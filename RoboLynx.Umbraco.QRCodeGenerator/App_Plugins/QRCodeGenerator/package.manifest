@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json.schemastore.org/package.manifest",
+  "other properties": "",
+
+  "propertyEditors": [
+    {
+      "alias": "qrCodeGenerator",
+      "name": "QR Code",
+      "icon": "icon-qr-code",
+      "editor": {
+        "view": "~/App_Plugins/QRCodeGenerator/propertyEditors/qrCodeGenerator/qrCodeGenerator.html",
+        "hideLabel": true,
+        "valueType": "JSON"
+      },
+      "prevalues": {
+        "fields": [
+          {
+            "label": "Source Provider",
+            "description": "Source provider which return a data to generate QR Code.",
+            "key": "codeSource",
+            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeSourcePicker/qrCodeSourcePicker.html",
+            "validation": [
+              {
+                "type": "Required"
+              }
+            ]
+          },
+          {
+            "label": "Source Provider Settings",
+            "description": "Settings passed to source provider. See source provider documentation to get details.",
+            "key": "codeSourceSettings",
+            "view": "textarea"
+          },
+          {
+            "label": "QR Code Type",
+            "description": "Property name which value will be use to generate QR Code.",
+            "key": "codeType",
+            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeTypePicker/qrCodeTypePicker.html",
+            "validation": [
+              {
+                "type": "Required"
+              }
+            ]
+          },
+          {
+            "label": "Default size",
+            "description": "",
+            "key": "defaultSize",
+            "view": "number"
+          },
+          {
+            "label": "Default format",
+            "description": "",
+            "key": "defaultFormat",
+            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html"
+          },
+          {
+            "label": "Default dark color",
+            "description": "",
+            "key": "defaultDarkColor",
+            "view": "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html"
+          },
+          {
+            "label": "Default light color",
+            "description": "",
+            "key": "defaultLightColor",
+            "view": "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html"
+          },
+          {
+            "label": "Default icon",
+            "description": "",
+            "key": "defaultIcon",
+            "view": "mediapicker"
+          },
+          {
+            "label": "Default icon size (percent)",
+            "description": "",
+            "key": "defaultIconSizePercent",
+            "view": "number"
+            //"validation": [
+            //  {
+            //    "type": "Range",
+            //    "config": {
+            //      "min": 0,
+            //      "max": 0
+            //    }
+            //  }
+            //]
+          },
+          {
+            "label": "Default icon border width",
+            "description": "",
+            "key": "defaultIconBorderWidth",
+            "view": "number"
+          },
+          {
+            "label": "Default draw quite zone",
+            "description": "",
+            "key": "defaultDrawQuiteZone",
+            "view": "boolean"
+          }
+        ]
+      },
+      "defaultConfig": {
+        "codeSource": "UrlSource",
+        "codeSourceSettings": "",
+        "codeType": "UrlType",
+        "defaultSize": "40",
+        "defaultFormat": "svg",
+        "defaultDarkColor": "#000000",
+        "defaultLightColor": "#ffffff",
+        "defaultIcon": null,
+        "defaultIconSizePercent": "10",
+        "defaultIconBorderWidth": "1",
+        "defaultDrawQuiteZone": "1"
+      }
+    }
+  ],
+  "javascript": [
+    "~/App_Plugins/QRCodeGenerator/propertyEditors/qrCodeGenerator/qrCodeGenerator.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeTypePicker/qrCodeTypePicker.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeSourcePicker/qrCodeSourcePicker.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/dialogs/generateQRCodeDialog/generateQRCodeDialog.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/services/qrCodeGenerator.Resources.js",
+    "~/App_Plugins/QRCodeGenerator/libs/download.min.js"
+  ],
+  "css": [
+    "~/App_Plugins/QRCodeGenerator/qrCodeGeneratorStyle.min.css"
+  ]
+}

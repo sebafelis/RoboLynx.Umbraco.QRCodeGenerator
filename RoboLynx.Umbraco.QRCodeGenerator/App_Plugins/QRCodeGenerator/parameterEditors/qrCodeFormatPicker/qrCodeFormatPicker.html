@@ -1,0 +1,6 @@
+﻿<div ng-controller="RoboLynx.Umbraco.QRCodeFormatPicker">
+    <umb-load-indicator ng-if="!loaded && !error"></umb-load-indicator>
+    <select ng-if="loaded" ng-options="item.id as item.name for item in availableFormats" class="umb-editor" ng-model="model.value" ng-change="change(model)"></select>
+    <span ng-if="error"><span class="icon-alert color-red"></span> {{error}}</span>
+    <!--<span class="help-inline" val-msg-for="integerField" val-toggle-msg="valServer">{{propertyForm.requiredField.errorMsg}}</span>-->
+</div>

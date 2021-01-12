@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="sv" intName="Swedish" localName="Svenska" lcid="" culture="sv-SE">
+  <area alias="scp">
+    <key alias="cancelText">Avbryt</key>
+    <key alias="chooseText">Välj</key>
+    <key alias="clearText">Rensa färgval</key>
+    <key alias="noColorSelectedText">Ingen färg vald</key>
+    <key alias="togglePaletteMoreText">Mer</key>
+    <key alias="togglePaletteLessText">Mindre</key>
+  </area>
+</language>

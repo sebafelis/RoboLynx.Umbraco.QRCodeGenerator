@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="ru" intName="Russian" localName="русский" lcid="" culture="ru-RU">
+  <area alias="scp">
+    <key alias="cancelText">Отмена</key>
+    <key alias="chooseText">Выбрать</key>
+    <key alias="clearText">Сбросить</key>
+    <key alias="noColorSelectedText">Цвет не выбран</key>
+    <key alias="togglePaletteMoreText">Ещё</key>
+    <key alias="togglePaletteLessText">Скрыть</key>
+  </area>
+</language>

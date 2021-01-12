@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Property editor for Umbraco 7 and 8 which generate QR codes from specify document property value.</Description>
+    <Copyright>RoboLynx @ 2021</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <PackageTags>umbraco, propety editor, qr code, generator</PackageTags>
+    <PackageReleaseNotes>Umbraco 7 release</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
+    <Version>7.0.0</Version>
+    <Company>RoboLynx</Company>
+    <Authors>Sebastian Felis</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="App_Plugins\QRCodeGenerator\Config\Lang\en.xml" />
+    <Content Include="App_Plugins\QRCodeGenerator\dialogs\generateQRCodeDialog\generateQRCodeDialog.Controller.js" />
+    <Content Include="App_Plugins\QRCodeGenerator\dialogs\generateQRCodeDialog\generateQRCodeDialog.html" />
+    <Content Include="App_Plugins\QRCodeGenerator\libs\download.min.js" />
+    <Content Include="App_Plugins\QRCodeGenerator\package.manifest" />
+    <Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.Controller.js" />
+    <Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.html" />
+    <Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeSourcePicker\qrCodeSourcePicker.Controller.js" />
+    <Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeSourcePicker\qrCodeSourcePicker.html" />
+    <Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeTypePicker\qrCodeTypePicker.Controller.js" />
+    <Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeTypePicker\qrCodeTypePicker.html" />
+    <Content Include="App_Plugins\QRCodeGenerator\propertyEditors\qrCodeGenerator\qrCodeGenerator.Controller.js" />
+    <Content Include="App_Plugins\QRCodeGenerator\propertyEditors\qrCodeGenerator\qrCodeGenerator.html" />
+    <Content Include="App_Plugins\QRCodeGenerator\qrCodeGeneratorStyle.min.css" />
+    <Content Include="App_Plugins\QRCodeGenerator\services\qrCodeGenerator.Resources.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QRCoder" Version="1.4.1" />
+    <PackageReference Include="UmbracoCms.Core" Version="7.15.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+  </ItemGroup>
+
+</Project>

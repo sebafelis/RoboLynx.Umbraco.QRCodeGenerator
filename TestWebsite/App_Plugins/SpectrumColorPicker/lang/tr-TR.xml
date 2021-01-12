@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="tr" intName="Turkish" localName="Türkçe" lcid="" culture="tr-TR">
+  <area alias="scp">
+    <key alias="cancelText">iptal</key>
+    <key alias="chooseText">tamam</key>
+    <key alias="clearText">Clear Color Selection</key>
+    <key alias="noColorSelectedText">No Color Selected</key>
+    <key alias="togglePaletteMoreText">More</key>
+    <key alias="togglePaletteLessText">Less</key>
+  </area>
+</language>

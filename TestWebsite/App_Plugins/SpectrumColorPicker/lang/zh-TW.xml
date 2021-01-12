@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="zh_tw" intName="Chinese (Taiwan)" localName="中文（正體，台灣）" lcid="" culture="zh-TW">
+  <area alias="scp">
+    <key alias="cancelText">取消</key>
+    <key alias="chooseText">選擇</key>
+    <key alias="clearText">清除</key>
+    <key alias="noColorSelectedText">尚未選擇任何顏色</key>
+    <key alias="togglePaletteMoreText">更多選項</key>
+    <key alias="togglePaletteLessText">隱藏</key>
+  </area>
+</language>

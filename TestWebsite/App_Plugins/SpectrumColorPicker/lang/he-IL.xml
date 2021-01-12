@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="he" intName="Hebrew (Israel)" localName="Hebrew" lcid="" culture="he-IL">
+  <area alias="scp">
+    <key alias="cancelText">בטל בחירה</key>
+    <key alias="chooseText">בחר צבע</key>
+    <key alias="clearText">אפס בחירה</key>
+    <key alias="noColorSelectedText">לא נבחר צבע</key>
+    <key alias="togglePaletteMoreText">עוד צבעים</key>
+    <key alias="togglePaletteLessText">פחות צבעים</key>
+  </area>
+</language>
