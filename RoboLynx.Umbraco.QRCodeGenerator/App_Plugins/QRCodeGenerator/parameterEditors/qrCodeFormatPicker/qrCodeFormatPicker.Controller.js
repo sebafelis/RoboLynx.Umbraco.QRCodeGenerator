@@ -14,7 +14,6 @@
                             $scope.loaded = true;
                             $scope.error = null;
                         }, function (error) {
-                            $scope.availableFormats = result;
                             $scope.error = error;
                         });
                 }
@@ -27,6 +26,7 @@
                     if ($scope.model.change) {
                         $scope.model.change(value);
                     }
+                    $scope.showInfo(value);
                 }
 
                 init();

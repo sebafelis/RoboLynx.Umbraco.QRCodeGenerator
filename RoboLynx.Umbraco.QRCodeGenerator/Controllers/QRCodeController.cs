@@ -12,10 +12,11 @@ using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
 using System.Web.Http.Results;
 using System.Linq;
 using System.Diagnostics;
+using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 {
-    [PluginController(RoboLynx.Umbraco.QRCodeGenerator.Constants.PluginName)]
+    [PluginController(RoboLynx.Umbraco.QRCodeGenerator.Constants.PluginAlias)]
     [JsonCamelCaseFormatter]
     public class QRCodeController : UmbracoAuthorizedJsonController
     {
@@ -38,6 +39,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         }
 
         [HttpGet]
+        //[CompressContent]
         public IHttpActionResult Image(int contentId, string propertyAlias, [FromUri] QRCodeSettings settings)
         {
             var finallSettings = GetSettings(contentId, propertyAlias, settings);
@@ -46,10 +48,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 
             if (content != null)
             {
-                var value = finallSettings.Type.Value;
+                try
+                {
+                    var value = finallSettings.Type.Value;
 
-                return CreateQRCodeResponse(value, finallSettings.DefaultSettings);
-
+                    return CreateQRCodeResponse(value, finallSettings.DefaultSettings);
+                }
+                catch (QRCodeGeneratorException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
             return StatusCode(HttpStatusCode.NotAcceptable);
         }
@@ -58,15 +66,20 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         {
             if (!string.IsNullOrEmpty(value))
             {
-                var response = Request.CreateResponse(HttpStatusCode.OK);
-
                 var formatProvider = QRCodeHelper.GetQRCodeFormatProviderById(settings.Format, Constants.GetDefaultFormat());
+
+                if (formatProvider == null)
+                {
+                    return BadRequest("Format provider not found.");
+                }
+
+                var response = Request.CreateResponse(HttpStatusCode.OK);
 
                 response.Content = formatProvider.ResponseContent(value, settings, Umbraco);
 
                 return ResponseMessage(response);
             }
-            return StatusCode(HttpStatusCode.NotAcceptable);
+            return BadRequest("Property value can not to be empty.");
         }
 
 
@@ -80,7 +93,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
                 {
                     var propertyValue = settingsProperty.GetValue(userSettings);
                     var defaultPropertyValue = settingsProperty.PropertyType.GetDefaultValue();
-                     if ((propertyValue != null && !propertyValue.Equals(defaultPropertyValue)) || (propertyValue == null && propertyValue != defaultPropertyValue))
+                    if ((propertyValue != null && !propertyValue.Equals(defaultPropertyValue)) || (propertyValue == null && propertyValue != defaultPropertyValue))
                     {
                         settingsProperty.SetValue(settings, propertyValue);
                     }
@@ -100,7 +113,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
                 LightColor = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultLightColorFieldName) ? dataTypePrevalue[Constants.DefaultLightColorFieldName].Value : "#FFFFFF",
                 DrawQuiteZone = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultDrawQuietZoneFieldName) ? QRCodeHelper.StringToBoolean(dataTypePrevalue[Constants.DefaultDrawQuietZoneFieldName].Value, false) : false,
                 IconBorderWidth = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultIconBorderWidthFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultIconBorderWidthFieldName].Value) : 2,
-                Icon = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultIconFieldName) ? dataTypePrevalue[Constants.DefaultIconFieldName].Value : null
+                Icon = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultIconFieldName) ? dataTypePrevalue[Constants.DefaultIconFieldName].Value : null,
+                ECCLevel = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultECCLevelFieldName) ? (ECCLevel)Enum.Parse(typeof(ECCLevel), dataTypePrevalue[Constants.DefaultECCLevelFieldName].Value) : ECCLevel.L
             };
         }
 

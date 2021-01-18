@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="pl_pl" intName="Polish (PL)" localName="Polish (PL)" lcid="" culture="pl-PL">
+	<creator>
+		<name>Sebastian Felis</name>
+		<link>https://robolynx.pl</link>
+	</creator>
+	<area alias="qrCodeTypes">
+		<key alias="textTypeName">Tekst</key>
+		<key alias="textTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określony tekst w skanerze kodów.</key>
+		<key alias="phoneNumberTypeName">Numer telefonu</key>
+		<key alias="phoneNumberTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy obreślony numer telefony gotowy do dzwonienia.</key>
+		<key alias="geolocationGEOTypeName">Geo-location (GEO)</key>
+		<key alias="geolocationGEOTypeDescription">Pozycja geograficzna w formacie GEO. Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w domyślnej aplikacji obsługującej ten format. Nie wszystkie urządzenia domyślnie obsługują ten format.</key>
+		<key alias="geolocationGooleMapTypeName">Geo-location (Google Map)</key>
+		<key alias="geolocationGooleMapTypeDescription">Pozycja geograficzna w formacie Google Map. Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w domyślnej aplikacji obsługującej ten format. Większość urządzeń posiada odpowiednią aplikację.</key>
+		<key alias="smsTypeName">SMS</key>
+		<key alias="smsTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określoną treść wiadomości gotową do wysłania na określony numer. Attributes: number, subject</key>
+		<key alias="urlTypeName">URL</key>
+		<key alias="urlTypeDescription">Po zeskanowaniu kodu użytkownik otworzy określony zasób w domyślnej aplikacji dla protokołu określonego w odnośniku.</key>
+	</area>
+	<area alias="qrCodeFormats">
+		<key alias="bmpFormatName">Bitmap (.bmp)</key>
+		<key alias="jpegFormatName">JPEG (.jpg)</key>
+		<key alias="pngFormatName">PNG (.png)</key>
+		<key alias="svgFormatName">SVG (.svg)</key>
+	</area>
+	<area alias="qrCodeSources">
+		<key alias="absoluteUrlSourceName">Absolutny URL</key>
+		<key alias="absoluteUrlSourceDescription">Kod jest generowny dla absolutnego adresu URL.</key>
+		<key alias="silmplePropertySourceName">Właściwość treści</key>
+		<key alias="silmplePropertySourceDescription">
+			Kod jest generowany z określonej właściwości opublikowanej treści. Alias właściwości musi by określony w Property source settings jako lista aliasów właściowści oddzielonymi przecinkami w zdefiniowanej kolejności lub w formacie JSON. Liczba wymaganych atrybutów, kolejność atrybutów oraz nazwy atrybótów są definiowane przez wybrany Type Provider.
+			JSON format:
+			{
+			properties: {
+			"attribute1": "propertyAlias1",
+			"attribute2": "propertyAlias2"
+			}
+			}
+		</key>
+	</area>
+	<area alias="qrCodeLevels">
+		<key alias="LName">Poziom L (Niski)</key>
+		<key alias="MName">Poziom M (Średni)</key>
+		<key alias="QName">Poziom Q (Wyższy)</key>
+		<key alias="HName">Poziom H (Wysoki)</key>
+		<key alias="LDescription">Można przywrócić 7% bajtów danych.</key>
+		<key alias="MDescription">Można przywrócić 15% bajtów danych.</key>
+		<key alias="QDescription">Można przywrócić 25% bajtów danych</key>
+		<key alias="HDescription">Można przywrócić 30% bajtów danych</key>
+	</area>
+	<area alias="qrCode">
+		<key alias="qrCode">Kod QR</key>
+		<key alias="size">Pixele na moduł</key>
+		<key alias="format">Format</key>
+		<key alias="darkColor">Ciemny kolor</key>
+		<key alias="lightColor">Jasny kolor</key>
+		<key alias="icon">Ikona</key>
+		<key alias="iconBorderWidth">Grubość obramowania ikony</key>
+		<key alias="drawQuiteZone">Rysuj strefę ciszy</key>
+		<key alias="dialogHeader">Generuj kod QR</key>
+		<key alias="iconSizePercent">Rozmiar ikony (%)</key>
+		<key alias="actionBtnCaption">Generuj kod QR</key>
+		<ket alias="eccLevel">Stopień korekcji błędów</ket>
+		<key alias="notPublishedAnyContentVersionMsg">Brak opublikowanej wersji treści</key>
+		<key alias="notPublishedAnyContentVersionHedline">Ta treść nie posiada opublikowanej wersji. Aby wygenerować Kod QR treść musi posiadać opublikowaną wersję.</key>
+		<key alias="openDirtyContentHedline">Treść posiada niezapisane zmiany</key>
+		<key alias="openDirtyContentMsg">Kod QR jest generowany z zapisanych wartiści właściwości opublikowanych treści. Ta treść posiada teraz niezapisane zmiany. Może to powadować różnicę między wartością, którą widzisz, a wartości przekazaną do generowania kodu QR. Czy chcesz wygenerować kod QR mimo to?</key>
+		<key alias="notPublishedContentHedline">Nieopublikowana treść</key>
+		<key alias="notPublishedContentMsg">Ta wersja treści jest zapisana, lecz nie została opublikowana. Może to powadować różnicę między wartością, którą widzisz, a wartości przekazaną do generowania kodu QR. Czy chcesz wygenerować kod QR mimo to?</key>
+		<key alias="generate">Generuj</key>
+		<key alias="publishFirst">Najpierw Zapiszę i Opublikuję treść</key>
+	</area>
+</language>

@@ -1,14 +1,14 @@
 {
   "name": "qrcodegenerator",
   "version": "1.0.0",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-cssmin": "^0.2.0",
     "gulp-less": "^4.0.1",
-    "gulp-newer": "^1.4.0",
+    "gulp-rename": "^2.0.0",
     "merge-stream": "^2.0.0"
   }
 }

@@ -22,6 +22,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
                 else
                 {
                     message = "String value can not to be parse to longitude.";
+                    return false;
                 }
             }
             else
@@ -49,7 +50,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
                 }
                 return isLongitude;
             }
-            throw new ArgumentException("Wrong input argument format.", nameof(value));
+
+            message = "Unsupported input.";
+            return false;
         }
     }
 }

@@ -3,7 +3,8 @@
         var qrCodeApiUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCode/",
             qrCodeTypePickerUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCodeTypePicker/",
             qrCodeSourcePickerUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCodeSourcePicker/",
-            qrCodeFormatPickerUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCodeFormatPicker/";
+            qrCodeFormatPickerUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCodeFormatPicker/",
+            qrCodeLevelPickerUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCodeLevelPicker/";
 
         var userPromises = {};
 
@@ -35,6 +36,21 @@
                 deferred.reject(reader.error);
             }
             reader.readAsDataURL(response);
+
+            return deferred.promise;
+        }
+
+        function _raadAsJson(response) {
+            var deferred = $q.defer();
+
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                deferred.resolve(JSON.parse(reader.result));
+            }
+            reader.onerror = function () {
+                deferred.reject(reader.error);
+            }
+            reader.readAsText(response);
 
             return deferred.promise;
         }
@@ -80,7 +96,7 @@
                         contentId: contentId, propertyAlias: propertyAlias, size: settings.size, format: settings.format,
                         darkColor: settings.darkColor, lightColor: settings.lightColor, icon: settings.icon,
                         iconSizePercent: settings.iconSizePercent, iconBorderWidth: settings.iconBorderWidth,
-                        drawQuiteZone: _convertToBool(settings.drawQuiteZone)
+                        drawQuiteZone: _convertToBool(settings.drawQuiteZone), eCCLevel: settings.eCCLevel
                     }
                 }).then(function (response) { return response; });
             },
@@ -100,7 +116,13 @@
                             return deferred.promise;
                         },
                         function (error) {
-                            throw new Error("Image response failed.");
+                            var deferred = $q.defer();
+                            _raadAsJson(error.data).then(function (errorObj) {
+                                deferred.resolve(errorObj.message);
+                            }, function (readerError) {
+                                deferred.reject(readerError);
+                            });
+                            return deferred.promise;
                         }
                     );
             },
@@ -118,6 +140,9 @@
             },
             getQRCodeFormats: function () {
                 return _callOneTimeHttpPromise(arguments.callee.name, $http.get(qrCodeFormatPickerUrl + 'Get'));
+            },
+            getQRCodeLevels: function () {
+                return _callOneTimeHttpPromise(arguments.callee.name, $http.get(qrCodeLevelPickerUrl + 'Get'));
             }
         };
     });

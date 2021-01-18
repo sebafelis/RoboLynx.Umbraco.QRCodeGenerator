@@ -46,7 +46,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
         {
             if (source == null)
             {
-                throw new System.ArgumentNullException(nameof(source), "Class is not configure to use.");
+                throw new System.ArgumentNullException(nameof(source), "Source is not configure.");
             }
         }
     }

@@ -2,33 +2,21 @@
 "use strict";
 
 var gulp = require("gulp"),
-    newer = require('gulp-newer'),
     concat = require("gulp-concat"),
     less = require("gulp-less"),
     merge = require("merge-stream"),
+    cleanCSS = require('gulp-clean-css'),
+    rename = require("gulp-rename"),
     compilerconfig = require("./compilerconfig.json"); // make sure bundleconfig.json doesn't contain any comments
 
+// Watch LESS files changes
 gulp.task("watch-less", function () {
     getCompiler(".less").forEach(function (bundle) {
         gulp.watch([bundle.inputFiles], gulp.series("less-compile"));
     });
 });
 
-gulp.task("watch-plugin", gulp.parallel((done) => {
-    gulp.watch(["./App_Plugins/**/*", "!./App_Plugins/**/*.less"], gulp.series("copy-plugin"));
-
-    done();
-}));
-
-gulp.task("copy-plugin", () => {
-    var dest = "./../TestWebsite/App_Plugins";
-    return gulp.src(["./App_Plugins/**/*", "!./App_Plugins/**/*.less"], { base: "App_Plugins" })
-        .pipe(newer(dest))
-        .pipe(gulp.dest(dest));
-});
-
-// Compile less
-
+// Compile LESS
 gulp.task('less-compile', function () {
     var tasks = getCompiler(".less").map(function (bundle) {
         console.log("Compile less file " + bundle.inputFile + " to " + bundle.outputFile);
@@ -39,6 +27,22 @@ gulp.task('less-compile', function () {
     });
     return merge(tasks);
 });
+
+// Minify CSS
+gulp.task('minify-css', () => {
+    var tasks = getCompiler(".less").map(function (bundle) {
+        console.log("Minify css file " + bundle.outputFile);
+        return gulp.src(bundle.outputFile, { base: "." })
+            .pipe(cleanCSS({ compatibility: 'ie8' }))
+            .pipe(rename({ suffix: ".min" }))
+            .pipe(gulp.dest("."));
+    });
+
+    return merge(tasks);
+});
+
+// Compile LESS and minify CSS
+gulp.task('compile-and-minify-less', gulp.series('less-compile','copy-plugin'));
 
 function getCompiler(extension) {
     return compilerconfig.filter(function (bundle) {

@@ -15,8 +15,8 @@
       "prevalues": {
         "fields": [
           {
-            "label": "Source Provider",
-            "description": "Source provider which return a data to generate QR Code.",
+            "label": "Source provider",
+            "description": "Return the data to generate QR Code.",
             "key": "codeSource",
             "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeSourcePicker/qrCodeSourcePicker.html",
             "validation": [
@@ -26,13 +26,13 @@
             ]
           },
           {
-            "label": "Source Provider Settings",
+            "label": "Source provider settings",
             "description": "Settings passed to source provider. See source provider documentation to get details.",
             "key": "codeSourceSettings",
             "view": "textarea"
           },
           {
-            "label": "QR Code Type",
+            "label": "QR Code type",
             "description": "Property name which value will be use to generate QR Code.",
             "key": "codeType",
             "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeTypePicker/qrCodeTypePicker.html",
@@ -43,16 +43,22 @@
             ]
           },
           {
-            "label": "Default size",
+            "label": "Default format",
+            "description": "",
+            "key": "defaultFormat",
+            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html"
+          },
+          {
+            "label": "Default pixel per module",
             "description": "",
             "key": "defaultSize",
             "view": "number"
           },
           {
-            "label": "Default format",
+            "label": "Error correction level",
             "description": "",
-            "key": "defaultFormat",
-            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html"
+            "key": "defaultECCLevel",
+            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.html"
           },
           {
             "label": "Default dark color",
@@ -121,7 +127,11 @@
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeTypePicker/qrCodeTypePicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeSourcePicker/qrCodeSourcePicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/dialogs/generateQRCodeDialog/generateQRCodeDialog.Controller.js",
+    "/App_Plugins/QRCodeGenerator/notifications/openDirtyContent/openDirtyContent.Controller.js",
+    "/App_Plugins/QRCodeGenerator/notifications/notPublishedContent/notPublishedContent.Controller.js",
+    "/App_Plugins/QRCodeGenerator/notifications/notPublishedAnyContentVersion/notPublishedAnyContentVersion.Controller.js",
     "~/App_Plugins/QRCodeGenerator/services/qrCodeGenerator.Resources.js",
     "~/App_Plugins/QRCodeGenerator/libs/download.min.js"
   ],

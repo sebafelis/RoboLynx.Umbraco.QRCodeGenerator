@@ -1,6 +1,10 @@
 ﻿<div ng-controller="RoboLynx.Umbraco.QRCodeTypePickerController">
-    <div>
-        <select ng-options="item.id as item.name for item in availableTypes" class="umb-editor" ng-model="model.value"></select>
+    <div ng-if="loaded && !error" ng-init="showInfo(model.value)">
+        <select ng-options="item.id as item.name for item in availableTypes" class="umb-editor" ng-model="model.value" ng-change="showInfo(model.value)" ng-required></select>
+        <div ng-if="selectedItem && selectedItem.description" class="qrcode-info" ng-bind="selectedItem.description"></div>
     </div>
-    <umb-indicator></umb-indicator>
+    <div ng-if="!loaded && !error" style="height: 25px; position: relative">
+        <umb-load-indicator></umb-load-indicator>
+    </div>
+    <span ng-if="error"><span class="icon-alert color-red"></span> {{error}}</span>
 </div>

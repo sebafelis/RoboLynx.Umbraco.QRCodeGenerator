@@ -25,7 +25,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         [Range(0, int.MaxValue)]
         public int? IconBorderWidth { get; set; }
 
+        [JsonConverter(typeof(BitBoolJsonConverter))]
         public bool? DrawQuiteZone { get; set; }
+
+        public ECCLevel ECCLevel { get; set; }
 
         public object Clone()
         {

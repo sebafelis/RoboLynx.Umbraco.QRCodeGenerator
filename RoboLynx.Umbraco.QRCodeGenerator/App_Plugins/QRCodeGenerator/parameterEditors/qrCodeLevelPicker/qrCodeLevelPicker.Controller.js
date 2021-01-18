@@ -1,15 +1,15 @@
 ﻿angular.module("umbraco")
-    .controller("RoboLynx.Umbraco.QRCodeTypePickerController",
+    .controller("RoboLynx.Umbraco.QRCodeLevelPickerController",
         ['$scope', 'RoboLynx.Umbraco.QRCodeGeneratorResources',
             function ($scope, resources) {
-                $scope.availableTypes = [];
+                $scope.availableLevels = [];
                 $scope.selectedItem = null;
                 $scope.loaded = false;
                 $scope.error = null;
 
                 function init() {
-                    resources.getQRCodeTypes().then(function (result) {
-                        $scope.availableTypes = result;
+                    resources.getQRCodeLevels().then(function (result) {
+                        $scope.availableLevels = result;
                         $scope.loaded = true;
                         $scope.error = null;
                     }, function (error) {
@@ -18,7 +18,7 @@
                 }
 
                 $scope.showInfo = function (value) {
-                    $scope.selectedItem = _.find($scope.availableTypes, function (type) { return type.id == value });
+                    $scope.selectedItem = _.find($scope.availableLevels, function (level) { return level.id == value });
                 }
 
                 init();

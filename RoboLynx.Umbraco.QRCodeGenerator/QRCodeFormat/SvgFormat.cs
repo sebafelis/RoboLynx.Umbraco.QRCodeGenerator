@@ -18,7 +18,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             Constants.FormatFieldName,
             Constants.DarkColorFieldName,
             Constants.LightColorFieldName,
-            Constants.DrawQuietZoneFieldName
+            Constants.DrawQuietZoneFieldName,
+            Constants.ECCLevelFieldName
         };
 
         public override string FileName => base.FileName + ".svg";

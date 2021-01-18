@@ -28,7 +28,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
                 return uri.IsAbsoluteUri;
             }
 
-            throw new ArgumentException("Wrong input argument format.", nameof(url));
+            message = "Unsupported input.";
+
+            return false;
         }
     }
 }

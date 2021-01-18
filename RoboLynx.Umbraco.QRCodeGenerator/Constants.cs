@@ -15,7 +15,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             return (IQRCodeFormat)Activator.CreateInstance(DefaultFormat);
         }
 
-        public const string PluginName = "QRCodeGenerator";
+        public const string PluginAlias = "QRCodeGenerator";
+        public const string PluginName = "QR Code Generator";
         public const string CodeSourceFieldName = "codeSource";
         public const string CodeSourceSettingsFieldName = "codeSourceSettings";
         public const string CodeTypeFieldName = "codeType";
@@ -27,6 +28,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         public const string DefaultIconSizePercentFieldName = "defaultIconSizePercent";
         public const string DefaultIconBorderWidthFieldName = "defaultIconBorderWidth";
         public const string DefaultDrawQuietZoneFieldName = "defaultDrawQuiteZone";
+        public const string DefaultECCLevelFieldName = "defaultECCLevel";
 
         public const string SizeFieldName = "size";
         public const string FormatFieldName = "format";
@@ -36,5 +38,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         public const string IconSizePercentFieldName = "iconSizePercent";
         public const string IconBorderWidthFieldName = "iconBorderWidth";
         public const string DrawQuietZoneFieldName = "drawQuiteZone";
+        public const string ECCLevelFieldName = "eccLevel";
     }
 }

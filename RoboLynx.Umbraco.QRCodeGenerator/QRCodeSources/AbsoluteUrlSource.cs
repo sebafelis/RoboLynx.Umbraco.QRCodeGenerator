@@ -11,7 +11,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
         {
 
         }
-
+        
         AbsoluteUrlSourceSettings settings;
 
         public AbsoluteUrlSource() : base(null)

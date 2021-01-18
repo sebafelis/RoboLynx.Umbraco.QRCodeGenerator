@@ -16,7 +16,7 @@
         $scope.qrCodeLoaded = false;
         $scope.qrCodeSettingsLoaded = false;
         $scope.requiredSettingsForFormatsLoaded = false;
-        $scope.qrCodeError = false;
+        $scope.qrCodeError = null;
         $scope.qrCode = null;
         $scope.qrCodeWidth = null;
         $scope.qrCodeHeight = null;
@@ -33,7 +33,7 @@
                     preferredFormat: "hex"
                 },
                 value: null,
-                order: 3
+                order: 4
             },
             {
                 label: "@qrCode_lightColor",
@@ -45,7 +45,7 @@
                     preferredFormat: "hex"
                 },
                 value: null,
-                order: 4
+                order: 5
             },
             {
                 label: "@qrCode_icon",
@@ -58,7 +58,7 @@
                     disableFolderSelect: true
                 },
                 value: null,
-                order: 6
+                order: 7
             },
             {
                 label: "@qrCode_iconSizePercent",
@@ -66,10 +66,12 @@
                 view: "integer",
                 alias: "iconSizePercent",
                 config: {
-
+                    min: 1,
+                    max: 100,
+                    step: 1
                 },
                 value: null,
-                order: 7
+                order: 8
             },
             {
                 label: "@qrCode_iconBorderWidth",
@@ -77,21 +79,20 @@
                 view: "integer",
                 alias: "iconBorderWidth",
                 config: {
-
+                    min: 1,
+                    max: 100,
+                    step: 1
                 },
                 value: null,
-                order: 8
+                order: 9
             },
             {
                 label: "@qrCode_drawQuiteZone",
                 show: true,
                 view: "boolean",
                 alias: "drawQuiteZone",
-                config: {
-
-                },
                 value: null,
-                order: 5
+                order: 6
             },
             {
                 label: "@qrCode_size",
@@ -100,10 +101,12 @@
                 view: "integer",
                 alias: "size",
                 config: {
-
+                    min: 1,
+                    max: 1000,
+                    step: 1
                 },
                 value: null,
-                order: 2
+                order: 3
             },
             {
                 label: "@qrCode_format",
@@ -111,11 +114,16 @@
                 view: "/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html",
                 alias: "format",
                 change: formatChange,
-                config: {
-
-                },
                 value: null,
                 order: 1
+            },
+            {
+                label: "@qrCode_eccLevel",
+                show: true,
+                view: "/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.html",
+                alias: "eccLevel",
+                value: null,
+                order: 2
             }
         ];
 
@@ -148,12 +156,7 @@
 
         function watchSettings() {
             $scope.$watch("settingsModel", function (newForm, oldForm) {
-                getQRCode(dialogData.contentId, dialogData.propertyAlias, mapSettings($scope.settingsModel)).then(
-                    function (data) {
-                        $scope.qrCodeLoaded = true;
-                        $scope.qrCodeError = null;
-                    }
-                );
+                getQRCode(dialogData.contentId, dialogData.propertyAlias, mapSettings($scope.settingsModel));
             }, true);
         }
 
@@ -184,6 +187,7 @@
                     },
                     function (error) {
                         notificationsService.error("Error", "Could not get default settings.", null, error);
+                        $scope.qrCodeError = error;
                         return error;
                     });
         }
@@ -202,6 +206,8 @@
 
                         $scope.qrCode = data.data;
                         $scope.qrCodeFileName = data.fileName;
+                        $scope.qrCodeLoaded = true;
+                        $scope.qrCodeError = null;
                         return data;
                     },
                     function (error) {

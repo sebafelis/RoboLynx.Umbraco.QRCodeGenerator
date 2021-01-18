@@ -21,7 +21,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             Constants.DrawQuietZoneFieldName,
             Constants.IconBorderWidthFieldName,
             Constants.IconFieldName,
-            Constants.IconSizePercentFieldName
+            Constants.IconSizePercentFieldName,
+            Constants.ECCLevelFieldName
         };
 
         protected HttpContent RasterResponseContent(string value, QRCodeSettings settings, UmbracoHelper umbracoHelper, ImageFormat imageFormat, string mime)
@@ -30,16 +31,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             var darkColor = ColorTranslator.FromHtml(settings.DarkColor);
 
             var qrGenerator = new QRCoder.QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, QRCoder.QRCodeGenerator.ECCLevel.Q);
 
-            var qrCodeBmp = GenerateBitmapQRCode(value, settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, ResolveIconUrl(settings.Icon, umbracoHelper), settings.IconSizePercent, settings.IconBorderWidth.Value);
+            var qrCodeBmp = GenerateBitmapQRCode(value, settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, ResolveIconUrl(settings.Icon, umbracoHelper), settings.IconSizePercent, settings.IconBorderWidth.Value, settings.ECCLevel);
             return SetBitmapAsHttpContent(qrCodeBmp, imageFormat, mime, FileName);
         }
 
-        private Bitmap GenerateBitmapQRCode(string value, int size, Color darkColor, Color lightColor, bool drawQuiteZone, string iconUrl, int iconSizePercent, int iconBorderWidth)
+        private Bitmap GenerateBitmapQRCode(string value, int size, Color darkColor, Color lightColor, bool drawQuiteZone, string iconUrl, int iconSizePercent, int iconBorderWidth, ECCLevel level)
         {
             var qrGenerator = new QRCoder.QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, QRCoder.QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, (QRCoder.QRCodeGenerator.ECCLevel)((int)level));
 
             QRCode bmpQrCode = new QRCode(qrCodeData);
             Bitmap qrCodeBmp = null;

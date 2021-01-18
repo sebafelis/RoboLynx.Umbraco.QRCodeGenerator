@@ -3,14 +3,17 @@
         ['$scope', 'RoboLynx.Umbraco.QRCodeGeneratorResources',
             function ($scope, resources) {
                 $scope.availableSources = [];
-                $scope.qrCodeParamsForm = { codeSource: null };
                 $scope.selectedItem = null;
                 $scope.loaded = false;
+                $scope.error = null;
 
                 function init() {
-                    resources.getQRCodeSources().success(function (result) {
+                    resources.getQRCodeSources().then(function (result) {
                         $scope.availableSources = result;
                         $scope.loaded = true;
+                        $scope.error = null;
+                    }, function (error) {
+                        $scope.error = error;
                     });
                 }
 
