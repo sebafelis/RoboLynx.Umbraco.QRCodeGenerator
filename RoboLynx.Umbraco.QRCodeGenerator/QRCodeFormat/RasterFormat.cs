@@ -1,5 +1,6 @@
 ﻿using QRCoder;
 using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
+using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -7,13 +8,16 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Umbraco.Core.IO;
+using Umbraco.Core.Services;
 using Umbraco.Web;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public abstract class RasterFormat : QRCodeFormat
     {
-        public override IEnumerable<string> RequiredSettings => new List<string> { 
+        private readonly IMediaFileSystem mediaFileSystem;
+
+        public override IEnumerable<string> RequiredSettings => new List<string> {
             Constants.SizeFieldName,
             Constants.FormatFieldName,
             Constants.DarkColorFieldName,
@@ -25,38 +29,39 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             Constants.ECCLevelFieldName
         };
 
-        protected HttpContent RasterResponseContent(string value, QRCodeSettings settings, UmbracoHelper umbracoHelper, ImageFormat imageFormat, string mime)
+        public RasterFormat(ILocalizedTextService localizedTextService, IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper) : base(localizedTextService, umbracoHelper)
+        {
+            this.mediaFileSystem = mediaFileSystem;
+        }
+
+        protected HttpContent RasterResponseContent(string value, QRCodeSettings settings, ImageFormat imageFormat)
         {
             var lightColor = ColorTranslator.FromHtml(settings.LightColor);
             var darkColor = ColorTranslator.FromHtml(settings.DarkColor);
 
-            var qrGenerator = new QRCoder.QRCodeGenerator();
-
-            var qrCodeBmp = GenerateBitmapQRCode(value, settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, ResolveIconUrl(settings.Icon, umbracoHelper), settings.IconSizePercent, settings.IconBorderWidth.Value, settings.ECCLevel);
-            return SetBitmapAsHttpContent(qrCodeBmp, imageFormat, mime, FileName);
+            var qrCodeBmp = GenerateBitmapQRCode(value, settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, ResolveIconUrl(settings.Icon), settings.IconSizePercent, settings.IconBorderWidth.Value, settings.ECCLevel.Value);
+            return SetBitmapAsHttpContent(qrCodeBmp, imageFormat, Mime, FileName);
         }
 
         private Bitmap GenerateBitmapQRCode(string value, int size, Color darkColor, Color lightColor, bool drawQuiteZone, string iconUrl, int iconSizePercent, int iconBorderWidth, ECCLevel level)
         {
             var qrGenerator = new QRCoder.QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, (QRCoder.QRCodeGenerator.ECCLevel)((int)level));
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, (QRCoder.QRCodeGenerator.ECCLevel)((int)level), true);
 
             QRCode bmpQrCode = new QRCode(qrCodeData);
             Bitmap qrCodeBmp = null;
             if (!string.IsNullOrEmpty(iconUrl))
             {
-                using (var iconStream = FileSystemProviderManager.Current.MediaFileSystem.OpenFile(iconUrl))
+                using var iconStream = mediaFileSystem.OpenFile(iconUrl);
+                using var iconBmp = new Bitmap(iconStream);
+                if (iconBmp is null)
                 {
-                    using (var iconBmp = new Bitmap(iconStream))
-                    {
-                        qrCodeBmp = bmpQrCode.GetGraphic(size, darkColor, lightColor, iconBmp, iconSizePercent, iconBorderWidth, drawQuiteZone);
-                    }
+                    qrCodeBmp = bmpQrCode.GetGraphic(size, darkColor, lightColor, drawQuiteZone);
                 }
-            }
-
-            if (qrCodeBmp == null)
-            {
-                qrCodeBmp = bmpQrCode.GetGraphic(size, darkColor, lightColor, drawQuiteZone);
+                else
+                {
+                    qrCodeBmp = bmpQrCode.GetGraphic(size, darkColor, lightColor, iconBmp, iconSizePercent, iconBorderWidth, drawQuiteZone);
+                }
             }
 
             return qrCodeBmp;
@@ -64,20 +69,20 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         private HttpContent SetBitmapAsHttpContent(Bitmap bitmap, ImageFormat format, string mime, string fileName)
         {
-            using (MemoryStream ms = new MemoryStream())
+            using MemoryStream ms = new MemoryStream();
+            bitmap.Save(ms, format);
+
+            var httpContent = new ByteArrayContent(ms.ToArray());
+            httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mime);
+            if (!string.IsNullOrEmpty(fileName))
             {
-                bitmap.Save(ms, format);
-
-                var httpContent = new ByteArrayContent(ms.ToArray());
-                httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mime);
-                if (!string.IsNullOrEmpty(fileName))
+                httpContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    httpContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-                    httpContent.Headers.ContentDisposition.FileName = fileName;
-                }
-
-                return httpContent;
+                    FileName = fileName
+                };
             }
+
+            return httpContent;
         }
     }
 }

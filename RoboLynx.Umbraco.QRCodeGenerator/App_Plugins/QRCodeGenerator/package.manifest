@@ -2,6 +2,15 @@
   "$schema": "http://json.schemastore.org/package.manifest",
   "other properties": "",
 
+  //"contentApps": [
+  //  {
+  //    "name": "QR Code", // required - the name that appears under the icon
+  //    "alias": "qrCodeGenerator", // required - unique alias for your app
+  //    "weight": 0, // optional, default is 0, use values between -99 and +99 to appear between the existing Content (-100) and Info (100) apps
+  //    "icon": "icon-qr-code", // required - the icon to use
+  //    "view": "~/App_Plugins/QRCodeGenerator/contentApps/qrCodeContentApp/qrCodeContentApp.html" // required - the location of the view file
+  //  }
+  //],
   "propertyEditors": [
     {
       "alias": "qrCodeGenerator",
@@ -46,7 +55,12 @@
             "label": "Default format",
             "description": "",
             "key": "defaultFormat",
-            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html"
+            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html",
+            "validation": [
+              {
+                "type": "Required"
+              }
+            ]
           },
           {
             "label": "Default pixel per module",
@@ -108,9 +122,9 @@
         ]
       },
       "defaultConfig": {
-        "codeSource": "UrlSource",
+        "codeSource": "AbsoluteUrl",
         "codeSourceSettings": "",
-        "codeType": "UrlType",
+        "codeType": "URL",
         "defaultSize": "40",
         "defaultFormat": "svg",
         "defaultDarkColor": "#000000",
@@ -118,22 +132,24 @@
         "defaultIcon": null,
         "defaultIconSizePercent": "10",
         "defaultIconBorderWidth": "1",
-        "defaultDrawQuiteZone": "1"
+        "defaultDrawQuiteZone": "1",
+        "defaultECCLevel": "M"
       }
     }
   ],
   "javascript": [
+    "~/App_Plugins/QRCodeGenerator/libs/download.min.js",
+    "~/App_Plugins/QRCodeGenerator/services/qrCodeGenerator.Resources.js",
     "~/App_Plugins/QRCodeGenerator/propertyEditors/qrCodeGenerator/qrCodeGenerator.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeTypePicker/qrCodeTypePicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeSourcePicker/qrCodeSourcePicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.Controller.js",
-    "~/App_Plugins/QRCodeGenerator/dialogs/generateQRCodeDialog/generateQRCodeDialog.Controller.js",
-    "/App_Plugins/QRCodeGenerator/notifications/openDirtyContent/openDirtyContent.Controller.js",
-    "/App_Plugins/QRCodeGenerator/notifications/notPublishedContent/notPublishedContent.Controller.js",
-    "/App_Plugins/QRCodeGenerator/notifications/notPublishedAnyContentVersion/notPublishedAnyContentVersion.Controller.js",
-    "~/App_Plugins/QRCodeGenerator/services/qrCodeGenerator.Resources.js",
-    "~/App_Plugins/QRCodeGenerator/libs/download.min.js"
+    "~/App_Plugins/QRCodeGenerator/notifications/openDirtyContent/openDirtyContent.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/notifications/notPublishedContent/notPublishedContent.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/notifications/notPublishedAnyContentVersion/notPublishedAnyContentVersion.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/contentApps/qrCodeGeneratorApp/qrCodeGeneratorApp.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/directives/hideUmbProperty.js"
   ],
   "css": [
     "~/App_Plugins/QRCodeGenerator/qrCodeGeneratorStyle.min.css"

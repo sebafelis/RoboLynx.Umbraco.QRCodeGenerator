@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
+namespace RoboLynx.Umbraco.QRCodeGenerator.Models
 {
     public class QRCodeSettings : ICloneable
     {
@@ -28,7 +28,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         [JsonConverter(typeof(BitBoolJsonConverter))]
         public bool? DrawQuiteZone { get; set; }
 
-        public ECCLevel ECCLevel { get; set; }
+        public ECCLevel? ECCLevel { get; set; }
 
         public object Clone()
         {
@@ -41,7 +41,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
                 Icon = Icon,
                 IconSizePercent = IconSizePercent,
                 DrawQuiteZone = DrawQuiteZone,
-                IconBorderWidth = IconBorderWidth
+                IconBorderWidth = IconBorderWidth,
+                ECCLevel = ECCLevel
             };
         }
     }

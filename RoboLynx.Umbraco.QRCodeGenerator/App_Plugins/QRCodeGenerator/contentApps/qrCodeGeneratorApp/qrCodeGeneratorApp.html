@@ -1,0 +1,45 @@
+<div ng-controller="RoboLynx.Umbraco.QRCodeContentAppController as vm">
+    <div class="qrcode-container">
+        <div class="qrcode-vertical-center">
+            <div class="qrcode-holder">
+                <img ng-src="{{vm.qrCode}}" ng-show="vm.qrCodeLoaded && !vm.qrCodeError" class="qrcode-img" id="qrCodeImg" />
+                <umb-load-indicator ng-show="!vm.qrCodeLoaded"></umb-load-indicator>
+            </div>
+            <div ng-if="vm.qrCodeWidth && vm.qrCodeHeight && vm.qrCodeLoaded" class="text-center"><small><localize key="qrCode_imageSize">Image size</localize>: {{vm.qrCodeWidth}} x {{vm.qrCodeHeight}}</small></div>
+
+            <umb-button type="button"
+                        button-style="action"
+                        label-key="general_download"
+                        action="vm.download(model)"
+                        icon="icon-download-alt"
+                        disabled="!vm.qrCodeLoaded">
+            </umb-button>
+        </div>
+        <div>
+            <umb-box>
+                <umb-box-header title-key="@qrCode_dialogHeader"></umb-box-header>
+                <umb-box-content>
+                    <div ng-if="vm.qrCodeSettingsLoaded && vm.requiredSettingsForFormatsLoaded">
+                        <div ng-if="vm.qrCodeError" class="alert alert-danger">
+                            <span class="icon-application-error"></span> <localize key="general_error">Error</localize>: <br /><span ng-bind="vm.qrCodeError"></span>
+                        </div>
+
+                        <umb-control-group label="Select source">
+                            <select ng-options="item.alias as item.label for item in vm.qrCodeProperties" ng-model="vm.selectedQRCodePropertyAlias"></select>
+                        </umb-control-group>
+
+
+                        <ng-form name="propertyForm" class="ng-pristine ng-valid" ng-model-options="{ debounce: 1000 }">
+                            <div ng-repeat="property in vm.settingsModel | orderBy:'order'" ng-init="property.change(property)">
+                                <umb-control-group label="{{property.label}}" ng-if="property.show">
+                                    <umb-property-editor model="property"></umb-property-editor>
+                                </umb-control-group>
+                            </div>
+                        </ng-form>
+                    </div>
+                    <umb-load-indicator ng-if="!vm.qrCodeSettingsLoaded || !vm.requiredSettingsForFormatsLoaded"></umb-load-indicator>
+                </umb-box-content>
+            </umb-box>
+        </div>
+    </div>
+</div>

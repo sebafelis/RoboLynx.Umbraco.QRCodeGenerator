@@ -1,33 +1,39 @@
-﻿(function () {
+(function () {
     'use strict';
 
-    angular
-        .module('umbraco')
-        .controller('RoboLynx.Umbraco.GenerateQRCodeDialog', generateQRCode);
+    angular.module("umbraco")
+        .controller("RoboLynx.Umbraco.QRCodeContentAppController", qrCodeContentApp);
 
-    generateQRCode.$inject = ['$scope', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'dialogService', 'notificationsService'];
+    qrCodeContentApp.$inject = ['$scope', 'editorState', 'contentResource', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService'];
 
-    function generateQRCode($scope, qrCodeGeneratorResources, $q, dialogService, notificationsService) {
+    function qrCodeContentApp($scope, editorState, contentResource, qrCodeGeneratorResources, $q, notificationsService) {
 
-        var dialogData = $scope.dialogData;
+        var vm = this;
+
         var defaultSettings = {};
         var requierdSettingsForFormats = {};
+        var watchSettingsModel = null;
 
-        $scope.qrCodeLoaded = false;
-        $scope.qrCodeSettingsLoaded = false;
-        $scope.requiredSettingsForFormatsLoaded = false;
-        $scope.qrCodeError = null;
-        $scope.qrCode = null;
-        $scope.qrCodeWidth = null;
-        $scope.qrCodeHeight = null;
-        $scope.qrCodeFileName = null;
+        vm.appActive = false;
+        vm.currentNodeId = editorState.current.id;
+        vm.currentNodeAlias = editorState.current.contentTypeAlias;
+        vm.qrCodeProperties = null;
+        vm.selectedQRCodePropertyAlias = null;
+        vm.qrCodeLoaded = false;
+        vm.qrCodeSettingsLoaded = false;
+        vm.requiredSettingsForFormatsLoaded = false;
+        vm.qrCodeError = null;
+        vm.qrCode = null;
+        vm.qrCodeWidth = null;
+        vm.qrCodeHeight = null;
+        vm.qrCodeFileName = null;
 
-        $scope.settingsModel = [
+        vm.settingsModel = [
             {
                 label: "@qrCode_darkColor",
                 show: true,
                 view: "/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html",
-                alias: "darkColor",                
+                alias: "darkColor",
                 config: {
                     enableTransparency: "0",
                     preferredFormat: "hex"
@@ -127,12 +133,22 @@
             }
         ];
 
-        $scope.confirm = function () {
-            download($scope.qrCode, $scope.qrCodeFileName);
+        vm.download = function () {
+            download(vm.qrCode, vm.qrCodeFileName);
+        };
+
+        vm.qrCodePropertyChange = function () {
+            unwatchSettings();
+
+            getQRCodeSettings(vm.currentNodeId, vm.selectedQRCodePropertyAlias)
+                .then(function () {
+                    setDefaultSettings();
+                    watchSettings();
+                })
         };
 
         function formatChange(formatModel) {
-            _.each($scope.settingsModel, function (property) {
+            _.each(vm.settingsModel, function (property) {
                 property.show = formatModel.value && _.contains(requierdSettingsForFormats[formatModel.value], property.alias);
             });
         }
@@ -147,88 +163,138 @@
 
         function setDefaultSettings() {
             for (var property in defaultSettings) {
-                var propertyModel = _.find($scope.settingsModel, { alias: property });
+                var propertyModel = _.find(vm.settingsModel, { alias: property });
                 if (propertyModel) {
                     propertyModel.value = defaultSettings[propertyModel.alias];
                 }
             }
         }
 
+        function unwatchSettings() {
+            if (watchSettingsModel) {
+                watchSettingsModel = null;
+            }
+        }
+
         function watchSettings() {
-            $scope.$watch("settingsModel", function (newForm, oldForm) {
-                getQRCode(dialogData.contentId, dialogData.propertyAlias, mapSettings($scope.settingsModel));
-            }, true);
+            if (!watchSettingsModel) {
+                $scope.$watch("vm.settingsModel", function (newForm, oldForm) {
+                    if (vm.selectedQRCodePropertyAlias) {
+                        getQRCode(vm.currentNodeId, vm.selectedQRCodePropertyAlias, mapSettings(vm.settingsModel));
+                    }
+                }, true);
+            }
         }
 
         function getRequiredSettingsForFormats() {
-            $scope.requiredSettingsForFormatsLoaded = false;
+            vm.requiredSettingsForFormatsLoaded = false;
             return qrCodeGeneratorResources.getRequiredSettingsForFormats()
                 .then(
                     function (data) {
                         requierdSettingsForFormats = data;
-                        $scope.requiredSettingsForFormatsLoaded = true;
+                        vm.requiredSettingsForFormatsLoaded = true;
                         return data;
                     },
                     function (error) {
                         notificationsService.error("Error", "Could not get required settings for formats.", null, error);
-                        $scope.qrCodeError = error;
+                        vm.qrCodeError = error;
                         return error;
                     });
         }
 
         function getQRCodeSettings(contentId, propertyAlias) {
-            $scope.qrCodeSettingsLoaded = false;
+            vm.qrCodeSettingsLoaded = false;
             return qrCodeGeneratorResources.getQRCodeSettings(contentId, propertyAlias)
                 .then(
                     function (data) {
                         defaultSettings = data;
-                        $scope.qrCodeSettingsLoaded = true;
+                        vm.qrCodeSettingsLoaded = true;
                         return data;
                     },
                     function (error) {
                         notificationsService.error("Error", "Could not get default settings.", null, error);
-                        $scope.qrCodeError = error;
+                        vm.qrCodeError = error;
                         return error;
                     });
         }
 
         function getQRCode(contentId, propertyAlias, settings) {
-            $scope.qrCodeLoaded = false;
+            vm.qrCodeLoaded = false;
             return qrCodeGeneratorResources.getQRCodeAsBase64(contentId, propertyAlias, settings)
                 .then(
                     function (data) {
                         const img = new Image();
                         img.onload = function () {
-                            $scope.qrCodeWidth = img.width;
-                            $scope.qrCodeHeight = img.height;
+                            vm.qrCodeWidth = img.width;
+                            vm.qrCodeHeight = img.height;
                         };
                         img.src = data.data;
 
-                        $scope.qrCode = data.data;
-                        $scope.qrCodeFileName = data.fileName;
-                        $scope.qrCodeLoaded = true;
-                        $scope.qrCodeError = null;
+                        vm.qrCode = data.data;
+                        vm.qrCodeFileName = data.fileName;
+                        vm.qrCodeLoaded = true;
+                        vm.qrCodeError = null;
                         return data;
                     },
                     function (error) {
                         notificationsService.error("Error", "Could not get QR Code URL.", null, error);
-                        $scope.qrCodeError = error;
+                        vm.qrCodeError = error;
                         return error;
                     });
         }
 
 
+        function findProperties() {
+            return contentResource.getById(vm.currentNodeId).then(function (node) {
+                vm.qrCodeProperties = _.filter(node.variants[0].tabs[0].properties,
+                    function (prop) {
+                        return prop.view.endsWith('qrCodeGenerator.html');
+                    });
+
+                if (!vm.qrCodeProperties || vm.qrCodeProperties.length == 0) {
+                    return $q.reject();
+                }
+
+                vm.selectedQRCodePropertyAlias = vm.qrCodeProperties[0].alias;
+
+                return vm.selectedQRCodePropertyAlias;
+            });
+        }
+
+        function waitForActive() {
+            var deferred = $q.defer();
+
+            $scope.$on("editors.apps.appChanged", function ($event, $args) {
+                vm.appActive = $args.app.alias == "qrCodeGenerator";
+
+                if (vm.appActive)
+                    deferred.resolve('Hello, ' + name + '!');
+            });
+
+            return deferred.promise;
+        }
+
         function init() {
-            $q.all(getRequiredSettingsForFormats(), getQRCodeSettings(dialogData.contentId, dialogData.propertyAlias)
-                .then(function () {
-                    setDefaultSettings();
-                }))
-                .then(function () {
-                    watchSettings()
-                });
+            $scope.model.disabled = true;
+            $q.all([
+                waitForActive(),
+                $q.all([
+                    findProperties()
+                        .then(function (selectedQRCodePropertyAlias) {
+                            getQRCodeSettings(vm.currentNodeId, selectedQRCodePropertyAlias)
+                                .then(function () {
+                                    setDefaultSettings();
+                                });
+                        }),
+                    getRequiredSettingsForFormats()
+                ]).then(function () {
+                    $scope.model.disabled = false;
+                })
+            ]).then(function () {
+                watchSettings();
+            });
         }
 
         init();
     }
-
 })();

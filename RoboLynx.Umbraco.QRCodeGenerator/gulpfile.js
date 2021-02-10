@@ -1,4 +1,4 @@
-/// <binding ProjectOpened='watch-folder' />
+/// <binding ProjectOpened='watch-less' />
 "use strict";
 
 var gulp = require("gulp"),
@@ -10,10 +10,11 @@ var gulp = require("gulp"),
     compilerconfig = require("./compilerconfig.json"); // make sure bundleconfig.json doesn't contain any comments
 
 // Watch LESS files changes
-gulp.task("watch-less", function () {
-    getCompiler(".less").forEach(function (bundle) {
-        gulp.watch([bundle.inputFiles], gulp.series("less-compile"));
+gulp.task("watch-less", function() {
+    var tasks = getCompiler(".less").map(function (bundle) {
+        return gulp.watch(bundle.inputFiles, gulp.series("compile-and-minify-less"));
     });
+    return merge(tasks);
 });
 
 // Compile LESS
@@ -42,7 +43,7 @@ gulp.task('minify-css', () => {
 });
 
 // Compile LESS and minify CSS
-gulp.task('compile-and-minify-less', gulp.series('less-compile','copy-plugin'));
+gulp.task('compile-and-minify-less', gulp.series('less-compile', 'minify-css'));
 
 function getCompiler(extension) {
     return compilerconfig.filter(function (bundle) {

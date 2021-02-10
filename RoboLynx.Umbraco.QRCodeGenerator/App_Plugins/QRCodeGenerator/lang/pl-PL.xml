@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language alias="pl_pl" intName="Polish (PL)" localName="Polish (PL)" lcid="" culture="pl-PL">
 	<creator>
 		<name>Sebastian Felis</name>
@@ -27,8 +27,8 @@
 	<area alias="qrCodeSources">
 		<key alias="absoluteUrlSourceName">Absolutny URL</key>
 		<key alias="absoluteUrlSourceDescription">Kod jest generowny dla absolutnego adresu URL.</key>
-		<key alias="silmplePropertySourceName">Właściwość treści</key>
-		<key alias="silmplePropertySourceDescription">
+		<key alias="simplePropertySourceName">Właściwość treści</key>
+		<key alias="simplePropertySourceDescription">
 			Kod jest generowany z określonej właściwości opublikowanej treści. Alias właściwości musi by określony w Property source settings jako lista aliasów właściowści oddzielonymi przecinkami w zdefiniowanej kolejności lub w formacie JSON. Liczba wymaganych atrybutów, kolejność atrybutów oraz nazwy atrybótów są definiowane przez wybrany Type Provider.
 			JSON format:
 			{
@@ -61,7 +61,8 @@
 		<key alias="dialogHeader">Generuj kod QR</key>
 		<key alias="iconSizePercent">Rozmiar ikony (%)</key>
 		<key alias="actionBtnCaption">Generuj kod QR</key>
-		<ket alias="eccLevel">Stopień korekcji błędów</ket>
+		<key alias="eccLevel">Stopień korekcji błędów</key>
+		<key alias="imageSize">Rozmiar obrazka</key>
 		<key alias="notPublishedAnyContentVersionMsg">Brak opublikowanej wersji treści</key>
 		<key alias="notPublishedAnyContentVersionHedline">Ta treść nie posiada opublikowanej wersji. Aby wygenerować Kod QR treść musi posiadać opublikowaną wersję.</key>
 		<key alias="openDirtyContentHedline">Treść posiada niezapisane zmiany</key>

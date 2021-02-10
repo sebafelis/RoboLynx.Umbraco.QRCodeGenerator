@@ -1,30 +1,24 @@
 ﻿using System;
 using Umbraco.Core;
 using Umbraco.Core.Models;
+using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 {
     public abstract class QRCodeSource : IQRCodeSource
     {
-        protected readonly IPublishedContent content;
+        protected readonly ILocalizedTextService textService;
 
-        public QRCodeSource(IPublishedContent content)
+        public QRCodeSource(ILocalizedTextService textService)
         {
-            this.content = content;
+            this.textService = textService;
         }
 
-        public string Name => ApplicationContext.Current.Services.TextService.Localize($"qrCodeSources/{GetType().Name.ToFirstLower()}Name") ?? GetType().Name;
-        public string Description => ApplicationContext.Current.Services.TextService.Localize($"qrCodeSources/{GetType().Name.ToFirstLower()}Description") ?? string.Empty;
+        public abstract string Id { get; }
+        public string Name => textService.Localize($"qrCodeSources/{GetType().Name.ToFirstLower()}Name") ?? GetType().Name;
+        public string Description => textService.Localize($"qrCodeSources/{GetType().Name.ToFirstLower()}Description") ?? string.Empty;
 
-        public abstract T GetValue<T>(int index, string key) where T : IConvertible;
-
-        protected void CheckContent()
-        {
-            if (content is null)
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
-        }
+        public abstract T GetValue<T>(int index, string key, IPublishedContent content, string sourceSettings) where T : IConvertible;
     }
 }

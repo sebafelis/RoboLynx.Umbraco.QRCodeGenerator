@@ -23,7 +23,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
             {
                 var uri = (Uri)url;
 
-                message = uri.IsAbsoluteUri ? "Passed URL is not absolute." : null;
+                message = !uri.IsAbsoluteUri ? "Passed URL is not absolute." : null;
 
                 return uri.IsAbsoluteUri;
             }

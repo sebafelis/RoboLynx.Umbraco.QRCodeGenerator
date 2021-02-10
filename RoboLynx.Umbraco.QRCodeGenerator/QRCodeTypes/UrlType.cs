@@ -4,6 +4,7 @@ using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
 using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core;
+using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
 using static QRCoder.PayloadGenerator;
 
@@ -18,27 +19,19 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
             public bool Validate { get; set; } = true;
         }
 
-        public UrlType() : base(null)
-        {
-
-        }
-
-        public UrlType(IQRCodeSource source): base(source)
+        public UrlType(ILocalizedTextService localizedTextService) : base(localizedTextService)
         {
             validators.Add(urlArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new UrlValidator() });
         }
 
-        public override string Value
+        public override string Id => "URL";
+
+        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content)
         {
-            get
-            {
-                CheckSource();
+            var url = source.GetValue<string>(0, urlArgumentName, content, sourceSettings);
+            RunValidator(urlArgumentName, url);
 
-                var url = source.GetValue<string>(0, urlArgumentName);
-                RunValidator(urlArgumentName, url);
-
-                return new Url(url).ToString();
-            }
+            return new Url(url).ToString();
         }
     }
 }

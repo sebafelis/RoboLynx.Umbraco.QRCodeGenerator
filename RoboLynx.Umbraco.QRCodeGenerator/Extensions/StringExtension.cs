@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
@@ -19,6 +16,21 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             };
             result = JsonConvert.DeserializeObject<T>(@this, settings);
             return success;
+        }
+
+        public static bool StringToBoolean(this string @string, bool bDefault)
+        {
+            string[] BooleanStringOff = { "0" };
+
+            if (string.IsNullOrEmpty(@string))
+                return bDefault;
+            else if (BooleanStringOff.Contains(@string, StringComparer.InvariantCultureIgnoreCase))
+                return false;
+
+            if (!bool.TryParse(@string, out bool result))
+                result = true;
+
+            return result;
         }
     }
 }

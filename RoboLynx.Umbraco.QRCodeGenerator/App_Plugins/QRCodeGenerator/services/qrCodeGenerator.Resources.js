@@ -1,4 +1,4 @@
-﻿angular.module("umbraco")
+angular.module("umbraco")
     .factory("RoboLynx.Umbraco.QRCodeGeneratorResources", function ($http, $log, $q) {
         var qrCodeApiUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCode/",
             qrCodeTypePickerUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCodeTypePicker/",
@@ -74,7 +74,7 @@
                         function (reason) {
                             userPromises[id] = null;
                             throw new Error(reason.message);
-                            return reason;
+                            return $q.reject(reason);
                         }
                     );
             }
@@ -96,7 +96,7 @@
                         contentId: contentId, propertyAlias: propertyAlias, size: settings.size, format: settings.format,
                         darkColor: settings.darkColor, lightColor: settings.lightColor, icon: settings.icon,
                         iconSizePercent: settings.iconSizePercent, iconBorderWidth: settings.iconBorderWidth,
-                        drawQuiteZone: _convertToBool(settings.drawQuiteZone), eCCLevel: settings.eCCLevel
+                        drawQuiteZone: _convertToBool(settings.drawQuiteZone), eccLevel: settings.eccLevel
                     }
                 }).then(function (response) { return response; });
             },
@@ -118,7 +118,7 @@
                         function (error) {
                             var deferred = $q.defer();
                             _raadAsJson(error.data).then(function (errorObj) {
-                                deferred.resolve(errorObj.message);
+                                deferred.reject(errorObj.message);
                             }, function (readerError) {
                                 deferred.reject(readerError);
                             });

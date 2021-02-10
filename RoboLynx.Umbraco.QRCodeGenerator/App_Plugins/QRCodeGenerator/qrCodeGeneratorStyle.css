@@ -4,19 +4,44 @@
   color: #0063ff;
   border: 1px solid #0063ff;
 }
+.qrcode-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: start;
+  flex-flow: row wrap;
+}
+@media (max-width: 767px) {
+  .qrcode-container {
+    flex-flow: column-reverse nowrap;
+  }
+}
+.qrcode-container > div {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 50%;
+}
+@media (max-width: 767px) {
+  .qrcode-container > div {
+    flex-basis: 100%;
+  }
+}
 .qrcode-holder {
-  padding: 50% 0;
-  width: 100%;
-  position: relative;
+  width: 90%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
+  position: relative;
 }
-.qrcode-holder img {
-  max-width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
+.qrcode-vertical-center {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: start;
+  align-items: center;
+  position: relative;
+}
+.qrcode-vertical-center > div {
+  justify-self: center;
+  flex-basis: 50%;
 }
 .qrcode-icon {
   font-size: 4em;

@@ -1,4 +1,5 @@
 ﻿@infoColor: #0063ff;
+@holder-size: 90%;
 
 .qrcode-info {
     padding: 1em;
@@ -7,20 +8,45 @@
     border: 1px solid @infoColor;
 }
 
-.qrcode-holder {
-    padding: 50% 0;
-    width: 100%;
-    position: relative;
+.qrcode-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: start;
+    flex-flow: row wrap;
 
+    @media (max-width: 767px) {
+        flex-flow: column-reverse nowrap;
+    }
+
+    > div {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 50%;
+
+        @media (max-width: 767px) {
+            flex-basis: 100%;
+        }
+    }
+}
+
+.qrcode-holder {
+    width: @holder-size;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
+    position: relative;
+}
 
-    img {
-        max-width: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
+.qrcode-vertical-center {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: start;
+    align-items: center;
+    position: relative;
+
+    > div {
+        justify-self: center;
+        flex-basis: 50%;
     }
 }
 
