@@ -429,6 +429,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             //Assign
             var contentId = 123;
             var propertyAlias = "qrCodePropertyAlias";
+            string culture = null;
 
             var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => defaultConfiguration));
 
@@ -455,7 +456,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                );
 
             //Act
-            var httpRespones = builder.CreateQRCodeAsResponse(publishedContent, propertyAlias, null);
+            var httpRespones = builder.CreateQRCodeAsResponse(publishedContent, propertyAlias, culture, null);
 
             //Assert
             Assert.NotNull(httpRespones);

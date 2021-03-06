@@ -13,9 +13,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 
         public override string Id => "Text";
 
-        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content)
+        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture)
         {
-            return source.GetValue<string>(0, "text", content, sourceSettings);
+            return source.GetValue<string>(0, "text", content, sourceSettings, culture);
         }
     }
 }

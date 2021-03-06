@@ -35,6 +35,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
         public void GetValue_WhenIndexIsPassAndPropertyExist_ShouldReturnValue<TReturn>(string propertyName, object propertyValue, string sourceSettings, object expectedResult) where TReturn : System.IConvertible
         {
             //Arrange
+            string culture = null;
+
             var source = new SimplePropertySource(Mock.Of<ILocalizedTextService>());
 
             var mockedPublishedContent = new Mock<IPublishedContent>();
@@ -42,7 +44,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
             SetupPropertyValue(mockedPublishedContent, propertyName, propertyValue);
 
             //Act
-            var value = source.GetValue<TReturn>(0, null, mockedPublishedContent.Object, sourceSettings);
+            var value = source.GetValue<TReturn>(0, null, mockedPublishedContent.Object, sourceSettings, culture);
 
             //Assert
             Assert.IsInstanceOf<TReturn>(value);
@@ -59,6 +61,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
         public void GetValue_WhenKeyIsPassAndPropertyExist_ShouldReturnValue<TReturn>(string propertyName, object propertyValue, string sourceSettings, string key, object expectedResult) where TReturn : System.IConvertible
         {
             //Arrange
+            string culture = null;
+
             var source = new SimplePropertySource(Mock.Of<ILocalizedTextService>());
 
             var mockedPublishedContent = new Mock<IPublishedContent>();
@@ -66,7 +70,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
             SetupPropertyValue(mockedPublishedContent, propertyName, propertyValue);
 
             //Act
-            var value = source.GetValue<TReturn>(-1, key, mockedPublishedContent.Object, sourceSettings);
+            var value = source.GetValue<TReturn>(-1, key, mockedPublishedContent.Object, sourceSettings, culture);
 
             //Assert
             Assert.IsInstanceOf<TReturn>(value);

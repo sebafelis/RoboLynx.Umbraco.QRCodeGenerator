@@ -22,7 +22,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         public ContentApp GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups)
         {
             // only show app on content items
-            if (source is IContentBase entity)
+            if (source is IContent entity)  //TODO Change to IContentBase to support Media and Members
             {
                 if (entity.Properties.Where(p => p.PropertyType.PropertyEditorAlias == Constants.PropertyEditorAlias).Any())
                 {

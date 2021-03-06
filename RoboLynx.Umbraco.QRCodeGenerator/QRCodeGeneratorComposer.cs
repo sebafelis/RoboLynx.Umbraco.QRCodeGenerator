@@ -32,7 +32,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             composition.Register<QRCodeSourcePickerController>(Lifetime.Request);
             composition.Register<QRCodeTypePickerController>(Lifetime.Request);
 
-            //composition.Components().Append<QRCodeGeneratorComponent>();
+            composition.Components().Append<QRCodeGeneratorComponent>();
             composition.ContentApps().Append<QRCodeGeneratorApp>();
         }
     }

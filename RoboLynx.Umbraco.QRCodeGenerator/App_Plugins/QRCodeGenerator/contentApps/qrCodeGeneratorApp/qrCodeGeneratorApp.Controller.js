@@ -4,19 +4,23 @@
     angular.module("umbraco")
         .controller("RoboLynx.Umbraco.QRCodeContentAppController", qrCodeContentApp);
 
-    qrCodeContentApp.$inject = ['$scope', 'editorState', 'contentResource', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService'];
+    qrCodeContentApp.$inject = ['$scope', 'editorState', 'eventsService', 'contentResource', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService'];
 
-    function qrCodeContentApp($scope, editorState, contentResource, qrCodeGeneratorResources, $q, notificationsService) {
+    function qrCodeContentApp($scope, editorState, eventsService, contentResource, qrCodeGeneratorResources, $q, notificationsService) {
 
         var vm = this;
 
-        var defaultSettings = {};
-        var requierdSettingsForFormats = {};
-        var watchSettingsModel = null;
+        var defaultSettings = {},
+            requierdSettingsForFormats = {},
+            unwatchSettingsModel,
+            unwatchQRCodePropertyAlias,
+            unwatchAppActive,
+            unwatchContentState,
+            onContentSaved,
+            initSubscription;
 
         vm.appActive = false;
         vm.currentNodeId = editorState.current.id;
-        vm.currentNodeAlias = editorState.current.contentTypeAlias;
         vm.qrCodeProperties = null;
         vm.selectedQRCodePropertyAlias = null;
         vm.qrCodeLoaded = false;
@@ -137,16 +141,6 @@
             download(vm.qrCode, vm.qrCodeFileName);
         };
 
-        vm.qrCodePropertyChange = function () {
-            unwatchSettings();
-
-            getQRCodeSettings(vm.currentNodeId, vm.selectedQRCodePropertyAlias)
-                .then(function () {
-                    setDefaultSettings();
-                    watchSettings();
-                })
-        };
-
         function formatChange(formatModel) {
             _.each(vm.settingsModel, function (property) {
                 property.show = formatModel.value && _.contains(requierdSettingsForFormats[formatModel.value], property.alias);
@@ -161,29 +155,67 @@
             return result;
         }
 
+        function getActiveVariant(variants) {
+            return _.findWhere(variants, { active: true });
+        }
+
+        function getCurrentCulture(variants) {
+            var culture = "invariant";
+            var activeVariant = getActiveVariant(variants);
+            if (activeVariant && activeVariant.language) {
+                culture = activeVariant.language.culture;
+            }
+            return culture;
+        }
+
         function setDefaultSettings() {
+            var tempSettings = angular.copy(vm.settingsModel);
             for (var property in defaultSettings) {
-                var propertyModel = _.find(vm.settingsModel, { alias: property });
+                var propertyModel = _.findWhere(tempSettings, { alias: property });
                 if (propertyModel) {
                     propertyModel.value = defaultSettings[propertyModel.alias];
                 }
             }
+            vm.settingsModel = tempSettings;
         }
 
         function unwatchSettings() {
-            if (watchSettingsModel) {
-                watchSettingsModel = null;
+            if (unwatchSettingsModel) {
+                unwatchSettingsModel();
+                unwatchSettingsModel = null;
+            }
+
+            if (onContentSaved) {
+                onContentSaved();
+                onContentSaved = null;
             }
         }
 
         function watchSettings() {
-            if (!watchSettingsModel) {
-                $scope.$watch("vm.settingsModel", function (newForm, oldForm) {
-                    if (vm.selectedQRCodePropertyAlias) {
-                        getQRCode(vm.currentNodeId, vm.selectedQRCodePropertyAlias, mapSettings(vm.settingsModel));
-                    }
+            var callGetQRCode = function () {
+                if (vm.selectedQRCodePropertyAlias) {
+                    var culture = getCurrentCulture($scope.content.variants);
+                    getQRCode(vm.currentNodeId, vm.selectedQRCodePropertyAlias, culture, mapSettings(vm.settingsModel));
+                }
+            }
+
+            if (!unwatchSettingsModel) {
+                unwatchSettingsModel = $scope.$watchGroup(generateExpressionsToWatchSettingsValue(), function () {
+                    callGetQRCode();
                 }, true);
             }
+
+            if (!onContentSaved) {
+                onContentSaved = eventsService.on("content.saved", function () {
+                    callGetQRCode();
+                });
+            }
+        }
+
+        function generateExpressionsToWatchSettingsValue() {
+            return _.map(vm.settingsModel, function (item, index) {
+                return "vm.settingsModel[" + index + "].value";
+            });
         }
 
         function getRequiredSettingsForFormats() {
@@ -196,9 +228,9 @@
                         return data;
                     },
                     function (error) {
-                        notificationsService.error("Error", "Could not get required settings for formats.", null, error);
+                        notificationsService.error("Error", "Could not get required settings for formats. " + error);
                         vm.qrCodeError = error;
-                        return error;
+                        return $q.reject(error);
                     });
         }
 
@@ -212,15 +244,15 @@
                         return data;
                     },
                     function (error) {
-                        notificationsService.error("Error", "Could not get default settings.", null, error);
+                        notificationsService.error("Error", "Could not get default settings. " + error);
                         vm.qrCodeError = error;
-                        return error;
+                        return $q.reject(error);
                     });
         }
 
-        function getQRCode(contentId, propertyAlias, settings) {
+        function getQRCode(contentId, propertyAlias, culture, settings) {
             vm.qrCodeLoaded = false;
-            return qrCodeGeneratorResources.getQRCodeAsBase64(contentId, propertyAlias, settings)
+            return qrCodeGeneratorResources.getQRCodeAsBase64(contentId, propertyAlias, culture, settings)
                 .then(
                     function (data) {
                         const img = new Image();
@@ -237,16 +269,18 @@
                         return data;
                     },
                     function (error) {
-                        notificationsService.error("Error", "Could not get QR Code URL.", null, error);
+                        notificationsService.error("Error", "Could not get QR Code. " + error);
                         vm.qrCodeError = error;
-                        return error;
+                        return $q.reject(error);
                     });
         }
 
 
         function findProperties() {
-            return contentResource.getById(vm.currentNodeId).then(function (node) {
-                vm.qrCodeProperties = _.filter(node.variants[0].tabs[0].properties,
+            var culture = getCurrentCulture($scope.content.variants);
+            return contentResource.getById(vm.currentNodeId, culture).then(function (node) {
+                var prop = _.flatten(_.pluck(_.flatten(node.variants[0].tabs, true), 'properties'));
+                vm.qrCodeProperties = _.filter(prop,
                     function (prop) {
                         return prop.view.endsWith('qrCodeGenerator.html');
                     });
@@ -261,40 +295,55 @@
             });
         }
 
-        function waitForActive() {
-            var deferred = $q.defer();
+        function oninit() {
 
-            $scope.$on("editors.apps.appChanged", function ($event, $args) {
-                vm.appActive = $args.app.alias == "qrCodeGenerator";
-
-                if (vm.appActive)
-                    deferred.resolve('Hello, ' + name + '!');
-            });
-
-            return deferred.promise;
-        }
-
-        function init() {
             $scope.model.disabled = true;
-            $q.all([
-                waitForActive(),
-                $q.all([
-                    findProperties()
-                        .then(function (selectedQRCodePropertyAlias) {
-                            getQRCodeSettings(vm.currentNodeId, selectedQRCodePropertyAlias)
-                                .then(function () {
-                                    setDefaultSettings();
-                                });
-                        }),
-                    getRequiredSettingsForFormats()
-                ]).then(function () {
-                    $scope.model.disabled = false;
-                })
-            ]).then(function () {
-                watchSettings();
+
+            unwatchQRCodePropertyAlias = $scope.$watch("vm.selectedQRCodePropertyAlias", function (newValue, oldValue) {
+                if (newValue && oldValue != newValue) {
+                    unwatchSettings();
+
+                    $q.all([
+                        getRequiredSettingsForFormats(),
+                        getQRCodeSettings(vm.currentNodeId, vm.selectedQRCodePropertyAlias)
+                    ]).then(function () {
+                        setDefaultSettings();
+                        watchSettings();
+                    });
+                }
+            });
+
+            unwatchContentState = $scope.$watch("variantContent.state", function (newValue, oldValue) {
+                $scope.model.disabled = newValue != "Published";
+            }, true);
+
+            unwatchAppActive = $scope.$watch("model.active", function (newValue, oldValue) {
+                if (newValue == true) {
+                    unwatchSettings();
+                    findProperties();
+                    unwatchAppActive();
+                }
             });
         }
 
-        init();
+        $scope.$on('$destroy', function () {
+            initSubscription.unsubscribe();
+
+            if (unwatchQRCodePropertyAlias) {
+                unwatchQRCodePropertyAlias();
+            }
+
+            unwatchSettings();
+
+            if (unwatchContentState) {
+                unwatchContentState();
+            }
+
+            if (unwatchAppActive) {
+                unwatchAppActive();
+            }
+        });
+
+        oninit();
     }
 })();

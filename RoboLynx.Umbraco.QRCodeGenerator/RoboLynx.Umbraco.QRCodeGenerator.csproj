@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net472</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Description>Property editor for Umbraco 7 and 8 which generate QR codes from specify document property value.</Description>
+		<Description>QR code generator for Umbraco 7 and Umbraco 8. It generate QR codes for specify data source (e.g. published document property value, URL, any custom source).</Description>
 		<Copyright>Sebastian Felis @ 2021</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
@@ -21,9 +21,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="App_Plugins\QRCodeGenerator\notifications\**" />
+	  <EmbeddedResource Remove="App_Plugins\QRCodeGenerator\notifications\**" />
+	  <None Remove="App_Plugins\QRCodeGenerator\notifications\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Remove="CompressContent.cs" />
 		<Compile Remove="QRCodeGenerator.cs" />
-		<Compile Remove="QRCodeGeneratorComponent.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,7 +36,6 @@
 		<Content Include="App_Plugins\QRCodeGenerator\lang\pl-PL.xml" />
 		<Content Include="App_Plugins\QRCodeGenerator\lang\en-US.xml" />
 		<Content Include="App_Plugins\QRCodeGenerator\lang\en-GB.xml" />
-		<Content Include="App_Plugins\QRCodeGenerator\libs\download.min.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\package.manifest" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.Controller.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.html" />

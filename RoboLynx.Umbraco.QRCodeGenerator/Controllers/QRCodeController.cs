@@ -47,23 +47,33 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult DefaultSettings(int contentId, string propertyAlias)
+        public IHttpActionResult DefaultSettings(int nodeId, string propertyAlias)
         {
-            var publishedContent = Umbraco.Content(contentId);
+            var objectType = Services.EntityService.GetObjectType(nodeId);
 
-            if (publishedContent is null)
+            switch (objectType)
             {
-                return BadRequest();
+                case UmbracoObjectTypes.Document:
+                    var publishedContent = Umbraco.Content(nodeId);
+
+                    if (publishedContent is null)
+                    {
+                        return BadRequest("Content is not published or is not in cache yet.");
+                    }
+
+                    var defaultSettings = qrCodeConfigBuilder.GetDefaultSettings(publishedContent, propertyAlias);
+
+                    if (defaultSettings is null)
+                    {
+                        return BadRequest("Content has not configuration.");
+                    }
+
+                    return Ok(defaultSettings);
+                case UmbracoObjectTypes.Unknown:
+                    return NotFound();
+                default:
+                    return BadRequest("This node type is not supported.");
             }
-
-            var defaultSettings = qrCodeConfigBuilder.GetDefaultSettings(publishedContent, propertyAlias);
-
-            if (defaultSettings is null)
-            {
-                return NotFound();
-            }
-
-            return Ok(defaultSettings);
         }
 
         [HttpGet]
@@ -76,30 +86,41 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 
         [HttpGet]
         //[CompressContent]
-        public IHttpActionResult Image(int contentId, string propertyAlias, [FromUri] QRCodeSettings settings)
+        public IHttpActionResult Image(int nodeId, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
         {
-            var publishedContent = Umbraco.Content(contentId);
+            var objectType = Services.EntityService.GetObjectType(nodeId);
 
-            if (publishedContent != null)
+            switch (objectType)
             {
-                try
-                {
-                    var response = Request.CreateResponse(HttpStatusCode.OK);
+                case UmbracoObjectTypes.Document:
+                    var publishedContent = Umbraco.Content(nodeId);
 
-                    response.Content = qrCodeConfigBuilder.CreateQRCodeAsResponse(publishedContent, propertyAlias, settings);
+                    if (publishedContent != null)
+                    {
+                        try
+                        {
+                            var response = Request.CreateResponse(HttpStatusCode.OK);
 
-                    return ResponseMessage(response);
-                }
-                catch (QRCodeGeneratorException qrex)
-                {
-                    return BadRequest(qrex.Message);
-                }
-                catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
-                {
-                    return BadRequest();
-                }
+                            response.Content = qrCodeConfigBuilder.CreateQRCodeAsResponse(publishedContent, propertyAlias, culture, settings);
+
+                            return ResponseMessage(response);
+                        }
+                        catch (QRCodeGeneratorException qrex)
+                        {
+                            return BadRequest(qrex.Message);
+                        }
+                        catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
+                        {
+                            return BadRequest();
+                        }
+                    }
+                    return BadRequest("Content is not published or is not in cache yet.");
+                case UmbracoObjectTypes.Unknown:
+                    return NotFound();
+                default:
+                    return BadRequest("This node type is not supported.");
             }
-            return BadRequest();
         }
+
     }
 }

@@ -56,7 +56,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Extensions
             return null;
         }
 
-        public HttpContent CreateQRCodeAsResponse(IPublishedContent publishedContent, string propertyAlias, QRCodeSettings userSettings)
+        public HttpContent CreateQRCodeAsResponse(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings userSettings)
         {
             if (publishedContent is null)
             {
@@ -69,7 +69,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Extensions
             }
 
             var config = CreateConfiguration(publishedContent, propertyAlias, userSettings);
-            var value = config.Type.Value(config.Source, config.SourceSettings, publishedContent);
+            var value = config.Type.Value(config.Source, config.SourceSettings, publishedContent, culture);
 
             return config.Format.ResponseContent(value, config.Settings);
         }

@@ -19,12 +19,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 
         public override string Id => "SMS";
 
-        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content)
+        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture)
         {
-            var number = source.GetValue<string>(0, numberArgumentName, content, sourceSettings);
+            var number = source.GetValue<string>(0, numberArgumentName, content, sourceSettings, culture);
             RunValidator(numberArgumentName, number);
 
-            var subject = source.GetValue<string>(1, subjectArgumentName, content, sourceSettings);
+            var subject = source.GetValue<string>(1, subjectArgumentName, content, sourceSettings, culture);
             RunValidator(subjectArgumentName, subject);
 
             return new QRCoder.PayloadGenerator.SMS(number, subject).ToString();

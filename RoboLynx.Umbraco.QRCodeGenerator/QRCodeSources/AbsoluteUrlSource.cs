@@ -16,14 +16,14 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 
         public override string Id => "AbsoluteUrl";
 
-        public override T GetValue<T>(int index, string key, IPublishedContent content, string sourceSettings)
+        public override T GetValue<T>(int index, string key, IPublishedContent content, string sourceSettings, string culture)
         {
             if (content is null)
             {
                 throw new ArgumentNullException(nameof(content));
             }
 
-            var url = content.Url(null, UrlMode.Absolute);
+            var url = content.Url(culture, UrlMode.Absolute);
 
             return (T)Convert.ChangeType(url, typeof(T));
         }

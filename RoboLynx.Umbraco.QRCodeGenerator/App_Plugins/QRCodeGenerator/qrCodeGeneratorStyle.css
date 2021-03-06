@@ -6,42 +6,49 @@
 }
 .qrcode-container {
   display: flex;
-  justify-content: space-evenly;
-  align-items: start;
-  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-flow: column-reverse nowrap;
 }
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .qrcode-container {
-    flex-flow: column-reverse nowrap;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: start;
   }
 }
 .qrcode-container > div {
   flex-grow: 1;
   flex-shrink: 1;
-  flex-basis: 50%;
+  flex-basis: 100%;
 }
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .qrcode-container > div {
-    flex-basis: 100%;
+    flex-basis: 50%;
   }
 }
 .qrcode-holder {
-  width: 90%;
-  display: flex;
+  width: 100%;
+  padding: 50% 0;
   justify-content: center;
   align-items: start;
   position: relative;
 }
+.qrcode-holder img {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 .qrcode-vertical-center {
   display: flex;
+  position: relative;
   flex-flow: column nowrap;
   justify-content: start;
-  align-items: center;
-  position: relative;
-}
-.qrcode-vertical-center > div {
-  justify-self: center;
-  flex-basis: 50%;
+  align-items: stretch;
+  align-content: center;
 }
 .qrcode-icon {
   font-size: 4em;

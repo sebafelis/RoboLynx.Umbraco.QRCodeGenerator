@@ -16,6 +16,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Extensions
 
         QRCodeConfig CreateConfiguration(IPublishedContent publishedContent, string propertyAlias, QRCodeSettings userSettings);
 
-        HttpContent CreateQRCodeAsResponse(IPublishedContent publishedContent, string propertyAlias, QRCodeSettings userSettings);
+        HttpContent CreateQRCodeAsResponse(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings userSettings);
     }
 }

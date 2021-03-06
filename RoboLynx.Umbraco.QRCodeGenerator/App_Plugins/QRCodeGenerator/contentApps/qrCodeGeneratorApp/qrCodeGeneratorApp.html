@@ -1,30 +1,59 @@
 <div ng-controller="RoboLynx.Umbraco.QRCodeContentAppController as vm">
-    <div class="qrcode-container">
-        <div class="qrcode-vertical-center">
-            <div class="qrcode-holder">
-                <img ng-src="{{vm.qrCode}}" ng-show="vm.qrCodeLoaded && !vm.qrCodeError" class="qrcode-img" id="qrCodeImg" />
-                <umb-load-indicator ng-show="!vm.qrCodeLoaded"></umb-load-indicator>
-            </div>
-            <div ng-if="vm.qrCodeWidth && vm.qrCodeHeight && vm.qrCodeLoaded" class="text-center"><small><localize key="qrCode_imageSize">Image size</localize>: {{vm.qrCodeWidth}} x {{vm.qrCodeHeight}}</small></div>
-
-            <umb-button type="button"
-                        button-style="action"
-                        label-key="general_download"
-                        action="vm.download(model)"
-                        icon="icon-download-alt"
-                        disabled="!vm.qrCodeLoaded">
-            </umb-button>
+    <div ng-if="vm.qrCodeSettingsLoaded && vm.requiredSettingsForFormatsLoaded">
+        <div ng-if="vm.qrCodeError" class="alert alert-danger">
+            <h4><span class="icon-application-error"></span> <localize key="general_error">Error</localize></h4>
+            <p>{{vm.qrCodeError}}</p>
         </div>
-        <div>
-            <umb-box>
-                <umb-box-header title-key="@qrCode_dialogHeader"></umb-box-header>
-                <umb-box-content>
-                    <div ng-if="vm.qrCodeSettingsLoaded && vm.requiredSettingsForFormatsLoaded">
-                        <div ng-if="vm.qrCodeError" class="alert alert-danger">
-                            <span class="icon-application-error"></span> <localize key="general_error">Error</localize>: <br /><span ng-bind="vm.qrCodeError"></span>
-                        </div>
 
-                        <umb-control-group label="Select source">
+        <div ng-if="variantContent.state == 'PublishedPendingChanges' && !variantContent.isDirty" class="alert alert-warning">
+            <h4><span class="icon-alert"></span> <localize key="qrCode_warning">Warning</localize></span></h4>
+            <p>
+                <localize key="qrCode_notPublishedContentMsg">This node was saved but it hasn't published version. It's can make a difference between value which you see and value passed to generate QR Code.</localize>
+            </p>
+        </div>
+
+        <div ng-if="variantContent.state == 'Published' && variantContent.isDirty" class="alert alert-warning">
+            <h4><span class="icon-alert"></span> <localize key="qrCode_warning">Warning</localize></span></h4>
+            <p>
+                <localize key="qrCode_openDirtyContentMsg">QR Code is generate from saved property values of published content. This content has unsaved changes now. It's can make a difference between value which you see and value passed to generate QR Code.</localize>
+            </p>
+        </div>
+
+        <div ng-if="variantContent.state == 'Draft' || variantContent.state == 'NotCreated'" class="alert alert-danger">
+            <h4><span class="icon-alert"></span> <localize key="general_error">Error</localize></span></h4>
+            <p>
+                <localize key="qrCode_notPublishedAnyContentVersionMsg">This content has not published version. To generate QR Code content has to have published version.</localize>
+            </p>
+        </div>
+
+        <div class="qrcode-container">
+            <div class="qrcode-vertical-center">
+                <div ng-if="vm.qrCodeLoaded" class="qrcode-vertical-center">
+                    <div class="qrcode-holder">
+                        <img ng-src="{{vm.qrCode}}" ng-show="vm.qrCodeLoaded && !vm.qrCodeError" class="qrcode-img" id="qrCodeImg" />
+                    </div>
+                    <div ng-if="vm.qrCodeWidth && vm.qrCodeHeight && vm.qrCodeLoaded" class="text-center"><small><localize key="qrCode_imageSize">Image size</localize>: {{vm.qrCodeWidth}}px X {{vm.qrCodeHeight}}px</small></div>
+
+                    <umb-button type="button"
+                                button-style="action"
+                                label-key="general_download"
+                                action="vm.download(model)"
+                                icon="icon-download-alt"
+                                disabled="!vm.qrCodeLoaded"
+                                ng-if="vm.qrCodeLoaded && !vm.qrCodeError"
+                                class="text-center">
+                    </umb-button>
+                </div>
+                <div class="qrcode-holder" ng-if="!vm.qrCodeLoaded">
+                    <div class="text-center text-error"><span ng-if="!vm.qrCodeLoaded && vm.qrCodeError" class="icon-application-error" style="font-size: 4em;"></span></div>
+                    <umb-load-indicator ng-if="!vm.qrCodeLoaded && !vm.qrCodeError"></umb-load-indicator>
+                </div>
+            </div>
+            <div>
+                <umb-box>
+                    <umb-box-header title-key="@qrCode_dialogHeader"></umb-box-header>
+                    <umb-box-content>
+                        <umb-control-group label="Select source" ng-show="vm.qrCodeProperties.length > 1">
                             <select ng-options="item.alias as item.label for item in vm.qrCodeProperties" ng-model="vm.selectedQRCodePropertyAlias"></select>
                         </umb-control-group>
 
@@ -36,10 +65,10 @@
                                 </umb-control-group>
                             </div>
                         </ng-form>
-                    </div>
-                    <umb-load-indicator ng-if="!vm.qrCodeSettingsLoaded || !vm.requiredSettingsForFormatsLoaded"></umb-load-indicator>
-                </umb-box-content>
-            </umb-box>
+                    </umb-box-content>
+                </umb-box>
+            </div>
         </div>
     </div>
+    <umb-load-indicator ng-if="!vm.qrCodeSettingsLoaded || !vm.requiredSettingsForFormatsLoaded"></umb-load-indicator>
 </div>

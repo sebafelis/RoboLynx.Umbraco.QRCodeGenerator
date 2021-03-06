@@ -2,15 +2,6 @@
   "$schema": "http://json.schemastore.org/package.manifest",
   "other properties": "",
 
-  //"contentApps": [
-  //  {
-  //    "name": "QR Code", // required - the name that appears under the icon
-  //    "alias": "qrCodeGenerator", // required - unique alias for your app
-  //    "weight": 0, // optional, default is 0, use values between -99 and +99 to appear between the existing Content (-100) and Info (100) apps
-  //    "icon": "icon-qr-code", // required - the icon to use
-  //    "view": "~/App_Plugins/QRCodeGenerator/contentApps/qrCodeContentApp/qrCodeContentApp.html" // required - the location of the view file
-  //  }
-  //],
   "propertyEditors": [
     {
       "alias": "qrCodeGenerator",
@@ -102,7 +93,7 @@
             //    "type": "Range",
             //    "config": {
             //      "min": 0,
-            //      "max": 0
+            //      "max": 30
             //    }
             //  }
             //]
@@ -138,16 +129,13 @@
     }
   ],
   "javascript": [
-    "~/App_Plugins/QRCodeGenerator/libs/download.min.js",
+    "~/App_Plugins/QRCodeGenerator/libs/downloadjs/download.min.js",
     "~/App_Plugins/QRCodeGenerator/services/qrCodeGenerator.Resources.js",
     "~/App_Plugins/QRCodeGenerator/propertyEditors/qrCodeGenerator/qrCodeGenerator.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeTypePicker/qrCodeTypePicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeSourcePicker/qrCodeSourcePicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.Controller.js",
-    "~/App_Plugins/QRCodeGenerator/notifications/openDirtyContent/openDirtyContent.Controller.js",
-    "~/App_Plugins/QRCodeGenerator/notifications/notPublishedContent/notPublishedContent.Controller.js",
-    "~/App_Plugins/QRCodeGenerator/notifications/notPublishedAnyContentVersion/notPublishedAnyContentVersion.Controller.js",
     "~/App_Plugins/QRCodeGenerator/contentApps/qrCodeGeneratorApp/qrCodeGeneratorApp.Controller.js",
     "~/App_Plugins/QRCodeGenerator/directives/hideUmbProperty.js"
   ],

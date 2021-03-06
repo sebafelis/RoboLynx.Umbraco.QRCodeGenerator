@@ -39,7 +39,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             var lightColor = ColorTranslator.FromHtml(settings.LightColor);
             var darkColor = ColorTranslator.FromHtml(settings.DarkColor);
 
-            var qrCodeBmp = GenerateBitmapQRCode(value, settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, ResolveIconUrl(settings.Icon), settings.IconSizePercent, settings.IconBorderWidth.Value, settings.ECCLevel.Value);
+            using var qrCodeBmp = GenerateBitmapQRCode(value, settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, ResolveIconUrl(settings.Icon), settings.IconSizePercent, settings.IconBorderWidth.Value, settings.ECCLevel.Value);
             return SetBitmapAsHttpContent(qrCodeBmp, imageFormat, Mime, FileName);
         }
 
@@ -49,22 +49,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, (QRCoder.QRCodeGenerator.ECCLevel)((int)level), true);
 
             QRCode bmpQrCode = new QRCode(qrCodeData);
-            Bitmap qrCodeBmp = null;
             if (!string.IsNullOrEmpty(iconUrl))
             {
                 using var iconStream = mediaFileSystem.OpenFile(iconUrl);
                 using var iconBmp = new Bitmap(iconStream);
-                if (iconBmp is null)
+                if (!(iconBmp is null))
                 {
-                    qrCodeBmp = bmpQrCode.GetGraphic(size, darkColor, lightColor, drawQuiteZone);
-                }
-                else
-                {
-                    qrCodeBmp = bmpQrCode.GetGraphic(size, darkColor, lightColor, iconBmp, iconSizePercent, iconBorderWidth, drawQuiteZone);
+                    return bmpQrCode.GetGraphic(size, darkColor, lightColor, iconBmp, iconSizePercent, iconBorderWidth, drawQuiteZone);
                 }
             }
-
-            return qrCodeBmp;
+            return bmpQrCode.GetGraphic(size, darkColor, lightColor, drawQuiteZone);
         }
 
         private HttpContent SetBitmapAsHttpContent(Bitmap bitmap, ImageFormat format, string mime, string fileName)

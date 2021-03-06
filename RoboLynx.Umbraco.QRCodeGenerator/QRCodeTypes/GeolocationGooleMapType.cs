@@ -21,17 +21,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 
         public override string Id => "GeolocationGooleMap";
 
-        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content)
+        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture)
         {
             if (source is null)
             {
                 throw new System.ArgumentNullException(nameof(source));
             }
 
-            var latitude = source.GetValue<double>(0, latitudeArgumentName, content, sourceSettings);
+            var latitude = source.GetValue<double>(0, latitudeArgumentName, content, sourceSettings, culture);
             RunValidator(latitudeArgumentName, latitude);
 
-            var longitude = source.GetValue<double>(1, longitudeArgumentName, content, sourceSettings);
+            var longitude = source.GetValue<double>(1, longitudeArgumentName, content, sourceSettings, culture);
             RunValidator(longitudeArgumentName, longitude);
 
             var usCultureInfo = new CultureInfo("en-US", false);

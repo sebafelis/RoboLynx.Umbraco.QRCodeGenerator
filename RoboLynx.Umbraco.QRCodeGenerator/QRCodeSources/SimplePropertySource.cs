@@ -25,7 +25,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 
         public override string Id => "SilmpleProperty";
 
-        public override T GetValue<T>(int index, string key, IPublishedContent content, string sourceSettings)
+        public override T GetValue<T>(int index, string key, IPublishedContent content, string sourceSettings, string culture)
         {
             if (content is null)
             {
@@ -48,7 +48,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
                 property = content.GetProperty(settings.Preperties[key]);
                 if (property != null)
                 {
-                    return (T)Convert.ChangeType(property.Value(), typeof(T));
+                    return (T)Convert.ChangeType(property.Value(culture), typeof(T));
                 }
             }
             if (settings.Preperties.Count > index && settings.Preperties[index] != null)
@@ -57,7 +57,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             }
 
             return !(property is null)
-                ? (T)Convert.ChangeType(property.Value(), typeof(T))
+                ? (T)Convert.ChangeType(property.Value(culture), typeof(T))
                 : throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configured correctly.");
         }
 

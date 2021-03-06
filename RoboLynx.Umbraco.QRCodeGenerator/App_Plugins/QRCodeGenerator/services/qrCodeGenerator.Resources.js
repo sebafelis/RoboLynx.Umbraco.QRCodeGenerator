@@ -73,8 +73,7 @@ angular.module("umbraco")
                         },
                         function (reason) {
                             userPromises[id] = null;
-                            throw new Error(reason.message);
-                            return $q.reject(reason);
+                            return $q.reject(reason.data.message);
                         }
                     );
             }
@@ -83,8 +82,8 @@ angular.module("umbraco")
         }
 
         return {
-            getQRCode: function (contentId, propertyAlias, settings) {
-                if (!contentId) {
+            getQRCode: function (nodeId, propertyAlias, culture, settings) {
+                if (!nodeId) {
                     throw new Error("Content ID cannot be empty.");
                 }
                 if (!propertyAlias) {
@@ -93,15 +92,15 @@ angular.module("umbraco")
                 return $http.get(qrCodeApiUrl + 'Image', {
                     responseType: "blob",
                     params: {
-                        contentId: contentId, propertyAlias: propertyAlias, size: settings.size, format: settings.format,
+                        nodeId: nodeId, propertyAlias: propertyAlias, culture: culture, size: settings.size, format: settings.format,
                         darkColor: settings.darkColor, lightColor: settings.lightColor, icon: settings.icon,
                         iconSizePercent: settings.iconSizePercent, iconBorderWidth: settings.iconBorderWidth,
                         drawQuiteZone: _convertToBool(settings.drawQuiteZone), eccLevel: settings.eccLevel
                     }
                 }).then(function (response) { return response; });
             },
-            getQRCodeAsBase64: function (contentId, propertyAlias, settings) {
-                return this.getQRCode(contentId, propertyAlias, settings)
+            getQRCodeAsBase64: function (nodeId, propertyAlias, culture, settings) {
+                return this.getQRCode(nodeId, propertyAlias, culture, settings)
                     .then(
                         function (response) {
                             var deferred = $q.defer();
@@ -126,8 +125,13 @@ angular.module("umbraco")
                         }
                     );
             },
-            getQRCodeSettings: function (contentId, propertyAlias) {
-                return $http.get(qrCodeApiUrl + 'DefaultSettings?contentId=' + contentId + '&propertyAlias=' + propertyAlias).then(function (response) { return response.data; });
+            getQRCodeSettings: function (nodeId, propertyAlias) {
+                return $http.get(qrCodeApiUrl + 'DefaultSettings?nodeId=' + nodeId + '&propertyAlias=' + propertyAlias).then(
+                    function (response) {
+                        return response.data;
+                    }, function (error) {
+                        return $q.reject(error.data.message);
+                    });
             },
             getRequiredSettingsForFormats: function () {
                 return _callOneTimeHttpPromise(arguments.callee.name, $http.get(qrCodeApiUrl + 'RequiredSettingsForFormats'));

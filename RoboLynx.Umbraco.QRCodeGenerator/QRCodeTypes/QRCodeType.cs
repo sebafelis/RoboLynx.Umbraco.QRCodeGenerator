@@ -26,7 +26,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 
         public string Description => localizedTextService.Localize($"qrCodeTypes/{GetType().Name.ToFirstLower()}Description") ?? string.Empty;
 
-        public abstract string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content);
+        public abstract string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture);
 
         protected void RunValidator(string key, object value)
         {

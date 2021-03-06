@@ -63,13 +63,14 @@
 		<key alias="actionBtnCaption">Generuj kod QR</key>
 		<key alias="eccLevel">Stopień korekcji błędów</key>
 		<key alias="imageSize">Rozmiar obrazka</key>
-		<key alias="notPublishedAnyContentVersionMsg">Brak opublikowanej wersji treści</key>
-		<key alias="notPublishedAnyContentVersionHedline">Ta treść nie posiada opublikowanej wersji. Aby wygenerować Kod QR treść musi posiadać opublikowaną wersję.</key>
+		<key alias="notPublishedAnyContentVersionHedline">Brak opublikowanej wersji treści</key>
+		<key alias="notPublishedAnyContentVersionMsg">Ta treść nie posiada opublikowanej wersji. Aby wygenerować Kod QR treść musi posiadać opublikowaną wersję.</key>
 		<key alias="openDirtyContentHedline">Treść posiada niezapisane zmiany</key>
 		<key alias="openDirtyContentMsg">Kod QR jest generowany z zapisanych wartiści właściwości opublikowanych treści. Ta treść posiada teraz niezapisane zmiany. Może to powadować różnicę między wartością, którą widzisz, a wartości przekazaną do generowania kodu QR. Czy chcesz wygenerować kod QR mimo to?</key>
 		<key alias="notPublishedContentHedline">Nieopublikowana treść</key>
-		<key alias="notPublishedContentMsg">Ta wersja treści jest zapisana, lecz nie została opublikowana. Może to powadować różnicę między wartością, którą widzisz, a wartości przekazaną do generowania kodu QR. Czy chcesz wygenerować kod QR mimo to?</key>
+		<key alias="notPublishedContentMsg">Ta wersja treści została zapisana, lecz nie jest opublikowana. Może to powadować różnicę między wartością, którą widzisz, a wartości przekazaną do generowania kodu QR.</key>
 		<key alias="generate">Generuj</key>
 		<key alias="publishFirst">Najpierw Zapiszę i Opublikuję treść</key>
+		<key alias="warning">Ostrzeżenie</key>
 	</area>
 </language>

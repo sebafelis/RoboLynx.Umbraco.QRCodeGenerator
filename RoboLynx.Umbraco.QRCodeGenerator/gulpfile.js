@@ -7,43 +7,64 @@ var gulp = require("gulp"),
     merge = require("merge-stream"),
     cleanCSS = require('gulp-clean-css'),
     rename = require("gulp-rename"),
-    compilerconfig = require("./compilerconfig.json"); // make sure bundleconfig.json doesn't contain any comments
+    compilerconfig = require("./compilerconfig.json"),
+    debug = require("gulp-debug"); // make sure bundleconfig.json doesn't contain any comments
 
 // Watch LESS files changes
-gulp.task("watch-less", function() {
-    var tasks = getCompiler(".less").map(function (bundle) {
-        return gulp.watch(bundle.inputFiles, gulp.series("compile-and-minify-less"));
+function watchLess(cb) {
+    getCompiler(".less").map(function (bundle) {
+        return gulp.watch(bundle.inputFile, compileAndMinifyLess);
     });
-    return merge(tasks);
-});
+
+    cb();
+}
+
+gulp.task('watch-less', watchLess);
 
 // Compile LESS
-gulp.task('less-compile', function () {
+function compileLess() {
     var tasks = getCompiler(".less").map(function (bundle) {
-        console.log("Compile less file " + bundle.inputFile + " to " + bundle.outputFile);
-        return gulp.src(bundle.inputFile, { base: "." })
-            .pipe(less())
-            .pipe(concat(bundle.outputFile))
-            .pipe(gulp.dest("."));
+        var stream = gulp.src(bundle.inputFile, { base: "." });
+        if (typeof filePath !== 'string' || bundle.inputFile == filePath) {
+            console.log("Compile less file " + bundle.inputFile + " to " + bundle.outputFile);
+            return stream
+                .pipe(less())
+                .pipe(concat(bundle.outputFile))
+                .pipe(gulp.dest("."));
+        }
+        return stream.pipe(gulp.dest('.'));;
     });
+
     return merge(tasks);
-});
+}
+
+gulp.task("compile-less", compileLess);
 
 // Minify CSS
-gulp.task('minify-css', () => {
+function minifyCss() {
     var tasks = getCompiler(".less").map(function (bundle) {
-        console.log("Minify css file " + bundle.outputFile);
-        return gulp.src(bundle.outputFile, { base: "." })
-            .pipe(cleanCSS({ compatibility: 'ie8' }))
-            .pipe(rename({ suffix: ".min" }))
-            .pipe(gulp.dest("."));
+        var stream = gulp.src(bundle.outputFile, { base: "." });
+        if (typeof filePath !== 'string' || bundle.inputFile == filePath) {
+            console.log("Minify css file " + bundle.outputFile);
+            return stream
+                .pipe(cleanCSS({ compatibility: 'ie8' }))
+                .pipe(rename({ suffix: ".min" }))
+                .pipe(gulp.dest("."));
+        }
+        return stream.pipe(gulp.dest('.'));;
     });
 
     return merge(tasks);
-});
+}
+
+gulp.task('minify-css', minifyCss);
 
 // Compile LESS and minify CSS
-gulp.task('compile-and-minify-less', gulp.series('less-compile', 'minify-css'));
+function compileAndMinifyLess(cb) {
+    return gulp.series(compileLess, minifyCss)(cb);
+}
+
+gulp.task('compile-and-minify-less', compileAndMinifyLess);
 
 function getCompiler(extension) {
     return compilerconfig.filter(function (bundle) {

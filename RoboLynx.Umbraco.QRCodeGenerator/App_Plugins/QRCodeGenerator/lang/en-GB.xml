@@ -50,7 +50,7 @@
 		<key alias="HDescription">30% of data bytes can be restored.</key>
 	</area>
 	<area alias="qrCode">
-		<key alias="qrCode">Code QR</key>
+		<key alias="qrCode">QR Code</key>
 		<key alias="size">Pixel per module</key>
 		<key alias="format">Format</key>
 		<key alias="darkColor">Dark color</key>
@@ -63,13 +63,14 @@
 		<key alias="actionBtnCaption">Generate QR Code</key>
 		<key alias="eccLevel">Error correction level</key>
 		<key alias="imageSize">Image size</key>
-		<key alias="notPublishedAnyContentVersionMsg">Unpublished content at all</key>
-		<key alias="notPublishedAnyContentVersionHedline">This content has not published version. To generate QR Code content must have published version.</key>
+		<key alias="notPublishedAnyContentVersionHedline">Unpublished content at all</key>
+		<key alias="notPublishedAnyContentVersionMsg">This content has not published version. To generate QR Code content has to have published version.</key>
 		<key alias="openDirtyContentHedline">This content has unsaved changes</key>
 		<key alias="openDirtyContentMsg">QR Code is generate from saved property values of published content. This content has unsaved changes now. It's can make a difference between value which you see and value passed to generate QR Code. Do you want generate QR code anyway?</key>
 		<key alias="notPublishedContentHedline">Unpublished content</key>
-		<key alias="notPublishedContentMsg">This content version has been saved but not published. It's can make a difference between value which you see and value passed to generate QR Code. Do you want generate QR code anyway?</key>
+		<key alias="notPublishedContentMsg">This node was saved but it hasn't published version. It's can make a difference between value which you see and value passed to generate QR Code.</key>
 		<key alias="generate">Generate</key>
 		<key alias="publishFirst">I will Save And Publish first</key>
+		<key alias="warning">Warning</key>
 	</area>
 </language>
