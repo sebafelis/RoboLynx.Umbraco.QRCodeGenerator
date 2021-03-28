@@ -1,4 +1,5 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
+﻿using DotNetColorParser;
+using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -11,7 +12,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public class PngFormat : RasterFormat
     {
-        public PngFormat(ILocalizedTextService localizedTextService, IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper) : base(localizedTextService, mediaFileSystem, umbracoHelper)
+        public PngFormat(ILocalizedTextService localizedTextService, IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IColorParser colorParser) : base(localizedTextService, mediaFileSystem, umbracoHelper, colorParser)
         {
 
         }

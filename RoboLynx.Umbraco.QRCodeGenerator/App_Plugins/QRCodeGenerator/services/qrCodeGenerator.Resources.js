@@ -25,7 +25,7 @@ angular.module("umbraco")
             return undefined;
         }
 
-        function _raadAsBase64(response) {
+        function _readAsBase64(response) {
             var deferred = $q.defer();
 
             var reader = new FileReader();
@@ -40,7 +40,7 @@ angular.module("umbraco")
             return deferred.promise;
         }
 
-        function _raadAsJson(response) {
+        function _readAsJson(response) {
             var deferred = $q.defer();
 
             var reader = new FileReader();
@@ -97,14 +97,14 @@ angular.module("umbraco")
                         iconSizePercent: settings.iconSizePercent, iconBorderWidth: settings.iconBorderWidth,
                         drawQuiteZone: _convertToBool(settings.drawQuiteZone), eccLevel: settings.eccLevel
                     }
-                }).then(function (response) { return response; });
+                }).then(function (response) { return response; }, function (error) { return $q.reject(error); });
             },
             getQRCodeAsBase64: function (nodeId, propertyAlias, culture, settings) {
                 return this.getQRCode(nodeId, propertyAlias, culture, settings)
                     .then(
                         function (response) {
                             var deferred = $q.defer();
-                            _raadAsBase64(response.data).then(function (base64Data) {
+                            _readAsBase64(response.data).then(function (base64Data) {
                                 deferred.resolve({
                                     data: base64Data,
                                     fileName: _getFileName(response)
@@ -116,7 +116,7 @@ angular.module("umbraco")
                         },
                         function (error) {
                             var deferred = $q.defer();
-                            _raadAsJson(error.data).then(function (errorObj) {
+                            _readAsJson(error.data).then(function (errorObj) {
                                 deferred.reject(errorObj.message);
                             }, function (readerError) {
                                 deferred.reject(readerError);

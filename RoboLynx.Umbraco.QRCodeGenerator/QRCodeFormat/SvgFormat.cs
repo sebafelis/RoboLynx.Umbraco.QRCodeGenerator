@@ -1,4 +1,5 @@
-﻿using QRCoder;
+﻿using DotNetColorParser;
+using QRCoder;
 using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System.Collections.Generic;
@@ -13,9 +14,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public class SvgFormat : QRCodeFormat
     {
-        public SvgFormat(ILocalizedTextService localizedTextService, UmbracoHelper umbracoHelper) : base(localizedTextService, umbracoHelper)
-        {
+        private readonly IColorParser colorParser;
 
+        public SvgFormat(ILocalizedTextService localizedTextService, UmbracoHelper umbracoHelper, IColorParser colorParser) : base(localizedTextService, umbracoHelper)
+        {
+            this.colorParser = colorParser;
         }
 
         public override string Id => "svg";
@@ -35,12 +38,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         public override HttpContent ResponseContent(string value, QRCodeSettings settings)
         {
-            var lightColor = ColorTranslator.FromHtml(settings.LightColor);
-            var darkColor = ColorTranslator.FromHtml(settings.DarkColor);
+            var lightColor = colorParser.ParseColor(settings.LightColor);
+            var darkColor = colorParser.ParseColor(settings.DarkColor);
 
             var qrGenerator = new QRCoder.QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, (QRCoder.QRCodeGenerator.ECCLevel)(int)settings.ECCLevel, true);
-            SvgQRCode svgQrCode = new SvgQRCode(qrCodeData);
+            SvgQRCode svgQrCode = new(qrCodeData);
             var svgString = svgQrCode.GetGraphic(settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, SvgQRCode.SizingMode.WidthHeightAttribute);
             svgString = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"> \n" + svgString;
 

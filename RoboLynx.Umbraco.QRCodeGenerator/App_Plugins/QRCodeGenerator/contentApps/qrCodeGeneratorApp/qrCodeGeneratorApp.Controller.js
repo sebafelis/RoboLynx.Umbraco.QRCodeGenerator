@@ -4,9 +4,9 @@
     angular.module("umbraco")
         .controller("RoboLynx.Umbraco.QRCodeContentAppController", qrCodeContentApp);
 
-    qrCodeContentApp.$inject = ['$scope', 'editorState', 'eventsService', 'contentResource', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService'];
+    qrCodeContentApp.$inject = ['$scope', 'editorState', 'eventsService', 'contentResource', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService', 'assetsService'];
 
-    function qrCodeContentApp($scope, editorState, eventsService, contentResource, qrCodeGeneratorResources, $q, notificationsService) {
+    function qrCodeContentApp($scope, editorState, eventsService, contentResource, qrCodeGeneratorResources, $q, notificationsService, assetsService) {
 
         var vm = this;
 
@@ -16,8 +16,7 @@
             unwatchQRCodePropertyAlias,
             unwatchAppActive,
             unwatchContentState,
-            onContentSaved,
-            initSubscription;
+            onContentSaved;
 
         vm.appActive = false;
         vm.currentNodeId = editorState.current.id;
@@ -26,6 +25,7 @@
         vm.qrCodeLoaded = false;
         vm.qrCodeSettingsLoaded = false;
         vm.requiredSettingsForFormatsLoaded = false;
+        vm.downloadJsLoaded = false;
         vm.qrCodeError = null;
         vm.qrCode = null;
         vm.qrCodeWidth = null;
@@ -36,7 +36,7 @@
             {
                 label: "@qrCode_darkColor",
                 show: true,
-                view: "/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html",
+                view: "/App_Plugins/ColorPickr/editor.html",
                 alias: "darkColor",
                 config: {
                     enableTransparency: "0",
@@ -48,7 +48,7 @@
             {
                 label: "@qrCode_lightColor",
                 show: true,
-                view: "/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html",
+                view: "/App_Plugins/ColorPickr/editor.html",
                 alias: "lightColor",
                 config: {
                     enableTransparency: "0",
@@ -160,7 +160,7 @@
         }
 
         function getCurrentCulture(variants) {
-            var culture = "invariant";
+            var culture = null;
             var activeVariant = getActiveVariant(variants);
             if (activeVariant && activeVariant.language) {
                 culture = activeVariant.language.culture;
@@ -216,6 +216,23 @@
             return _.map(vm.settingsModel, function (item, index) {
                 return "vm.settingsModel[" + index + "].value";
             });
+        }
+
+
+        function loadDownloadJs() {
+            return assetsService.loadJs(
+                "~/App_Plugins/QRCodeGenerator/libs/downloadjs/download.min.js"
+            ).then(
+                function (data) {
+                    vm.downloadJsLoaded = true;
+                    return data;
+                },
+                function (error) {
+                    notificationsService.error("Error", "Could not get required settings for formats. " + error);
+                    vm.qrCodeError = error;
+                    return $q.reject(error);
+                }
+            );
         }
 
         function getRequiredSettingsForFormats() {
@@ -305,7 +322,8 @@
 
                     $q.all([
                         getRequiredSettingsForFormats(),
-                        getQRCodeSettings(vm.currentNodeId, vm.selectedQRCodePropertyAlias)
+                        getQRCodeSettings(vm.currentNodeId, vm.selectedQRCodePropertyAlias),
+                        loadDownloadJs()
                     ]).then(function () {
                         setDefaultSettings();
                         watchSettings();
@@ -327,8 +345,6 @@
         }
 
         $scope.$on('$destroy', function () {
-            initSubscription.unsubscribe();
-
             if (unwatchQRCodePropertyAlias) {
                 unwatchQRCodePropertyAlias();
             }

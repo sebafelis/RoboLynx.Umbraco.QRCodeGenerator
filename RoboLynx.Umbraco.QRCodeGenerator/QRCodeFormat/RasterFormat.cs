@@ -1,4 +1,5 @@
-﻿using QRCoder;
+﻿using DotNetColorParser;
+using QRCoder;
 using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
     public abstract class RasterFormat : QRCodeFormat
     {
         private readonly IMediaFileSystem mediaFileSystem;
+        private readonly IColorParser colorParser;
 
         public override IEnumerable<string> RequiredSettings => new List<string> {
             Constants.SizeFieldName,
@@ -29,15 +31,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             Constants.ECCLevelFieldName
         };
 
-        public RasterFormat(ILocalizedTextService localizedTextService, IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper) : base(localizedTextService, umbracoHelper)
+        public RasterFormat(ILocalizedTextService localizedTextService, IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IColorParser colorParser) : base(localizedTextService, umbracoHelper)
         {
             this.mediaFileSystem = mediaFileSystem;
+            this.colorParser = colorParser;
         }
 
         protected HttpContent RasterResponseContent(string value, QRCodeSettings settings, ImageFormat imageFormat)
         {
-            var lightColor = ColorTranslator.FromHtml(settings.LightColor);
-            var darkColor = ColorTranslator.FromHtml(settings.DarkColor);
+            var lightColor = colorParser.ParseColor(settings.LightColor);
+            var darkColor = colorParser.ParseColor(settings.DarkColor);
 
             using var qrCodeBmp = GenerateBitmapQRCode(value, settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, ResolveIconUrl(settings.Icon), settings.IconSizePercent, settings.IconBorderWidth.Value, settings.ECCLevel.Value);
             return SetBitmapAsHttpContent(qrCodeBmp, imageFormat, Mime, FileName);
@@ -48,7 +51,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             var qrGenerator = new QRCoder.QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, (QRCoder.QRCodeGenerator.ECCLevel)((int)level), true);
 
-            QRCode bmpQrCode = new QRCode(qrCodeData);
+            QRCode bmpQrCode = new(qrCodeData);
             if (!string.IsNullOrEmpty(iconUrl))
             {
                 using var iconStream = mediaFileSystem.OpenFile(iconUrl);
@@ -63,7 +66,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         private HttpContent SetBitmapAsHttpContent(Bitmap bitmap, ImageFormat format, string mime, string fileName)
         {
-            using MemoryStream ms = new MemoryStream();
+            using MemoryStream ms = new();
             bitmap.Save(ms, format);
 
             var httpContent = new ByteArrayContent(ms.ToArray());

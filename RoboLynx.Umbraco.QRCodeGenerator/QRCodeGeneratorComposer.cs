@@ -1,4 +1,5 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
+﻿using DotNetColorParser;
+using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
 using RoboLynx.Umbraco.QRCodeGenerator.Extensions;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
@@ -24,6 +25,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
             composition.QRCodeFormats().Add(() => composition.TypeLoader.GetTypes<IQRCodeFormat>());
 
+            composition.Register<IColorNotationProvider>(f => new ColorNotationProvider(true), Lifetime.Singleton);
+            composition.Register<IColorParser, ColorParser>(Lifetime.Singleton);            
             composition.Register<IQRCodeBuilder, QRCodeBuilder>(Lifetime.Request);
 
             composition.Register<QRCodeController>(Lifetime.Request);
@@ -32,7 +35,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             composition.Register<QRCodeSourcePickerController>(Lifetime.Request);
             composition.Register<QRCodeTypePickerController>(Lifetime.Request);
 
-            composition.Components().Append<QRCodeGeneratorComponent>();
+            //composition.Components().Append<QRCodeGeneratorComponent>();
             composition.ContentApps().Append<QRCodeGeneratorApp>();
         }
     }

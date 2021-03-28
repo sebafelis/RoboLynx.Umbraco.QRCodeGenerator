@@ -29,6 +29,7 @@
 	<ItemGroup>
 		<Compile Remove="CompressContent.cs" />
 		<Compile Remove="QRCodeGenerator.cs" />
+		<Compile Remove="QRCodeGeneratorComponent.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -51,6 +52,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="DotNetColorParser" Version="0.1.1-alpha0034" />
 		<PackageReference Include="MSBuild.Umbraco.Packaging" Version="1.0.2" />
 		<PackageReference Include="QRCoder" Version="1.4.1" />
 		<PackageReference Include="SpectrumColourPicker" Version="1.0.0" />

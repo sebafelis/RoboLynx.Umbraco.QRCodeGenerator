@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using DotNetColorParser;
+using Moq;
 using NUnit.Framework;
 using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
@@ -25,7 +26,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var qrCodeFormat = new BmpFormat(
                 Mock.Of<ILocalizedTextService>(),
                 Mock.Of<IMediaFileSystem>(),
-                this.UmbracoHelper
+                this.UmbracoHelper,
+                Mock.Of<IColorParser>()
                 );
 
             //Act
@@ -43,7 +45,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             //Arrange
             var qrCodeFormat = new SvgFormat(
                 Mock.Of<ILocalizedTextService>(),
-                this.UmbracoHelper
+                this.UmbracoHelper,
+                Mock.Of<IColorParser>()
                 );
 
             //Act
@@ -63,7 +66,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var qrCodeFormat = new JpegFormat(
                 Mock.Of<ILocalizedTextService>(),
                 Mock.Of<IMediaFileSystem>(),
-                this.UmbracoHelper
+                this.UmbracoHelper,
+                Mock.Of<IColorParser>()
                 );
 
             //Act
@@ -82,7 +86,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var qrCodeFormat = new  PngFormat(
                 Mock.Of<ILocalizedTextService>(),
                 Mock.Of<IMediaFileSystem>(),
-                this.UmbracoHelper
+                this.UmbracoHelper,
+                Mock.Of<IColorParser>()
                 );
 
             //Act

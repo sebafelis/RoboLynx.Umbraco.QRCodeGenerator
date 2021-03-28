@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json.schemastore.org/package.manifest",
+  "$schema": "https://json.schemastore.org/package.manifest-8.0.0",
   "other properties": "",
 
   "propertyEditors": [
@@ -69,13 +69,18 @@
             "label": "Default dark color",
             "description": "",
             "key": "defaultDarkColor",
-            "view": "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html"
+            "view": "~/App_Plugins/ColorPickr/editor.html"
           },
           {
             "label": "Default light color",
             "description": "",
             "key": "defaultLightColor",
-            "view": "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html"
+            "view": "~/App_Plugins/ColorPickr/editor.html",
+            "defaultConfig": {
+              "disableReturn": "1",
+              "disableDoubleReturn": "1",
+              "disableExtraSpaces": "1"
+            }
           },
           {
             "label": "Default icon",
@@ -129,7 +134,6 @@
     }
   ],
   "javascript": [
-    "~/App_Plugins/QRCodeGenerator/libs/downloadjs/download.min.js",
     "~/App_Plugins/QRCodeGenerator/services/qrCodeGenerator.Resources.js",
     "~/App_Plugins/QRCodeGenerator/propertyEditors/qrCodeGenerator/qrCodeGenerator.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeTypePicker/qrCodeTypePicker.Controller.js",

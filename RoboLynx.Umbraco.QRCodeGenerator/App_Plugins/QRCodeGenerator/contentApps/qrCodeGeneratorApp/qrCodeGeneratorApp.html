@@ -1,10 +1,9 @@
 <div ng-controller="RoboLynx.Umbraco.QRCodeContentAppController as vm">
-    <div ng-if="vm.qrCodeSettingsLoaded && vm.requiredSettingsForFormatsLoaded">
-        <div ng-if="vm.qrCodeError" class="alert alert-danger">
-            <h4><span class="icon-application-error"></span> <localize key="general_error">Error</localize></h4>
-            <p>{{vm.qrCodeError}}</p>
-        </div>
-
+    <div ng-if="vm.qrCodeError" class="alert alert-danger">
+        <h4><span class="icon-application-error"></span> <localize key="general_error">Error</localize></h4>
+        <p>{{vm.qrCodeError}}</p>
+    </div>
+    <div ng-if="vm.downloadJsLoaded && vm.qrCodeSettingsLoaded && vm.requiredSettingsForFormatsLoaded">
         <div ng-if="variantContent.state == 'PublishedPendingChanges' && !variantContent.isDirty" class="alert alert-warning">
             <h4><span class="icon-alert"></span> <localize key="qrCode_warning">Warning</localize></span></h4>
             <p>
@@ -70,5 +69,5 @@
             </div>
         </div>
     </div>
-    <umb-load-indicator ng-if="!vm.qrCodeSettingsLoaded || !vm.requiredSettingsForFormatsLoaded"></umb-load-indicator>
+    <umb-load-indicator ng-if="!vm.downloadJsLoaded || !vm.qrCodeSettingsLoaded || !vm.requiredSettingsForFormatsLoaded"></umb-load-indicator>
 </div>
