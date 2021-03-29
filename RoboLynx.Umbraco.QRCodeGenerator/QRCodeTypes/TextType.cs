@@ -6,6 +6,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class TextType : QRCodeType
     {
+        const string textArgumentName = "text";
+
         public TextType(ILocalizedTextService localizedTextService) : base(localizedTextService)
         {
 
@@ -15,7 +17,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 
         public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture)
         {
-            return source.GetValue<string>(0, "text", content, sourceSettings, culture);
+            return source.GetValue<string>(0, textArgumentName, content, sourceSettings, culture);
         }
     }
 }

@@ -22,9 +22,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 
         public abstract string Id { get; }
 
-        public string Name => localizedTextService.Localize($"qrCodeTypes/{GetType().Name.ToFirstLower()}Name") ?? GetType().Name;
+        public virtual string Name => localizedTextService.Localize($"qrCodeTypes/{GetType().Name.ToFirstLower()}Name") ?? GetType().Name;
 
-        public string Description => localizedTextService.Localize($"qrCodeTypes/{GetType().Name.ToFirstLower()}Description") ?? string.Empty;
+        public virtual string Description => localizedTextService.Localize($"qrCodeTypes/{GetType().Name.ToFirstLower()}Description") ?? string.Empty;
 
         public abstract string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture);
 
