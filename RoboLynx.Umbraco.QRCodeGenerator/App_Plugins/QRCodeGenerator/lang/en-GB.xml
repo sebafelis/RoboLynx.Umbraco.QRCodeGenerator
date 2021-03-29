@@ -6,17 +6,17 @@
 	</creator>
 	<area alias="qrCodeTypes">
 		<key alias="textTypeName">Text</key>
-		<key alias="textTypeDescription">After user will scan the code it will saw specify text in code scanner.</key>
+		<key alias="textTypeDescription">After user will scan the code it will saw specify text in code scanner. Argument: text (string)</key>
 		<key alias="phoneNumberTypeName">Phone number</key>
-		<key alias="phoneNumberTypeDescription">After user will scan the code it will saw specify phone number ready to call.</key>
+		<key alias="phoneNumberTypeDescription">After user will scan the code it will saw specify phone number ready to call. Argument: number (string)</key>
 		<key alias="geolocationGEOTypeName">Geo-location (GEO)</key>
-		<key alias="geolocationGEOTypeDescription">Geographic position in GEO format.</key>
+		<key alias="geolocationGEOTypeDescription">After user will scan the code it will open default map application with pinned specify position. Arguments: latitude (double), longitude (double)</key>
 		<key alias="geolocationGooleMapTypeName">Geo-location (Google Map)</key>
-		<key alias="geolocationGooleMapTypeDescription">Geographic position in Google Map format.</key>
+		<key alias="geolocationGooleMapTypeDescription">After user will scan the code it will open Google Maps application or website with pinned specify position. Arguments: latitude (double), longitude (double)</key>
 		<key alias="smsTypeName">SMS</key>
-		<key alias="smsTypeDescription">After user will scan the code it will saw new SMS message with specific content ready to send on specific number. Arguments: number, subject</key>
+		<key alias="smsTypeDescription">After user will scan the code it will saw new SMS message with specific content ready to send on specific number. Arguments: number (string), subject (string)</key>
 		<key alias="urlTypeName">URL</key>
-		<key alias="urlTypeDescription">After user will scan the code it will open specify resource in default application for specify protocol.</key>s
+		<key alias="urlTypeDescription">After user will scan the code it will open specify resource in default application for specify protocol. i.e. specify website in default browser if protocol will bee HTTP or HTTPS. Argument: url (string)</key>
 	</area>
 	<area alias="qrCodeFormats">
 		<key alias="bmpFormatName">Bitmap (.bmp)</key>

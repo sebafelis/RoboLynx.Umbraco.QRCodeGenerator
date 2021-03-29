@@ -6,17 +6,17 @@
 	</creator>
 	<area alias="qrCodeTypes">
 		<key alias="textTypeName">Tekst</key>
-		<key alias="textTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określony tekst w skanerze kodów.</key>
+		<key alias="textTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określony tekst w skanerze kodów. Argument: text (string)</key>
 		<key alias="phoneNumberTypeName">Numer telefonu</key>
-		<key alias="phoneNumberTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy obreślony numer telefony gotowy do dzwonienia.</key>
-		<key alias="geolocationGEOTypeName">Geo-location (GEO)</key>
-		<key alias="geolocationGEOTypeDescription">Pozycja geograficzna w formacie GEO. Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w domyślnej aplikacji obsługującej ten format. Nie wszystkie urządzenia domyślnie obsługują ten format.</key>
-		<key alias="geolocationGooleMapTypeName">Geo-location (Google Map)</key>
-		<key alias="geolocationGooleMapTypeDescription">Pozycja geograficzna w formacie Google Map. Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w domyślnej aplikacji obsługującej ten format. Większość urządzeń posiada odpowiednią aplikację.</key>
+		<key alias="phoneNumberTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy obreślony numer telefony gotowy do dzwonienia. Argument: number (string)</key>
+		<key alias="geolocationGEOTypeName">Geolokalizacja (GEO)</key>
+		<key alias="geolocationGEOTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w domyślnej aplikacji obsługującej ten format. Argumenty: latitude (double), longitude (double)</key>
+		<key alias="geolocationGooleMapTypeName">Geolokalizacja (Google Map)</key>
+		<key alias="geolocationGooleMapTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w aplikacji lub na stronie Google Maps. Argumenty: latitude (double), longitude (double)</key>
 		<key alias="smsTypeName">SMS</key>
-		<key alias="smsTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określoną treść wiadomości gotową do wysłania na określony numer. Attributes: number, subject</key>
+		<key alias="smsTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określoną treść wiadomości gotową do wysłania na określony numer. Argumenty: number, subject</key>
 		<key alias="urlTypeName">URL</key>
-		<key alias="urlTypeDescription">Po zeskanowaniu kodu użytkownik otworzy określony zasób w domyślnej aplikacji dla protokołu określonego w odnośniku.</key>
+		<key alias="urlTypeDescription">Po zeskanowaniu kodu użytkownik otworzy określony zasób w domyślnej aplikacji dla protokołu określonego w odnośniku. Np. podany adres strony internetowej otworzy się w domyślnej przeglądarce jeśli protoków to HTTP lub HTTPS. Argument: url (string)</key>
 	</area>
 	<area alias="qrCodeFormats">
 		<key alias="bmpFormatName">Bitmap (.bmp)</key>
