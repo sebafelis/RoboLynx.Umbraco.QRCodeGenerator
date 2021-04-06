@@ -1,16 +1,16 @@
-﻿using System.Web.Http;
-using Umbraco.Web.Editors;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Linq;
+using System.Web.Http;
+using Umbraco.Core;
+using Umbraco.Core.Cache;
+using Umbraco.Core.Configuration;
+using Umbraco.Core.Logging;
+using Umbraco.Core.Persistence;
+using Umbraco.Core.Services;
+using Umbraco.Web;
+using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
-using Umbraco.Core.Configuration;
-using Umbraco.Web;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Services;
-using Umbraco.Core;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 {
@@ -30,7 +30,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
                                                                                                                          logger,
                                                                                                                          runtimeState,
                                                                                                                          umbracoHelper)
-        { 
+        {
             this.types = types;
         }
 
@@ -38,10 +38,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         public IHttpActionResult Get()
         {
             var result = types.Select(ct => new { id = ct.Id, name = ct.Name, description = ct.Description });
-            
+
             return Ok(result);
         }
 
-     
+
     }
 }

@@ -1,8 +1,8 @@
 ﻿// NUnit 3 Test
 // See documentation : https://github.com/nunit/docs/wiki/NUnit-Documentation
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 {

@@ -1,16 +1,16 @@
-﻿using System.Web.Http;
-using Umbraco.Web.Editors;
+﻿using System;
 using System.Linq;
-using Umbraco.Web.Mvc;
-using Umbraco.Web.WebApi;
+using System.Web.Http;
 using Umbraco.Core;
-using System;
-using Umbraco.Core.Services;
-using Umbraco.Core.Persistence;
-using Umbraco.Web;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Configuration;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Cache;
+using Umbraco.Core.Persistence;
+using Umbraco.Core.Services;
+using Umbraco.Web;
+using Umbraco.Web.Editors;
+using Umbraco.Web.Mvc;
+using Umbraco.Web.WebApi;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 {

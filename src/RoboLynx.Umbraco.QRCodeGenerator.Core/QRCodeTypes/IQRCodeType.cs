@@ -1,12 +1,6 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Models.PublishedContent;
-using static QRCoder.PayloadGenerator;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {

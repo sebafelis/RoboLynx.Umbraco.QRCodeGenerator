@@ -1,9 +1,6 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
 using System.Collections.Generic;
-using System.Linq;
-using Umbraco.Core;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
 using static QRCoder.PayloadGenerator;

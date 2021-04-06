@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
 {
@@ -14,9 +9,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
             if (value is string stringValue)
             {
                 var isValid = Regex.IsMatch(stringValue, @"^\+?[\d#*]{1,14}$");
-                
+
                 message = !isValid ? "A number is not in correct" : null;
-                
+
                 return isValid;
             }
 

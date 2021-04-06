@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using Umbraco.Core.Models;
+﻿using System;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
 using Umbraco.Web;

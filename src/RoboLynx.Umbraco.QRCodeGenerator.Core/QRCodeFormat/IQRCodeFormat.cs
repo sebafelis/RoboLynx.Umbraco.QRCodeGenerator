@@ -19,6 +19,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         HttpContent ResponseContent(string value, QRCodeSettings settings);
 
-       
+
     }
 }

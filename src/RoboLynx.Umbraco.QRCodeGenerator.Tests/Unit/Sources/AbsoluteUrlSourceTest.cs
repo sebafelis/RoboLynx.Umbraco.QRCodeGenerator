@@ -1,21 +1,4 @@
-﻿using Moq;
-using NUnit.Framework;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Umbraco.Core.Composing;
-using Umbraco.Core.Configuration;
-using Umbraco.Core.Configuration.UmbracoSettings;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Services;
-using Umbraco.Web;
-using Umbraco.Web.PublishedCache;
-using Umbraco.Web.Routing;
-using UmbracoCore = Umbraco.Core;
+﻿using NUnit.Framework;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
 {

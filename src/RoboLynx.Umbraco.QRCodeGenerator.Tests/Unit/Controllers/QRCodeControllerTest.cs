@@ -1,13 +1,13 @@
 ﻿using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
 using RoboLynx.Umbraco.QRCodeGenerator.Extensions;
+using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Net.Http;
+using System.Web.Http;
 using System.Web.Http.Results;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
@@ -15,17 +15,11 @@ using Umbraco.Core.Composing;
 using Umbraco.Core.Configuration;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Mapping;
+using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Persistence;
-using Umbraco.Web;
-using Umbraco.Core.Models;
-using Castle.DynamicProxy;
-using System.Web;
-using System.Net.Http;
-using System;
-using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System.Web.Http;
 using Umbraco.Core.Services;
+using Umbraco.Web;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
 {
@@ -133,7 +127,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
                 { "id3", new List<string> { "setting1", "setting3" } }
             };
 
-            QRCodeFormatsCollection formats = new QRCodeFormatsCollection(new IQRCodeFormat[] { 
+            QRCodeFormatsCollection formats = new QRCodeFormatsCollection(new IQRCodeFormat[] {
                 Mock.Of<IQRCodeFormat>(f=>f.Id == "id1" && f.RequiredSettings == new List<string> { "setting1", "setting2" }),
                 Mock.Of<IQRCodeFormat>(f=>f.Id == "id2" && f.RequiredSettings == new List<string> { "setting3", "setting4" }),
                 Mock.Of<IQRCodeFormat>(f=>f.Id == "id3" && f.RequiredSettings == new List<string> { "setting1", "setting3" }),

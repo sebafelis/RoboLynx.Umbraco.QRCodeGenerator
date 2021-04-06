@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Umbraco.Core;
-using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
 using Umbraco.Web;
@@ -75,7 +74,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             }
             else
             {
-                settings = new SilmplePropertySourceSettings() { Properties = Regex.Matches(sourceSettings, @"\w+((\{\{).*?(\}\}))?").Cast<Match>().Select((m, i)  => new { Key = i, Value = m.Value }).ToDictionary(k => (object)k.Key, v => (SettingsItem)v.Value) };
+                settings = new SilmplePropertySourceSettings() { Properties = Regex.Matches(sourceSettings, @"\w+((\{\{).*?(\}\}))?").Cast<Match>().Select((m, i) => new { Key = i, Value = m.Value }).ToDictionary(k => (object)k.Key, v => (SettingsItem)v.Value) };
             }
 
             if (settings is null)

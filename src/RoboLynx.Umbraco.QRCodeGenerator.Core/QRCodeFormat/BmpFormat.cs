@@ -8,7 +8,7 @@ using Umbraco.Web;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
-    public class BmpFormat : RasterFormat 
+    public class BmpFormat : RasterFormat
     {
         public BmpFormat(ILocalizedTextService localizedTextService, IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IColorParser colorParser) : base(localizedTextService, mediaFileSystem, umbracoHelper, colorParser)
         {
