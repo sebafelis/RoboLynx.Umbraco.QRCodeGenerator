@@ -6,6 +6,7 @@
 trigger:
 - main-u8
 - release-u8
+- develop-u8
 
 pool:
   vmImage: 'windows-latest'
