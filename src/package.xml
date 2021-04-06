@@ -3,8 +3,8 @@
   <info>
     <package>
       <name>RoboLynx.Umbraco.QRCodeGenerator</name>
-      <version>8.0.0</version>
-      <iconUrl></iconUrl>
+      <version>$Version$</version>
+      <iconUrl>https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u8/assets/RoboLynx.Umbraco.QRCodeGenerator_128.png</iconUrl>
       <licence url="https://opensource.org/licenses/MIT">MIT</licence>
       <url>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</url>
       <requirements type="strict">
@@ -23,7 +23,7 @@
     <folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/contentApps" orgPath="App_Plugins/QRCodeGenerator/contentApps" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/directives" orgPath="App_Plugins/QRCodeGenerator/directives" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/lang" orgPath="App_Plugins/QRCodeGenerator/lang" /> 
-	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/libs" orgPath="App_Plugins/QRCodeGenerator/libs" /> 
+	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/libs/downloadjs/download.min.js" orgPath="App_Plugins/QRCodeGenerator/libs/downloadjs" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/parameterEditors" orgPath="App_Plugins/QRCodeGenerator/parameterEditors" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/propertyEditors" orgPath="App_Plugins/QRCodeGenerator/propertyEditors" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/services" orgPath="App_Plugins/QRCodeGenerator/services" /> 
