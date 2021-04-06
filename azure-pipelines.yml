@@ -73,7 +73,7 @@ steps:
   displayName: 'NuGet push'
   inputs:
     command: push
-    publishVstsFeed: 'DotNetColorParser/DotNetColorParserBuild'
+    publishVstsFeed: 'RoboLynx.Umbraco.QRCodeGenerator/QRCodeGeneratorNugets'
     allowPackageConflicts: true
 - task: NuGetAuthenticate@0
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
