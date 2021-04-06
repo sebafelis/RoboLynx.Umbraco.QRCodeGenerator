@@ -1,5 +1,4 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
-using RoboLynx.Umbraco.QRCodeGenerator.Models;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -32,15 +31,24 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         public abstract HttpContent ResponseContent(string value, QRCodeSettings settings);
 
-        protected string ResolveIconUrl(string iconPathOrMediaId)
+        /// <summary>
+        /// Resolve icon source
+        /// </summary>
+        /// <param name="icon">Image path, Media ID or Media UDI</param>
+        /// <returns>Image path</returns>
+        protected string ResolveIconUrl(string icon)
         {
-            if (!string.IsNullOrEmpty(iconPathOrMediaId))
+            if (!string.IsNullOrEmpty(icon))
             {
-                if (int.TryParse(iconPathOrMediaId, out int mediaId))
+                if (int.TryParse(icon, out int mediaId))
                 {
                     return umbracoHelper.Media(mediaId)?.Url();
                 }
-                return iconPathOrMediaId;
+                if (Udi.TryParse(icon, out Udi mediaUdi))
+                {
+                    return umbracoHelper.Media(mediaUdi)?.Url();
+                }
+                return icon;
             }
             return null;
         }

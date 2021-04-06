@@ -1,6 +1,5 @@
 ﻿using DotNetColorParser;
 using QRCoder;
-using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System.Collections.Generic;
 using System.Drawing;

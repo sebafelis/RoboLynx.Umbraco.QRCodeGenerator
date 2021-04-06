@@ -1,11 +1,5 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
-using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Umbraco.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Extensions

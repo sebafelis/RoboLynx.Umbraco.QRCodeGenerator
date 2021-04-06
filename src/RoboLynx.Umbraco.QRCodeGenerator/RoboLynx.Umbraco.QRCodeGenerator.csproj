@@ -54,9 +54,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DotNetColorParser" Version="1.0.0" />
-		<PackageReference Include="QRCoder" Version="1.4.1" /><PackageReference Include="UmbracoCms.Web" Version="8.10.1" />
+		<PackageReference Include="UmbracoCms.Web" Version="8.10.1" />
 		<PackageReference Include="Our.Umbraco.ColorPickr" Version="1.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Core\RoboLynx.Umbraco.QRCodeGenerator.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

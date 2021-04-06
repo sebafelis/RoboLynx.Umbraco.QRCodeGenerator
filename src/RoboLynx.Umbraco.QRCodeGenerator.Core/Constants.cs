@@ -1,11 +1,4 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RoboLynx.Umbraco.QRCodeGenerator
+﻿namespace RoboLynx.Umbraco.QRCodeGenerator
 {
     internal class Constants
     {
