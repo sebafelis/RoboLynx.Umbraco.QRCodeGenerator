@@ -50,6 +50,19 @@ steps:
     includesymbols: true
     versioningScheme: byEnvVar
     versionEnvVar: 'GitVersion.NuGetVersion'
+- task: DotNetCoreCLI@2
+  displayName: 'Restore UmbPack'
+  inputs:
+    command: custom
+    custom: 'tool'
+    arguments: 'restore'
+- task: DotNetCoreCLI@2
+  displayName: 'Run UmbPack'
+  inputs:
+    command: custom
+    custom: 'tool'
+    arguments: 'run UmbPack pack $(System.DefaultWorkingDirectory)\src\package.xml -v $(GitVersion.NuGetVersion) -o $(Build.ArtifactStagingDirectory)'
+- task: DotNetCoreCLI@2
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
   inputs:
@@ -74,3 +87,10 @@ steps:
     publishFeedCredentials: sebafelisNuGetAccount
     versioningScheme: byEnvVar
     versionEnvVar: 'GitVersion.NuGetVersion'
+- task: NuGetCommand@2
+  displayName: 'Publish package on Our.Umbraco.com'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  inputs:
+    command: custom
+    custom: 'tool'
+    arguments: 'run UmbPack push $(Build.ArtifactStagingDirectory)\RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion).zip -k $(OurUmbracoApiKey)' 
