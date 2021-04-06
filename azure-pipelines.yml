@@ -76,11 +76,11 @@ steps:
     publishVstsFeed: 'RoboLynx.Umbraco.QRCodeGenerator/QRCodeGeneratorNugets'
     allowPackageConflicts: true
 - task: NuGetAuthenticate@0
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
   inputs:
     nuGetServiceConnections: sebafelisNuGetAccount
 - task: NuGetCommand@2
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
   inputs:
     command: push
     nuGetFeedType: external
@@ -89,7 +89,7 @@ steps:
     versionEnvVar: 'GitVersion.NuGetVersion'
 - task: DotNetCoreCLI@2
   displayName: 'Publish package on Our.Umbraco.com'
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
   inputs:
     command: custom
     custom: 'tool'
