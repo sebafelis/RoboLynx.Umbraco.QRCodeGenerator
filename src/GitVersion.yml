@@ -1,0 +1,12 @@
+assembly-versioning-scheme: MajorMinorPatch
+assembly-file-versioning-scheme: MajorMinorPatch
+mode: ContinuousDelivery
+commit-message-incrementing: Enabled
+branches:
+  develop:
+    regex: ^develop[/-]
+  main:
+    regex: ^main[/-]
+ignore:
+  sha: []
+merge-message-formats: {}
