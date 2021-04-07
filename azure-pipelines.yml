@@ -75,6 +75,16 @@ steps:
   displayName: 'Publish artifacts'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+- task: UniversalPackages@0
+  displayName: 'Publish Universal Pack'
+  inputs:
+    command: publish
+    publishDirectory: '$(Build.ArtifactStagingDirectory)'
+    vstsFeedPublish: 'RoboLynx.Umbraco.QRCodeGenerator/QRCodeGeneratorNugets'
+    vstsFeedPackagePublish: 'RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion)'
+    versionOption: custom
+    versionPublish: '$(GitVersion.NuGetVersion)'
+    packagePublishDescription: '<Package description>'
 - task: NuGetAuthenticate@0
   displayName: 'Authenticate DevOps Artifacts Nuget'
 - task: NuGetCommand@2
