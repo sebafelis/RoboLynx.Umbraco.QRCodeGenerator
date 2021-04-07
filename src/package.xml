@@ -23,7 +23,7 @@
     <folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/contentApps" orgPath="App_Plugins/QRCodeGenerator/contentApps" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/directives" orgPath="App_Plugins/QRCodeGenerator/directives" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/lang" orgPath="App_Plugins/QRCodeGenerator/lang" /> 
-	<file path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/libs/downloadjs/download.min.js" orgPath="App_Plugins/QRCodeGenerator/libs/downloadjs" /> 
+	<file path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/libs/downloadjs/download.min.js" orgPath="App_Plugins/QRCodeGenerator/libs/downloadjs/download.min.js" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/parameterEditors" orgPath="App_Plugins/QRCodeGenerator/parameterEditors" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/propertyEditors" orgPath="App_Plugins/QRCodeGenerator/propertyEditors" /> 
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/services" orgPath="App_Plugins/QRCodeGenerator/services" /> 
