@@ -62,7 +62,7 @@ steps:
   inputs:
     command: custom
     custom: 'tool'
-    arguments: 'restore --tool-manifest src\.config\dotnet-tools.json'
+    arguments: 'restore'
 - task: DotNetCoreCLI@2
   displayName: 'Run UmbPack'
   inputs:
