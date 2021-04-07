@@ -81,7 +81,7 @@ steps:
     command: publish
     publishDirectory: '$(Build.ArtifactStagingDirectory)'
     vstsFeedPublish: 'RoboLynx.Umbraco.QRCodeGenerator/QRCodeGeneratorNugets'
-    vstsFeedPackagePublish: 'roboLynx.umbraco.qrcodegenerator_$(GitVersion.NuGetVersion)'
+    vstsFeedPackagePublish: 'robolynx.umbraco.qrcodegenerator'
     versionOption: custom
     versionPublish: '$(GitVersion.NuGetVersion)'
     packagePublishDescription: '<Package description>'
