@@ -11,11 +11,8 @@
 		<PackageTags>umbraco, propety editor, qr code, generator</PackageTags>
 		<PackageReleaseNotes>Release for Umbraco 8</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
-		<Version>8.0.0.0</Version>
 		<Company>RoboLynx</Company>
 		<Authors>Sebastian Felis</Authors>
-		<AssemblyVersion>$(Version)</AssemblyVersion>
-		<FileVersion>$(Version)</FileVersion>
 		<LangVersion>latest</LangVersion>
 		<PackageIcon>RoboLynx.Umbraco.QRCodeGenerator_128.png</PackageIcon>
 	</PropertyGroup>
