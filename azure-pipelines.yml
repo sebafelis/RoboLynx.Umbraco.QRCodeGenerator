@@ -63,12 +63,14 @@ steps:
     command: custom
     custom: 'tool'
     arguments: 'restore'
+    workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
 - task: DotNetCoreCLI@2
   displayName: 'Run UmbPack'
   inputs:
     command: custom
     custom: 'tool'
     arguments: 'run UmbPack pack $(System.DefaultWorkingDirectory)\src\package.xml -v $(GitVersion.NuGetVersion) -o $(Build.ArtifactStagingDirectory) -p BuildConfiguration=$(buildConfiguration)'
+    workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
   inputs:
