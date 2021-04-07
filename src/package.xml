@@ -29,8 +29,8 @@
 	<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/services" orgPath="App_Plugins/QRCodeGenerator/services" /> 
 	<file path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/package.manifest" orgPath="/App_Plugins/QRCodeGenerator/package.manifest" />
 	<file path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/qrCodeGeneratorStyle.min.css" orgPath="/App_Plugins/QRCodeGenerator/qrCodeGeneratorStyle.min.css" />
-    <file path="RoboLynx.Umbraco.QRCodeGenerator/bin/Release/net472/RoboLynx.Umbraco.QRCodeGenerator.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.dll" />
-    <file path="RoboLynx.Umbraco.QRCodeGenerator/bin/Release/net472/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" />
+    <file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.dll" />
+    <file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" />
   </files>
   <Actions />
   <control />
