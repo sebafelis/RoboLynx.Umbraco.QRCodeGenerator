@@ -57,6 +57,7 @@ steps:
     includesymbols: true
     versioningScheme: byEnvVar
     versionEnvVar: 'GitVersion.NuGetVersion'
+    buildProperties: 'SymbolPackageFormat=snupkg'
 - task: DotNetCoreCLI@2
   displayName: 'Restore UmbPack'
   inputs:
