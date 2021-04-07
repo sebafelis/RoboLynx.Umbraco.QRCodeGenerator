@@ -31,10 +31,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="App_Plugins\QRCodeGenerator\contentApps\qrCodeGeneratorApp\qrCodeGeneratorApp.html" />
+	  <None Remove="App_Plugins\QRCodeGenerator\directives\hideUmbProperty.js" />
+	  <None Remove="App_Plugins\QRCodeGenerator\libs\downloadjs\download.min.js" />
+	  <None Remove="App_Plugins\QRCodeGenerator\qrCodeGeneratorStyle.min.css" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Content Include="App_Plugins\QRCodeGenerator\contentApps\qrCodeGeneratorApp\qrCodeGeneratorApp.Controller.js" />
+		<Content Include="App_Plugins\QRCodeGenerator\contentApps\qrCodeGeneratorApp\qrCodeGeneratorApp.html" />
+		<Content Include="App_Plugins\QRCodeGenerator\directives\hideUmbProperty.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\lang\pl-PL.xml" />
 		<Content Include="App_Plugins\QRCodeGenerator\lang\en-US.xml" />
 		<Content Include="App_Plugins\QRCodeGenerator\lang\en-GB.xml" />
+		<Content Include="App_Plugins\QRCodeGenerator\libs\downloadjs\download.min.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\package.manifest" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.Controller.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.html" />
@@ -46,6 +56,7 @@
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeLevelPicker\qrCodeLevelPicker.html" />
 		<Content Include="App_Plugins\QRCodeGenerator\propertyEditors\qrCodeGenerator\qrCodeGenerator.Controller.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\propertyEditors\qrCodeGenerator\qrCodeGenerator.html" />
+		<Content Include="App_Plugins\QRCodeGenerator\qrCodeGeneratorStyle.min.css" />
 		<Content Include="App_Plugins\QRCodeGenerator\services\qrCodeGenerator.Resources.js" />
 	</ItemGroup>
 
