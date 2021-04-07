@@ -18,33 +18,39 @@ variables:
 
 steps:
 - task: NuGetToolInstaller@1
+  displayName: 'Install NuGet 5.8.1'
   inputs:    
     versionSpec: 5.8.1
 - task: NuGetCommand@2
+  displayName: 'Restore NuGets'
   inputs:
     restoreSolution: '$(solution)'
     includeNuGetOrg: true
 - task: gitversion/setup@0
+  displayName: 'Setup GitVersions'
   inputs:
     versionSpec: 5.6.6
 - task: gitversion/execute@0
+  displayName: 'Get build version'
   inputs:
     useConfigFile: true
     configFilePath: 'src\GitVersion.yml'
 - task: DotNetCoreCLI@2
+  displayName: 'Build project ($(buildConfiguration) configuration)'
   inputs:
     command: 'build'
     projects: '$(solution)'
     arguments: '--configuration $(buildConfiguration)'
     versioningScheme: byEnvVar
     versionEnvVar: 'GitVersion.SemVer'
-  displayName: 'dotnet build $(buildConfiguration)'
 - task: DotNetCoreCLI@2
+  displayName: 'Run tests'
   inputs:
     command: test
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 - task: DotNetCoreCLI@2
+  displayName: 'Create NuGet package'
   inputs:
     command: pack
     projects: '$(solution)'
@@ -56,31 +62,27 @@ steps:
   inputs:
     command: custom
     custom: 'tool'
-    arguments: 'restore'
+    arguments: 'restore --tool-manifest src\.config\dotnet-tools.json'
 - task: DotNetCoreCLI@2
   displayName: 'Run UmbPack'
   inputs:
     command: custom
     custom: 'tool'
-    arguments: 'run UmbPack pack $(System.DefaultWorkingDirectory)\src\package.xml -v $(GitVersion.NuGetVersion) -o $(Build.ArtifactStagingDirectory)'
-- task: DotNetCoreCLI@2
+    arguments: 'run UmbPack pack $(System.DefaultWorkingDirectory)\src\package.xml -v $(GitVersion.NuGetVersion) -o $(Build.ArtifactStagingDirectory) -p BuildConfiguration=$(buildConfiguration)'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
 - task: NuGetAuthenticate@0
-  displayName: 'NuGet Authenticate'
+  displayName: 'Authenticate DevOps Artifacts Nuget'
 - task: NuGetCommand@2
-  displayName: 'NuGet push'
+  displayName: 'Publish NuGet package on DevOps Artifacts'
   inputs:
     command: push
     publishVstsFeed: 'RoboLynx.Umbraco.QRCodeGenerator/QRCodeGeneratorNugets'
     allowPackageConflicts: true
-- task: NuGetAuthenticate@0
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
-  inputs:
-    nuGetServiceConnections: sebafelisNuGetAccountForQRCodeGenerator
 - task: NuGetCommand@2
+  displayName: 'Publish NuGet package on NuGet.org'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
   inputs:
     command: push
@@ -89,7 +91,7 @@ steps:
     versioningScheme: byEnvVar
     versionEnvVar: 'GitVersion.NuGetVersion'
 - task: DotNetCoreCLI@2
-  displayName: 'Publish package on Our.Umbraco.com'
+  displayName: 'Publish Umbraco package on Our.Umbraco.com'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
   inputs:
     command: custom
