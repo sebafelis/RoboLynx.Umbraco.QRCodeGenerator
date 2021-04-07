@@ -94,4 +94,4 @@ steps:
   inputs:
     command: custom
     custom: 'tool'
-    arguments: 'run UmbPack push $(Build.ArtifactStagingDirectory)\RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion).zip -k $(OurUmbracoApiKey)' 
+    arguments: 'run UmbPack push $(Build.ArtifactStagingDirectory)\RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion).zip -k $(OurUmbracoApiKey) -a RoboLynx.Umbraco.QRCodeGenerator_8*' 
