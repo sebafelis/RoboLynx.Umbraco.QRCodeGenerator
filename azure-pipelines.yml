@@ -79,13 +79,13 @@ steps:
 - task: NuGetAuthenticate@0
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
   inputs:
-    nuGetServiceConnections: sebafelisNuGetAccount
+    nuGetServiceConnections: sebafelisNuGetAccountForQRCodeGenerator
 - task: NuGetCommand@2
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
   inputs:
     command: push
     nuGetFeedType: external
-    publishFeedCredentials: sebafelisNuGetAccount
+    publishFeedCredentials: sebafelisNuGetAccountForQRCodeGenerator
     versioningScheme: byEnvVar
     versionEnvVar: 'GitVersion.NuGetVersion'
 - task: DotNetCoreCLI@2
