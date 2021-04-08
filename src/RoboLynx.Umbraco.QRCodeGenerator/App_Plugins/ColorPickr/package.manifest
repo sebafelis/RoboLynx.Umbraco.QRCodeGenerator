@@ -1,0 +1,43 @@
+{
+    propertyEditors: [
+    {
+        alias: "Our.Umbraco.ColorPickr",
+        name: "Color Pickr",
+        group: "pickers",
+        icon: "icon-colorpicker",
+        editor:{
+            view: "~/App_Plugins/ColorPickr/editor.html",
+            valueType: "STRING"
+        },
+        prevalues: {
+            fields:[
+                {
+                   label: "Inline",
+                   description: "Show color picker as inline.",
+                   key: "inlineMode",
+                   view: "boolean"
+                },
+                {
+                   label: "Swatches",
+                   description: "Swatches to be shown in the color picker.",
+                   key: "swatches",
+                   view: "~/App_Plugins/ColorPickr/prevalues/multicolors.html",
+                },
+                {
+                   label: "Theme",
+                   description: "Select a color picker theme.",
+                   key: "theme",
+                   view: "~/App_Plugins/ColorPickr/prevalues/themepicker.html",
+                }
+            ]
+        }
+  	}],
+  	javascript: [
+        "~/App_Plugins/ColorPickr/components/colorpicker.directive.js",
+        "~/App_Plugins/ColorPickr/prevalues/multicolors.controller.js",
+    	"~/App_Plugins/ColorPickr/editor.controller.js"
+	],
+    css: [
+        "~/App_Plugins/ColorPickr/css/styles.css"
+    ]
+}

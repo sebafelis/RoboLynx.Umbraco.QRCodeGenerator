@@ -1,0 +1,34 @@
+<div ng-controller="Our.Umbraco.ColorPickr.PrevalueEditors.MultiColorsController as vm">
+
+    <div class="control-group">
+        <div class="flex">
+            <color-picker ng-model="color" on-cancel="vm.cancel(values)" on-save="vm.save(color)" style="margin-right:10px;"></color-picker>
+            <button type="button" class="btn btn-info" ng-click="vm.add($event)"><localize key="general_add">Add</localize></button>
+        </div>
+    </div>
+
+    <div ui-sortable="sortableOptions" ng-model="model.value">
+        <div class="control-group umb-prevalues-multivalues__listitem" ng-repeat="item in model.value">
+            <i class="icon icon-navigation handle" aria-hidden="true"></i>
+            <div class="umb-prevalues-multivalues__left">
+                <div class="color-picker-preview" ng-style="{'color': item.rgba }"></div>
+                <div class="color-picker-prediv">
+                    <div class="color-hexa">{{item.hexa}}<span ng-if="item.hexa.length < 8" class="color-hexa-suffix">FF</span></div>
+                    <div class="color-divider">&mdash;</div>
+                    <div class="color-rgba">
+                        <span>R: {{item.rgbaCode.r}}</span>
+                        <span>G: {{item.rgbaCode.g}}</span>
+                        <span>B: {{item.rgbaCode.b}}</span>
+                        <span ng-if="item.rgbaCode.a < 1">A: {{item.rgbaCode.a}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="umb-prevalues-multivalues__right">
+                <button type="button" class="umb-node-preview__action umb-node-preview__action--red" ng-click="vm.remove(item, $event)">
+                    <localize key="general_remove">Remove</localize>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

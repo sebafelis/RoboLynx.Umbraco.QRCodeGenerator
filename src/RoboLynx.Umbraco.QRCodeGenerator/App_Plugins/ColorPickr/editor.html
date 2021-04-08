@@ -1,0 +1,7 @@
+<div ng-controller="Our.Umbraco.ColorPickr.Controller as vm">
+
+    <color-picker ng-model="color" options="options" on-setup="vm.setup(instance)" on-cancel="vm.cancel(color)" on-save="vm.save(color)"></color-picker>
+
+    <input type="hidden" name="modelValue" ng-model="model.value" val-property-validator="vm.validateMandatory" />
+
+</div>
