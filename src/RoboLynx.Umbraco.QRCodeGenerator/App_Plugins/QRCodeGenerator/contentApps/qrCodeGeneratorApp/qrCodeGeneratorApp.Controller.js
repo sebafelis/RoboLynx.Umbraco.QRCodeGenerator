@@ -43,6 +43,9 @@
                     preferredFormat: "hex"
                 },
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 4
             },
             {
@@ -55,6 +58,9 @@
                     preferredFormat: "hex"
                 },
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 5
             },
             {
@@ -66,6 +72,9 @@
                     multiPicker: false,
                     onlyImages: true,
                     disableFolderSelect: true
+                },
+                validation: {
+                    mandatory: false
                 },
                 value: null,
                 order: 7
@@ -81,6 +90,9 @@
                     step: 1
                 },
                 value: null,
+                validation: {
+                    mandatory: false
+                },
                 order: 8
             },
             {
@@ -94,6 +106,9 @@
                     step: 1
                 },
                 value: null,
+                validation: {
+                    mandatory: false
+                },
                 order: 9
             },
             {
@@ -102,6 +117,9 @@
                 view: "boolean",
                 alias: "drawQuiteZone",
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 6
             },
             {
@@ -116,6 +134,9 @@
                     step: 1
                 },
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 3
             },
             {
@@ -125,6 +146,9 @@
                 alias: "format",
                 change: formatChange,
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 1
             },
             {
@@ -133,6 +157,9 @@
                 view: "/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.html",
                 alias: "eccLevel",
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 2
             }
         ];
