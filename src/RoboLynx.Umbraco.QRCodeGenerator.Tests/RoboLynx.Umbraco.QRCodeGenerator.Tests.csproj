@@ -32,7 +32,6 @@
 		<PackageReference Include="nunit" Version="3.13.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-		<PackageReference Include="Our.Umbraco.Community.Tests" Version="8.12.2" />
 	</ItemGroup>
 
 	<ItemGroup>
