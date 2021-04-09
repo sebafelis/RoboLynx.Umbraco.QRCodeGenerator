@@ -15,6 +15,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  publishOnGithubRelease: true
 
 steps:
 - task: NuGetToolInstaller@1
@@ -112,14 +113,14 @@ steps:
     arguments: 'run UmbPack push $(Build.ArtifactStagingDirectory)\RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion).zip -k $(OurUmbracoApiKey) -a RoboLynx.Umbraco.QRCodeGenerator_8*' 
 - task: GitHubRelease@1
   displayName: 'Publish on Github Release as Draft'
-  condition: ne(variables['Build.SourceBranch'], 'refs/heads/main-u8')
+  condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/main-u8'), variables['publishOnGithubRelease'])
   inputs:
     gitHubConnection: 'github.com_sebafelis'
     repositoryName: '$(Build.Repository.Name)'
     action: 'create'
     target: '$(Build.SourceVersion)'
-    tagSource: 'userSpecifiedTag'
-    tag: $(GitVersion.SemVer)
+    tagSource: 'gitTag'
+    tagPattern: 'v*'
     isDraft: true
     isPreRelease: true
     assets: '$(Build.ArtifactStagingDirectory)/*.zip'
@@ -127,14 +128,14 @@ steps:
     changeLogType: 'commitBased'
 - task: GitHubRelease@1
   displayName: 'Publish on Github Release'
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
+  condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/main-u8'), variables['publishOnGithubRelease'])
   inputs:
     gitHubConnection: 'github.com_sebafelis'
     repositoryName: '$(Build.Repository.Name)'
     action: 'create'
     target: '$(Build.SourceVersion)'
-    tagSource: 'userSpecifiedTag'
-    tag: $(GitVersion.SemVer)
+    tagSource: 'gitTag'
+    tagPattern: 'v*'
     isDraft: false
     isPreRelease: false
     assets: '$(Build.ArtifactStagingDirectory)/*.zip'
