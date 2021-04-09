@@ -35,6 +35,7 @@
         vm.settingsModel = [
             {
                 label: "@qrCode_darkColor",
+                description: "@qrCode_darkColorDescription",
                 show: true,
                 view: "/App_Plugins/ColorPickr/editor.html",
                 alias: "darkColor",
@@ -50,6 +51,7 @@
             },
             {
                 label: "@qrCode_lightColor",
+                description: "@qrCode_lightColorDescription",
                 show: true,
                 view: "/App_Plugins/ColorPickr/editor.html",
                 alias: "lightColor",
@@ -65,6 +67,7 @@
             },
             {
                 label: "@qrCode_icon",
+                description: "@qrCode_iconDescription",
                 show: true,
                 view: "mediapicker",
                 alias: "icon",
@@ -81,6 +84,7 @@
             },
             {
                 label: "@qrCode_iconSizePercent",
+                description: "@qrCode_iconSizePercentDescription",
                 show: true,
                 view: "integer",
                 alias: "iconSizePercent",
@@ -97,6 +101,7 @@
             },
             {
                 label: "@qrCode_iconBorderWidth",
+                description: "@qrCode_iconBorderWidthDescription",
                 show: true,
                 view: "integer",
                 alias: "iconBorderWidth",
@@ -113,6 +118,7 @@
             },
             {
                 label: "@qrCode_drawQuiteZone",
+                description: "@qrCode_drawQuiteZoneDescription",
                 show: true,
                 view: "boolean",
                 alias: "drawQuiteZone",
@@ -124,7 +130,7 @@
             },
             {
                 label: "@qrCode_size",
-                descrition: "Pixels per module",
+                descrition: "@qrCode_sizeDescription",
                 show: true,
                 view: "integer",
                 alias: "size",
@@ -141,6 +147,7 @@
             },
             {
                 label: "@qrCode_format",
+                description: "@qrCode_formatDescription",
                 show: true,
                 view: "/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html",
                 alias: "format",
@@ -153,6 +160,7 @@
             },
             {
                 label: "@qrCode_eccLevel",
+                description: "@qrCode_eccLevelDescription",
                 show: true,
                 view: "/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.html",
                 alias: "eccLevel",
