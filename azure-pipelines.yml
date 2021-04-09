@@ -111,15 +111,32 @@ steps:
     custom: 'tool'
     arguments: 'run UmbPack push $(Build.ArtifactStagingDirectory)\RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion).zip -k $(OurUmbracoApiKey) -a RoboLynx.Umbraco.QRCodeGenerator_8*' 
 - task: GitHubRelease@1
-  displayName: 'Publish Umbraco package on Github Release'
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
+  displayName: 'Publish on Github Release as Draft'
+  condition: ne(variables['Build.SourceBranch'], 'refs/heads/main-u8')
   inputs:
+    gitHubConnection: 'github.com_sebafelis'
     repositoryName: '$(Build.Repository.Name)'
-    gitHubConnection: sebafelis
     action: 'create'
     target: '$(Build.SourceVersion)'
-    tagSource: 'gitTag'
-    tagPattern: 'v*'
+    tagSource: 'userSpecifiedTag'
+    tag: $(GitVersion.SemVer)
+    isDraft: true
+    isPreRelease: true
+    assets: '$(Build.ArtifactStagingDirectory)/*.zip'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'
+- task: GitHubRelease@1
+  displayName: 'Publish on Github Release'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')
+  inputs:
+    gitHubConnection: 'github.com_sebafelis'
+    repositoryName: '$(Build.Repository.Name)'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'userSpecifiedTag'
+    tag: $(GitVersion.SemVer)
+    isDraft: false
+    isPreRelease: false
     assets: '$(Build.ArtifactStagingDirectory)/*.zip'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
