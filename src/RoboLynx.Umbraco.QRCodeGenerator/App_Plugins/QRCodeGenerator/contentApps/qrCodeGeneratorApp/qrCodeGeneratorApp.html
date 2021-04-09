@@ -59,7 +59,7 @@
 
                         <ng-form name="propertyForm" class="ng-pristine ng-valid" ng-model-options="{ debounce: 1000 }">
                             <div ng-repeat="property in vm.settingsModel | orderBy:'order'" ng-init="property.change(property)">
-                                <umb-control-group label="{{property.label}}" ng-if="property.show">
+                                <umb-control-group label="{{property.label}}" description="{{property.description}}"  ng-if="property.show">
                                     <umb-property-editor model="property"></umb-property-editor>
                                 </umb-control-group>
                             </div>

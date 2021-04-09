@@ -130,7 +130,7 @@
             },
             {
                 label: "@qrCode_size",
-                descrition: "@qrCode_sizeDescription",
+                description: "@qrCode_sizeDescription",
                 show: true,
                 view: "integer",
                 alias: "size",
