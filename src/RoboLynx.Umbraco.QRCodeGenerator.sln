@@ -10,10 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0DB16C92-AB9C-46DD-A45D-0E3C9B8B278B}"
 	ProjectSection(SolutionItems) = preProject
 		package.xml = package.xml
-		readme.md = readme.md
+		..\readme.md = ..\readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboLynx.Umbraco.QRCodeGenerator.Core", "RoboLynx.Umbraco.QRCodeGenerator.Core\RoboLynx.Umbraco.QRCodeGenerator.Core.csproj", "{4415FA73-5D82-4819-AAB6-4F310A3D1AB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGenerator.Core", "RoboLynx.Umbraco.QRCodeGenerator.Core\RoboLynx.Umbraco.QRCodeGenerator.Core.csproj", "{4415FA73-5D82-4819-AAB6-4F310A3D1AB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
