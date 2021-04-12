@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGene
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGenerator.Tests", "RoboLynx.Umbraco.QRCodeGenerator.Tests\RoboLynx.Umbraco.QRCodeGenerator.Tests.csproj", "{2197DDA9-19C2-4738-8B2C-31C140673847}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboLynx.Umbraco.QRCodeGenerator.Core", "RoboLynx.Umbraco.QRCodeGenerator.Core\RoboLynx.Umbraco.QRCodeGenerator.Core.csproj", "{C589803E-BDE8-441D-A057-4EF1EDA3E527}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2197DDA9-19C2-4738-8B2C-31C140673847}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2197DDA9-19C2-4738-8B2C-31C140673847}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2197DDA9-19C2-4738-8B2C-31C140673847}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C589803E-BDE8-441D-A057-4EF1EDA3E527}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C589803E-BDE8-441D-A057-4EF1EDA3E527}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C589803E-BDE8-441D-A057-4EF1EDA3E527}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C589803E-BDE8-441D-A057-4EF1EDA3E527}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

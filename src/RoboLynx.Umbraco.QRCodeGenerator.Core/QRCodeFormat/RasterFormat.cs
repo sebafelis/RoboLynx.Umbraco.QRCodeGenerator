@@ -30,8 +30,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             var lightColor = ColorTranslator.FromHtml(settings.LightColor);
             var darkColor = ColorTranslator.FromHtml(settings.DarkColor);
 
-            var qrGenerator = new QRCoder.QRCodeGenerator();
-
             var qrCodeBmp = GenerateBitmapQRCode(value, settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, ResolveIconUrl(settings.Icon, umbracoHelper), settings.IconSizePercent, settings.IconBorderWidth.Value, settings.ECCLevel);
             return SetBitmapAsHttpContent(qrCodeBmp, imageFormat, mime, FileName);
         }
@@ -41,17 +39,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             var qrGenerator = new QRCoder.QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, (QRCoder.QRCodeGenerator.ECCLevel)((int)level));
 
-            QRCode bmpQrCode = new QRCode(qrCodeData);
+            QRCode bmpQrCode = new(qrCodeData);
             Bitmap qrCodeBmp = null;
             if (!string.IsNullOrEmpty(iconUrl))
             {
-                using (var iconStream = FileSystemProviderManager.Current.MediaFileSystem.OpenFile(iconUrl))
-                {
-                    using (var iconBmp = new Bitmap(iconStream))
-                    {
-                        qrCodeBmp = bmpQrCode.GetGraphic(size, darkColor, lightColor, iconBmp, iconSizePercent, iconBorderWidth, drawQuiteZone);
-                    }
-                }
+                using var iconStream = FileSystemProviderManager.Current.MediaFileSystem.OpenFile(iconUrl);
+                using var iconBmp = new Bitmap(iconStream);
+                qrCodeBmp = bmpQrCode.GetGraphic(size, darkColor, lightColor, iconBmp, iconSizePercent, iconBorderWidth, drawQuiteZone);
             }
 
             if (qrCodeBmp == null)
@@ -64,20 +58,20 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         private HttpContent SetBitmapAsHttpContent(Bitmap bitmap, ImageFormat format, string mime, string fileName)
         {
-            using (MemoryStream ms = new MemoryStream())
+            using MemoryStream ms = new();
+            bitmap.Save(ms, format);
+
+            var httpContent = new ByteArrayContent(ms.ToArray());
+            httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mime);
+            if (!string.IsNullOrEmpty(fileName))
             {
-                bitmap.Save(ms, format);
-
-                var httpContent = new ByteArrayContent(ms.ToArray());
-                httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(mime);
-                if (!string.IsNullOrEmpty(fileName))
+                httpContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    httpContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-                    httpContent.Headers.ContentDisposition.FileName = fileName;
-                }
-
-                return httpContent;
+                    FileName = fileName
+                };
             }
+
+            return httpContent;
         }
     }
 }

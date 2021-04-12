@@ -111,7 +111,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
                 Format = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFormatFieldName) ? dataTypePrevalue[Constants.DefaultFormatFieldName].Value : Constants.GetDefaultFormat().Id,
                 DarkColor = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultDarkColorFieldName) ? dataTypePrevalue[Constants.DefaultDarkColorFieldName].Value : "#000000",
                 LightColor = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultLightColorFieldName) ? dataTypePrevalue[Constants.DefaultLightColorFieldName].Value : "#FFFFFF",
-                DrawQuiteZone = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultDrawQuietZoneFieldName) ? QRCodeHelper.StringToBoolean(dataTypePrevalue[Constants.DefaultDrawQuietZoneFieldName].Value, false) : false,
+                DrawQuiteZone = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultDrawQuietZoneFieldName) && QRCodeHelper.StringToBoolean(dataTypePrevalue[Constants.DefaultDrawQuietZoneFieldName].Value, false),
                 IconBorderWidth = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultIconBorderWidthFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultIconBorderWidthFieldName].Value) : 2,
                 Icon = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultIconFieldName) ? dataTypePrevalue[Constants.DefaultIconFieldName].Value : null,
                 ECCLevel = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultECCLevelFieldName) ? (ECCLevel)Enum.Parse(typeof(ECCLevel), dataTypePrevalue[Constants.DefaultECCLevelFieldName].Value) : ECCLevel.L
