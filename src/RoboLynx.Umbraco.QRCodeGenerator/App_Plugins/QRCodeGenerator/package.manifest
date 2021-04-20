@@ -108,15 +108,6 @@
             "description": "The percent size of icon in the center of code.",
             "key": "defaultIconSizePercent",
             "view": "number"
-            //"validation": [
-            //  {
-            //    "type": "Range",
-            //    "config": {
-            //      "min": 0,
-            //      "max": 30
-            //    }
-            //  }
-            //]
           },
           {
             "label": "Default icon border width",

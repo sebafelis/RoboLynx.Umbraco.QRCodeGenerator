@@ -1,0 +1,143 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- main-u7
+- release-u7
+- develop-u7
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  publishOnGithubRelease: true
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: 'Install NuGet 5.8.1'
+  inputs:    
+    versionSpec: 5.8.1
+- task: NuGetCommand@2
+  displayName: 'Restore NuGets'
+  inputs:
+    restoreSolution: '$(solution)'
+    includeNuGetOrg: true
+- task: gitversion/setup@0
+  displayName: 'Setup GitVersions'
+  inputs:
+    versionSpec: 5.6.6
+- task: gitversion/execute@0
+  displayName: 'Get build version'
+  inputs:
+    useConfigFile: true
+    configFilePath: 'src\GitVersion.yml'
+- task: DotNetCoreCLI@2
+  displayName: 'Build project ($(buildConfiguration) configuration)'
+  inputs:
+    command: 'build'
+    projects: '$(solution)'
+    arguments: '--configuration $(buildConfiguration)'
+    versioningScheme: byEnvVar
+    versionEnvVar: 'GitVersion.SemVer'
+- task: DotNetCoreCLI@2
+  displayName: 'Run tests'
+  inputs:
+    command: test
+    projects: '**/*Tests/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+- task: DotNetCoreCLI@2
+  displayName: 'Create NuGet package'
+  inputs:
+    command: pack
+    projects: '$(solution)'
+    includesymbols: true
+    versioningScheme: byEnvVar
+    versionEnvVar: 'GitVersion.NuGetVersion'
+    buildProperties: 'SymbolPackageFormat=snupkg'
+- task: DotNetCoreCLI@2
+  displayName: 'Restore UmbPack'
+  inputs:
+    command: custom
+    custom: 'tool'
+    arguments: 'restore'
+    workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
+- task: DotNetCoreCLI@2
+  displayName: 'Run UmbPack'
+  inputs:
+    command: custom
+    custom: 'tool'
+    arguments: 'run UmbPack pack $(System.DefaultWorkingDirectory)\src\package.xml -v $(GitVersion.NuGetVersion) -o $(Build.ArtifactStagingDirectory) -p BuildConfiguration=$(buildConfiguration)'
+    workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+- task: UniversalPackages@0
+  displayName: 'Publish Universal Pack'
+  inputs:
+    command: publish
+    publishDirectory: '$(Build.ArtifactStagingDirectory)'
+    vstsFeedPublish: 'RoboLynx.Umbraco.QRCodeGenerator/QRCodeGeneratorNugets'
+    vstsFeedPackagePublish: 'robolynx.umbraco.qrcodegenerator'
+    versionOption: custom
+    versionPublish: '$(GitVersion.NuGetVersion)'
+    packagePublishDescription: '<Package description>'
+- task: NuGetAuthenticate@0
+  displayName: 'Authenticate DevOps Artifacts Nuget'
+- task: NuGetCommand@2
+  displayName: 'Publish NuGet package on DevOps Artifacts'
+  inputs:
+    command: push
+    publishVstsFeed: 'RoboLynx.Umbraco.QRCodeGenerator/QRCodeGeneratorNugets'
+    allowPackageConflicts: true
+- task: NuGetCommand@2
+  displayName: 'Publish NuGet package on NuGet.org'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u7')
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: sebafelisNuGetAccountForQRCodeGenerator
+    versioningScheme: byEnvVar
+    versionEnvVar: 'GitVersion.NuGetVersion'
+- task: DotNetCoreCLI@2
+  displayName: 'Publish Umbraco package on Our.Umbraco.com'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main-u7')
+  inputs:
+    command: custom
+    custom: 'tool'
+    arguments: 'run UmbPack push $(Build.ArtifactStagingDirectory)\RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion).zip -k $(OurUmbracoApiKey) -a RoboLynx.Umbraco.QRCodeGenerator_8*' 
+- task: GitHubRelease@1
+  displayName: 'Publish on Github Release as Draft'
+  condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/main-u7'), variables['publishOnGithubRelease'])
+  inputs:
+    gitHubConnection: 'github.com_sebafelis'
+    repositoryName: '$(Build.Repository.Name)'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'gitTag'
+    tagPattern: 'v*'
+    isDraft: true
+    isPreRelease: true
+    assets: '$(Build.ArtifactStagingDirectory)/*.zip'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'
+- task: GitHubRelease@1
+  displayName: 'Publish on Github Release'
+  condition: and(eq(variables['Build.SourceBranch'], 'refs/heads/main-u7'), variables['publishOnGithubRelease'])
+  inputs:
+    gitHubConnection: 'github.com_sebafelis'
+    repositoryName: '$(Build.Repository.Name)'
+    action: 'create'
+    target: '$(Build.SourceVersion)'
+    tagSource: 'gitTag'
+    tagPattern: 'v*'
+    isDraft: false
+    isPreRelease: false
+    assets: '$(Build.ArtifactStagingDirectory)/*.zip'
+    changeLogCompareToRelease: 'lastFullRelease'
+    changeLogType: 'commitBased'

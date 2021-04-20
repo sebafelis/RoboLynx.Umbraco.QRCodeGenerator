@@ -1,4 +1,4 @@
-﻿![Logo](https://github.com/sebafelis/RoboLynx.Umbraco.CodeGenerator/raw/main-u8/assets/RoboLynx.Umbraco.QRCodeGenerator_128.png)
+﻿![Logo](https://github.com/sebafelis/RoboLynx.Umbraco.CodeGenerator/raw/main-u7/assets/RoboLynx.Umbraco.QRCodeGenerator_128.png)
 # QR Code Generator
 
 [![RoboLynx.Umbraco.QRCodeGenerator NuGet Package](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
@@ -14,7 +14,7 @@ User can customize generating code by color, size, output format, error correcti
 > 
 > It's can be us only for Document content. It can't be used for Media, Member or User at now.
 
->Umbraco 8 Version is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
+>Version for Umbraco 8 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
 
 ## Installation
 
