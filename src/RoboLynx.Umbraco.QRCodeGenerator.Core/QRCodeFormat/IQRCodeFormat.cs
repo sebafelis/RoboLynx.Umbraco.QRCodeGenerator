@@ -1,7 +1,6 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System.Collections.Generic;
 using System.Net.Http;
-using Umbraco.Web;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
@@ -13,10 +12,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         string FileName { get; }
 
+        string Mime { get; }
+
         IEnumerable<string> RequiredSettings { get; }
 
-        HttpContent ResponseContent(string value, QRCodeSettings settings, UmbracoHelper umbracoHelper);
+        HttpContent ResponseContent(string value, QRCodeSettings settings);
 
-       
+
     }
 }

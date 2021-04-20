@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="pt" intName="Portuguese Brazil" localName="Portuguese Brazil" lcid="" culture="pt-BR">
+  <area alias="scp">
+    <key alias="cancelText">Cancelar</key>
+    <key alias="chooseText">Escolher</key>
+    <key alias="clearText">Limpar cor selecionada</key>
+    <key alias="noColorSelectedText">Nenhuma cor selecionada</key>
+    <key alias="togglePaletteMoreText">Mais</key>
+    <key alias="togglePaletteLessText">Menos</key>
+  </area>
+</language>

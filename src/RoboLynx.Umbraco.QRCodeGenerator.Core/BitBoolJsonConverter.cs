@@ -1,13 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
-    public class BitBoolJsonConverter : JsonConverter
+    internal class BitBoolJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
@@ -16,20 +12,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            switch (reader.Value)
+            return reader.Value switch
             {
-                case "1":
-                case 1:
-                case true:
-                case "true":
-                    return true;
-                case "0":
-                case 0:
-                case false:
-                case "false":
-                default: 
-                    return false;
-            }
+                "1" or 1 or true or "true" => true,
+                _ => false,
+            };
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -1,32 +1,24 @@
-﻿using QRCoder;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
-using System;
-using Umbraco.Core;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
+using Umbraco.Core.Models;
+using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
-using static QRCoder.PayloadGenerator;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class TextType : QRCodeType
     {
-        public TextType() : base(null)
+        const string textArgumentName = "text";
+
+        public TextType(ILocalizedTextService localizedTextService) : base(localizedTextService)
         {
 
         }
 
-        public TextType(IQRCodeSource source) : base(source)
+        public override string Id => "Text";
+
+        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture)
         {
-
-        }
-
-        public override string Value
-        {
-            get
-            {
-                CheckSource();
-
-                return source.GetValue<string>(0, "text");
-            }
+            return source.GetValue<string>(0, textArgumentName, content, sourceSettings, culture);
         }
     }
 }

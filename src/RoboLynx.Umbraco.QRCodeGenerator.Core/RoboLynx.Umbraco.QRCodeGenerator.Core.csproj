@@ -17,7 +17,6 @@
 		<PackageIcon>RoboLynx.Umbraco.QRCodeGenerator_128.png</PackageIcon>
 	</PropertyGroup>
 
-	
 	<ItemGroup>
 		<None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png">
 			<Pack>True</Pack>
@@ -34,19 +33,14 @@
 		</AssemblyAttribute>
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="DotNetColorParser" Version="1.0.0" />
+		<PackageReference Include="LightInject" Version="5.5.0" />
 		<PackageReference Include="QRCoder" Version="1.4.1" />
 		<PackageReference Include="UmbracoCms.Core" Version="7.15.7" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Reference Include="System.ComponentModel.DataAnnotations" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png">
-	    <Pack>True</Pack>
-	    <PackagePath></PackagePath>
-	  </None>
 	</ItemGroup>
 	
 </Project>

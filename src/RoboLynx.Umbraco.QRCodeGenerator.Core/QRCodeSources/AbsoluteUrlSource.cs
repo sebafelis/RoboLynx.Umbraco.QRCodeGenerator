@@ -1,35 +1,25 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using Umbraco.Core.Models;
+using Umbraco.Core.Services;
 using Umbraco.Web;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 {
     public class AbsoluteUrlSource : QRCodeSource
     {
-        public class AbsoluteUrlSourceSettings
-        {
-
-        }
-        
-        AbsoluteUrlSourceSettings settings;
-
-        public AbsoluteUrlSource() : base(null)
+        public AbsoluteUrlSource(ILocalizedTextService localizedTextService) : base(localizedTextService)
         {
 
         }
 
-        public AbsoluteUrlSource(IPublishedContent content, string sourceSettings) : base(content)
+        public override string Id => "AbsoluteUrl";
+
+        public override T GetValue<T>(int index, string key, IPublishedContent content, string sourceSettings, string culture)
         {
-            if (!string.IsNullOrEmpty(sourceSettings))
+            if (content is null)
             {
-                settings = JsonConvert.DeserializeObject<AbsoluteUrlSourceSettings>(sourceSettings);
+                throw new ArgumentNullException(nameof(content));
             }
-        }
-
-        public override T GetValue<T>(int index, string key)
-        {
-            CheckContent();
 
             var url = content.UrlAbsolute();
 

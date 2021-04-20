@@ -1,8 +1,8 @@
-﻿<div ng-controller="RoboLynx.Umbraco.QRCodeFormatPicker" >
+<div ng-controller="RoboLynx.Umbraco.QRCodeFormatPicker">
     <div ng-if="loaded && !error" ng-init="change(model)">
-        <select ng-options="item.id as item.name for item in availableFormats" class="umb-editor" ng-model="model.value" ng-change="change(model)" ng-required></select>
+        <select class="umb-property-editor" ng-options="item.id as item.name for item in availableFormats" ng-model="model.value" ng-change="change(model)" ng-required></select>
     </div>
-    <div ng-if="!loaded && !error" style="height: 25px; position: relative">
+    <div ng-if="!loaded && !error" style="height: 25px; position: relative; width: 100%">
         <umb-load-indicator></umb-load-indicator>
     </div>
     <span ng-if="error"><span class="icon-alert color-red"></span> {{error}}</span>

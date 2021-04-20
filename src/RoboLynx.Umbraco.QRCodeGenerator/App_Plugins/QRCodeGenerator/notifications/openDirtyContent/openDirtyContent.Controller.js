@@ -1,4 +1,4 @@
-﻿//used for the media picker dialog
+//used for the media picker dialog
 angular.module("umbraco").controller("RoboLynx.QRCodeGenerator.OpenDirtyContentController",
 	function ($scope, $location, notificationsService) {
 

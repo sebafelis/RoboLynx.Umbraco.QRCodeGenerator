@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <language alias="pl_pl" intName="Polish (PL)" localName="Polish (PL)" lcid="" culture="pl-PL">
 	<creator>
 		<name>Sebastian Felis</name>
@@ -6,17 +6,17 @@
 	</creator>
 	<area alias="qrCodeTypes">
 		<key alias="textTypeName">Tekst</key>
-		<key alias="textTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określony tekst w skanerze kodów.</key>
+		<key alias="textTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określony tekst w skanerze kodów. Argument: text (string)</key>
 		<key alias="phoneNumberTypeName">Numer telefonu</key>
-		<key alias="phoneNumberTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy obreślony numer telefony gotowy do dzwonienia.</key>
-		<key alias="geolocationGEOTypeName">Geo-location (GEO)</key>
-		<key alias="geolocationGEOTypeDescription">Pozycja geograficzna w formacie GEO. Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w domyślnej aplikacji obsługującej ten format. Nie wszystkie urządzenia domyślnie obsługują ten format.</key>
-		<key alias="geolocationGooleMapTypeName">Geo-location (Google Map)</key>
-		<key alias="geolocationGooleMapTypeDescription">Pozycja geograficzna w formacie Google Map. Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w domyślnej aplikacji obsługującej ten format. Większość urządzeń posiada odpowiednią aplikację.</key>
+		<key alias="phoneNumberTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy obreślony numer telefony gotowy do dzwonienia. Argument: number (string)</key>
+		<key alias="geolocationGEOTypeName">Geolokalizacja (GEO)</key>
+		<key alias="geolocationGEOTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w domyślnej aplikacji obsługującej ten format. Argumenty: latitude (double), longitude (double)</key>
+		<key alias="geolocationGooleMapTypeName">Geolokalizacja (Google Map)</key>
+		<key alias="geolocationGooleMapTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy pozycję otwartą w aplikacji lub na stronie Google Maps. Argumenty: latitude (double), longitude (double)</key>
 		<key alias="smsTypeName">SMS</key>
-		<key alias="smsTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określoną treść wiadomości gotową do wysłania na określony numer. Attributes: number, subject</key>
+		<key alias="smsTypeDescription">Po zeskanowaniu kodu użytkownik zobaczy określoną treść wiadomości gotową do wysłania na określony numer. Argumenty: number, subject</key>
 		<key alias="urlTypeName">URL</key>
-		<key alias="urlTypeDescription">Po zeskanowaniu kodu użytkownik otworzy określony zasób w domyślnej aplikacji dla protokołu określonego w odnośniku.</key>
+		<key alias="urlTypeDescription">Po zeskanowaniu kodu użytkownik otworzy określony zasób w domyślnej aplikacji dla protokołu określonego w odnośniku. Np. podany adres strony internetowej otworzy się w domyślnej przeglądarce jeśli protoków to HTTP lub HTTPS. Argument: url (string)</key>
 	</area>
 	<area alias="qrCodeFormats">
 		<key alias="bmpFormatName">Bitmap (.bmp)</key>
@@ -27,8 +27,8 @@
 	<area alias="qrCodeSources">
 		<key alias="absoluteUrlSourceName">Absolutny URL</key>
 		<key alias="absoluteUrlSourceDescription">Kod jest generowny dla absolutnego adresu URL.</key>
-		<key alias="silmplePropertySourceName">Właściwość treści</key>
-		<key alias="silmplePropertySourceDescription">
+		<key alias="simplePropertySourceName">Właściwość treści</key>
+		<key alias="simplePropertySourceDescription">
 			Kod jest generowany z określonej właściwości opublikowanej treści. Alias właściwości musi by określony w Property source settings jako lista aliasów właściowści oddzielonymi przecinkami w zdefiniowanej kolejności lub w formacie JSON. Liczba wymaganych atrybutów, kolejność atrybutów oraz nazwy atrybótów są definiowane przez wybrany Type Provider.
 			JSON format:
 			{
@@ -52,23 +52,34 @@
 	<area alias="qrCode">
 		<key alias="qrCode">Kod QR</key>
 		<key alias="size">Pixele na moduł</key>
+		<key alias="sizeDescription">Rozmiar w pikselach jednego modułu (moduł to kwadrat z których zbudowany jest kod).</key>
 		<key alias="format">Format</key>
+		<key alias="formatDescription">Format wyjściowy w którym zapisany jest kod.</key>
 		<key alias="darkColor">Ciemny kolor</key>
+		<key alias="darkColorDescription">Kolor ciemnych kwardatów.</key>
 		<key alias="lightColor">Jasny kolor</key>
+		<key alias="lightColorDescription">Kolor tła.</key>
 		<key alias="icon">Ikona</key>
+		<key alias="iconDescription">Ikona na środku kodu.</key>
 		<key alias="iconBorderWidth">Grubość obramowania ikony</key>
+		<key alias="iconBorderWidthDescription">Grubość obramowania wokół ikony.</key>
 		<key alias="drawQuiteZone">Rysuj strefę ciszy</key>
+		<key alias="drawQuiteZoneDescription">Rysuj lub nie obramowanie wokół kodu.</key>
 		<key alias="dialogHeader">Generuj kod QR</key>
 		<key alias="iconSizePercent">Rozmiar ikony (%)</key>
+		<key alias="iconSizePercentDescription">Procentowy rozmiar ikony na środku kodu.</key>
 		<key alias="actionBtnCaption">Generuj kod QR</key>
-		<ket alias="eccLevel">Stopień korekcji błędów</ket>
-		<key alias="notPublishedAnyContentVersionMsg">Brak opublikowanej wersji treści</key>
-		<key alias="notPublishedAnyContentVersionHedline">Ta treść nie posiada opublikowanej wersji. Aby wygenerować Kod QR treść musi posiadać opublikowaną wersję.</key>
+		<key alias="eccLevel">Stopień korekcji błędów</key>
+		<key alias="eccLevelDescription">Poziom determinuje jak duży obszar kodu może być nie do odczytania, mimo że cały kod wciąż pozostaje czytelny.</key>
+		<key alias="imageSize">Rozmiar obrazka</key>
+		<key alias="notPublishedAnyContentVersionHedline">Brak opublikowanej wersji treści</key>
+		<key alias="notPublishedAnyContentVersionMsg">Ta treść nie posiada opublikowanej wersji. Aby wygenerować Kod QR treść musi posiadać opublikowaną wersję.</key>
 		<key alias="openDirtyContentHedline">Treść posiada niezapisane zmiany</key>
 		<key alias="openDirtyContentMsg">Kod QR jest generowany z zapisanych wartiści właściwości opublikowanych treści. Ta treść posiada teraz niezapisane zmiany. Może to powadować różnicę między wartością, którą widzisz, a wartości przekazaną do generowania kodu QR. Czy chcesz wygenerować kod QR mimo to?</key>
 		<key alias="notPublishedContentHedline">Nieopublikowana treść</key>
-		<key alias="notPublishedContentMsg">Ta wersja treści jest zapisana, lecz nie została opublikowana. Może to powadować różnicę między wartością, którą widzisz, a wartości przekazaną do generowania kodu QR. Czy chcesz wygenerować kod QR mimo to?</key>
+		<key alias="notPublishedContentMsg">Ta wersja treści została zapisana, lecz nie jest opublikowana. Może to powadować różnicę między wartością, którą widzisz, a wartości przekazaną do generowania kodu QR.</key>
 		<key alias="generate">Generuj</key>
 		<key alias="publishFirst">Najpierw Zapiszę i Opublikuję treść</key>
+		<key alias="warning">Ostrzeżenie</key>
 	</area>
 </language>

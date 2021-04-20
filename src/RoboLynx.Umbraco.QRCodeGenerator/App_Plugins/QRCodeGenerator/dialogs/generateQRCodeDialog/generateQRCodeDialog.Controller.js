@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     'use strict';
 
     angular
@@ -9,9 +9,10 @@
 
     function generateQRCode($scope, qrCodeGeneratorResources, $q, dialogService, notificationsService) {
 
-        var dialogData = $scope.dialogData;
-        var defaultSettings = {};
-        var requierdSettingsForFormats = {};
+        var dialogData = $scope.dialogData,
+            defaultSettings = {},
+            requierdSettingsForFormats = {},
+            settingsModelWatches = [];
 
         $scope.qrCodeLoaded = false;
         $scope.qrCodeSettingsLoaded = false;
@@ -25,18 +26,23 @@
         $scope.settingsModel = [
             {
                 label: "@qrCode_darkColor",
+                description: "@qrCode_darkColorDescription",
                 show: true,
                 view: "/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html",
-                alias: "darkColor",                
+                alias: "darkColor",
                 config: {
                     enableTransparency: "0",
                     preferredFormat: "hex"
                 },
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 4
             },
             {
                 label: "@qrCode_lightColor",
+                description: "@qrCode_lightColorDescription",
                 show: true,
                 view: "/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html",
                 alias: "lightColor",
@@ -45,10 +51,14 @@
                     preferredFormat: "hex"
                 },
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 5
             },
             {
                 label: "@qrCode_icon",
+                description: "@qrCode_iconDescription",
                 show: true,
                 view: "mediapicker",
                 alias: "icon",
@@ -57,11 +67,15 @@
                     onlyImages: true,
                     disableFolderSelect: true
                 },
+                validation: {
+                    mandatory: false
+                },
                 value: null,
                 order: 7
             },
             {
                 label: "@qrCode_iconSizePercent",
+                description: "@qrCode_iconSizePercentDescription",
                 show: true,
                 view: "integer",
                 alias: "iconSizePercent",
@@ -71,10 +85,14 @@
                     step: 1
                 },
                 value: null,
+                validation: {
+                    mandatory: false
+                },
                 order: 8
             },
             {
                 label: "@qrCode_iconBorderWidth",
+                description: "@qrCode_iconBorderWidthDescription",
                 show: true,
                 view: "integer",
                 alias: "iconBorderWidth",
@@ -84,19 +102,26 @@
                     step: 1
                 },
                 value: null,
+                validation: {
+                    mandatory: false
+                },
                 order: 9
             },
             {
                 label: "@qrCode_drawQuiteZone",
+                description: "@qrCode_drawQuiteZoneDescription",
                 show: true,
                 view: "boolean",
                 alias: "drawQuiteZone",
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 6
             },
             {
                 label: "@qrCode_size",
-                descrition: "Pixels per module",
+                description: "@qrCode_sizeDescription",
                 show: true,
                 view: "integer",
                 alias: "size",
@@ -106,23 +131,34 @@
                     step: 1
                 },
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 3
             },
             {
                 label: "@qrCode_format",
+                description: "@qrCode_formatDescription",
                 show: true,
                 view: "/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html",
                 alias: "format",
                 change: formatChange,
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 1
             },
             {
                 label: "@qrCode_eccLevel",
+                description: "@qrCode_eccLevelDescription",
                 show: true,
                 view: "/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.html",
                 alias: "eccLevel",
                 value: null,
+                validation: {
+                    mandatory: true
+                },
                 order: 2
             }
         ];
@@ -155,9 +191,26 @@
         }
 
         function watchSettings() {
-            $scope.$watch("settingsModel", function (newForm, oldForm) {
-                getQRCode(dialogData.contentId, dialogData.propertyAlias, mapSettings($scope.settingsModel));
-            }, true);
+            unwatchSettings();
+
+            var watchExpressions = generateExpressionsToWatchSettingsValue();
+            _.each(watchExpressions, function (expression) {
+                settingsModelWatches.push($scope.$watch(expression, function (newForm, oldForm) {
+                    getQRCode(dialogData.contentId, dialogData.propertyAlias, mapSettings($scope.settingsModel));
+                }));
+            });
+        }
+
+        function unwatchSettings() {
+            _.each(settingsModelWatches, function (watched) {
+                watched();
+            });
+        }
+
+        function generateExpressionsToWatchSettingsValue() {
+            return _.map($scope.settingsModel, function (item, index) {
+                return "settingsModel[" + index + "].value";
+            });
         }
 
         function getRequiredSettingsForFormats() {
@@ -172,7 +225,7 @@
                     function (error) {
                         notificationsService.error("Error", "Could not get required settings for formats.", null, error);
                         $scope.qrCodeError = error;
-                        return error;
+                        return $q.reject(error);
                     });
         }
 
@@ -188,7 +241,7 @@
                     function (error) {
                         notificationsService.error("Error", "Could not get default settings.", null, error);
                         $scope.qrCodeError = error;
-                        return error;
+                        return $q.reject(error);
                     });
         }
 
@@ -213,16 +266,23 @@
                     function (error) {
                         notificationsService.error("Error", "Could not get QR Code URL.", null, error);
                         $scope.qrCodeError = error;
-                        return error;
+                        return $q.reject(error);
                     });
         }
 
+        $scope.$on('$destroy', function () {
+            unwatchSettings();
+        });
 
         function init() {
-            $q.all(getRequiredSettingsForFormats(), getQRCodeSettings(dialogData.contentId, dialogData.propertyAlias)
-                .then(function () {
-                    setDefaultSettings();
-                }))
+            $q.all(
+                [
+                    getRequiredSettingsForFormats(),
+                    getQRCodeSettings(dialogData.contentId, dialogData.propertyAlias)
+                        .then(function () {
+                            setDefaultSettings();
+                        })
+                ])
                 .then(function () {
                     watchSettings()
                 });

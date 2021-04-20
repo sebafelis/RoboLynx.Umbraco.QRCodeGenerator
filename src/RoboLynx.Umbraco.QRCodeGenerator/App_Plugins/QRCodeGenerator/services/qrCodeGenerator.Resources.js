@@ -1,5 +1,5 @@
-﻿angular.module("umbraco")
-    .factory("RoboLynx.Umbraco.QRCodeGeneratorResources", function ($http, $log, $q) {
+angular.module("umbraco")
+    .factory("RoboLynx.Umbraco.QRCodeGeneratorResources", function ($http, $log, $q, $injector) {
         var qrCodeApiUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCode/",
             qrCodeTypePickerUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCodeTypePicker/",
             qrCodeSourcePickerUrl = "/Umbraco/backoffice/QRCodeGenerator/QRCodeSourcePicker/",
@@ -25,7 +25,11 @@
             return undefined;
         }
 
-        function _raadAsBase64(response) {
+        function _readAsBase64(response) {
+            if (response.size == 0) {
+                return $q.when(null);
+            }
+
             var deferred = $q.defer();
 
             var reader = new FileReader();
@@ -40,7 +44,11 @@
             return deferred.promise;
         }
 
-        function _raadAsJson(response) {
+        function _readAsJson(response) {
+            if (response.size == 0) {
+                return $q.when({ message: '' });
+            }
+
             var deferred = $q.defer();
 
             var reader = new FileReader();
@@ -73,8 +81,7 @@
                         },
                         function (reason) {
                             userPromises[id] = null;
-                            throw new Error(reason.message);
-                            return reason;
+                            return $q.reject(reason.data.message);
                         }
                     );
             }
@@ -83,8 +90,8 @@
         }
 
         return {
-            getQRCode: function (contentId, propertyAlias, settings) {
-                if (!contentId) {
+            getQRCode: function (nodeId, propertyAlias, settings) {
+                if (!nodeId) {
                     throw new Error("Content ID cannot be empty.");
                 }
                 if (!propertyAlias) {
@@ -93,19 +100,19 @@
                 return $http.get(qrCodeApiUrl + 'Image', {
                     responseType: "blob",
                     params: {
-                        contentId: contentId, propertyAlias: propertyAlias, size: settings.size, format: settings.format,
+                        nodeId: nodeId, propertyAlias: propertyAlias, size: settings.size, format: settings.format,
                         darkColor: settings.darkColor, lightColor: settings.lightColor, icon: settings.icon,
                         iconSizePercent: settings.iconSizePercent, iconBorderWidth: settings.iconBorderWidth,
-                        drawQuiteZone: _convertToBool(settings.drawQuiteZone), eCCLevel: settings.eCCLevel
+                        drawQuiteZone: _convertToBool(settings.drawQuiteZone), eccLevel: settings.eccLevel
                     }
-                }).then(function (response) { return response; });
+                });
             },
-            getQRCodeAsBase64: function (contentId, propertyAlias, settings) {
-                return this.getQRCode(contentId, propertyAlias, settings)
+            getQRCodeAsBase64: function (nodeId, propertyAlias, settings) {
+                return this.getQRCode(nodeId, propertyAlias, settings)
                     .then(
                         function (response) {
                             var deferred = $q.defer();
-                            _raadAsBase64(response.data).then(function (base64Data) {
+                            _readAsBase64(response.data).then(function (base64Data) {
                                 deferred.resolve({
                                     data: base64Data,
                                     fileName: _getFileName(response)
@@ -117,8 +124,8 @@
                         },
                         function (error) {
                             var deferred = $q.defer();
-                            _raadAsJson(error.data).then(function (errorObj) {
-                                deferred.resolve(errorObj.message);
+                            _readAsJson(error.data).then(function (errorObj) {
+                                deferred.reject(errorObj.message);
                             }, function (readerError) {
                                 deferred.reject(readerError);
                             });
@@ -126,8 +133,13 @@
                         }
                     );
             },
-            getQRCodeSettings: function (contentId, propertyAlias) {
-                return $http.get(qrCodeApiUrl + 'DefaultSettings?contentId=' + contentId + '&propertyAlias=' + propertyAlias).then(function (response) { return response.data; });
+            getQRCodeSettings: function (nodeId, propertyAlias) {
+                return $http.get(qrCodeApiUrl + 'DefaultSettings?nodeId=' + nodeId + '&propertyAlias=' + propertyAlias).then(
+                    function (response) {
+                        return response.data;
+                    }, function (error) {
+                        return $q.reject(error.data.message);
+                    });
             },
             getRequiredSettingsForFormats: function () {
                 return _callOneTimeHttpPromise(arguments.callee.name, $http.get(qrCodeApiUrl + 'RequiredSettingsForFormats'));

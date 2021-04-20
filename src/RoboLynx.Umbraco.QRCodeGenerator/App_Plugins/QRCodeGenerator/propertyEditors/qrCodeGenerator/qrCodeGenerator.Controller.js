@@ -1,4 +1,4 @@
-﻿angular.module("umbraco")
+angular.module("umbraco")
     .controller("RoboLynx.Umbraco.QRCodeGeneratorController",
         ["$scope", "dialogService", "editorState", "notificationsService",
             function ($scope, dialogService, editorState, notificationsService) {

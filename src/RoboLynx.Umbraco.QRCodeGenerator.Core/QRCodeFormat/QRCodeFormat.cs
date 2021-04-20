@@ -1,4 +1,4 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,23 +10,47 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public abstract class QRCodeFormat : IQRCodeFormat
     {
+        protected readonly ILocalizedTextService localizedTextService;
+        protected readonly UmbracoHelper umbracoHelper;
+
+        public QRCodeFormat(ILocalizedTextService localizedTextService, UmbracoHelper umbracoHelper)
+        {
+            this.localizedTextService = localizedTextService;
+            this.umbracoHelper = umbracoHelper;
+        }
+
         public abstract string Id { get; }
 
-        public string Name => ApplicationContext.Current.Services.TextService.Localize($"qrCodeFormats/{GetType().Name.ToFirstLower()}Name");
+        public virtual string Name => localizedTextService.Localize($"qrCodeFormats/{GetType().Name.ToFirstLower()}Name");
+
+        public abstract string Mime { get; }
 
         public abstract IEnumerable<string> RequiredSettings { get; }
 
         public virtual string FileName => Guid.NewGuid().ToString();
 
-        public abstract HttpContent ResponseContent(string value, QRCodeSettings settings, UmbracoHelper umbracoHelper);
+        public abstract HttpContent ResponseContent(string value, QRCodeSettings settings);
 
-        protected string ResolveIconUrl(string iconPathOrMediaId, UmbracoHelper umbracoHelper)
+        /// <summary>
+        /// Resolve icon source
+        /// </summary>
+        /// <param name="icon">Image path, Media ID or Media UDI</param>
+        /// <returns>Image path</returns>
+        protected string ResolveIconUrl(string icon)
         {
-            if (int.TryParse(iconPathOrMediaId, out int mediaId))
+            if (!string.IsNullOrEmpty(icon))
             {
-                return umbracoHelper.TypedMedia(mediaId)?.Url;
+                if (int.TryParse(icon, out int mediaId))
+                {
+                    return umbracoHelper.Media(mediaId)?.Url();
+                }
+                if (Udi.TryParse(icon, out Udi mediaUdi))
+                {
+                    return umbracoHelper.Media(mediaUdi)?.Url();
+                }
+                return icon;
             }
-            return iconPathOrMediaId;
+            return null;
         }
     }
 }

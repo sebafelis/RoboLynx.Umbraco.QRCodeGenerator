@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="en_us" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+  <area alias="scp">
+    <key alias="cancelText">Cancel</key>
+    <key alias="chooseText">Choose</key>
+    <key alias="clearText">Clear Color Selection</key>
+    <key alias="noColorSelectedText">No Color Selected</key>
+    <key alias="togglePaletteMoreText">More</key>
+    <key alias="togglePaletteLessText">Less</key>
+  </area>
+</language>

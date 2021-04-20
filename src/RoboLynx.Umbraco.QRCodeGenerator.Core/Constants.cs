@@ -1,22 +1,11 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RoboLynx.Umbraco.QRCodeGenerator
+﻿namespace RoboLynx.Umbraco.QRCodeGenerator
 {
     internal class Constants
     {
-        public static Type DefaultFormat => typeof(SvgFormat);
-        public static IQRCodeFormat GetDefaultFormat()
-        {
-            return (IQRCodeFormat)Activator.CreateInstance(DefaultFormat);
-        }
-
         public const string PluginAlias = "QRCodeGenerator";
         public const string PluginName = "QR Code Generator";
+        public const string PropertyEditorAlias = "qrCodeGenerator";
+        public const string ContentAppAlias = "qrCodeGenerator";
         public const string CodeSourceFieldName = "codeSource";
         public const string CodeSourceSettingsFieldName = "codeSourceSettings";
         public const string CodeTypeFieldName = "codeType";

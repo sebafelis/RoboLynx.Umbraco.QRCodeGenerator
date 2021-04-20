@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="nl" intName="Dutch" localName="Nederlands" lcid="" culture="nl-NL">
+  <area alias="scp">
+    <key alias="cancelText">Annuleer</key>
+    <key alias="chooseText">Kies</key>
+    <key alias="clearText">Wis kleur selectie</key>
+    <key alias="noColorSelectedText">No Color Selected</key>
+    <key alias="togglePaletteMoreText">Meer</key>
+    <key alias="togglePaletteLessText">Minder</key>
+  </area>
+</language>

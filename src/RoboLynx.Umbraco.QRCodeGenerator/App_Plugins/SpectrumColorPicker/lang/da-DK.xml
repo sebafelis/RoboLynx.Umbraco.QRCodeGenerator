@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="da" intName="Danish" localName="dansk" lcid="" culture="da-DK">
+  <area alias="scp">
+    <key alias="cancelText">Annuller</key>
+    <key alias="chooseText">Vælg</key>
+    <key alias="clearText">Fjern farvevalg</key>
+    <key alias="noColorSelectedText">Ingen farve er valgt</key>
+    <key alias="togglePaletteMoreText">Mere</key>
+    <key alias="togglePaletteLessText">Mindre</key>
+  </area>
+</language>

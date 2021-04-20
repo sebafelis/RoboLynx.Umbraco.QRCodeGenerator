@@ -1,4 +1,5 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers

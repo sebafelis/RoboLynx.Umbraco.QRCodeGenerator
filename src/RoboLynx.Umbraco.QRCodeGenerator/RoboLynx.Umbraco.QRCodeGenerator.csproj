@@ -15,6 +15,7 @@
 		<Authors>Sebastian Felis</Authors>
 		<LangVersion>latest</LangVersion>
 		<PackageIcon>RoboLynx.Umbraco.QRCodeGenerator_128.png</PackageIcon>
+		<UserSecretsId>a4f5de04-c917-427d-881e-5a81310831db</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -42,7 +43,6 @@
 		<Content Include="App_Plugins\QRCodeGenerator\lang\en-GB.xml" />
 		<Content Include="App_Plugins\QRCodeGenerator\dialogs\generateQRCodeDialog\generateQRCodeDialog.Controller.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\dialogs\generateQRCodeDialog\generateQRCodeDialog.html" />
-		<Content Include="App_Plugins\QRCodeGenerator\libs\download.min.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\package.manifest" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.Controller.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.html" />
@@ -58,8 +58,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Our.Umbraco.ColorPickr" Version="1.0.1" />
+		<PackageReference Include="LightInject" Version="5.5.0" />
+		<PackageReference Include="Our.Umbraco.IoC.LightInject" Version="1.0.0" />
 		<PackageReference Include="QRCoder" Version="1.4.1" />
+		<PackageReference Include="SpectrumColourPicker" Version="1.0.0" />
 		<PackageReference Include="UmbracoCms.Core" Version="7.15.7" />
 	</ItemGroup>
 

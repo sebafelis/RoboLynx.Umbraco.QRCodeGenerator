@@ -1,0 +1,38 @@
+﻿{   
+    propertyEditors: [    
+        {
+            alias: "Spectrum.Color.Picker",
+            name: "Spectrum Color Picker",
+            editor: {
+                view: "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html"
+            },
+			prevalues: {
+				fields: [
+				{
+					label: "Enable Transparency",
+					key: "enableTransparency",
+					view: "boolean"
+				},
+				{
+					label: "Preferred Format",
+					description: "Choose what format the color should be selected/displayed in. RGBA is used by default if transparency is selected.",
+					key: "preferredFormat",
+					view: "~/App_Plugins/SpectrumColorPicker/lib/prevalue/preferredFormat.html"
+				}
+				]
+			},
+			defaultConfig: {
+				enableTransparency: "0",
+				preferredFormat: "hex"
+			}
+        }
+    ]
+    ,
+    javascript: [
+        "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.controller.js"
+    ]
+    ,
+    css: [
+        "~/App_Plugins/SpectrumColorPicker/lib/spectrum/spectrum.css"
+    ]
+}

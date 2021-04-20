@@ -1,4 +1,4 @@
-﻿angular.module("umbraco").controller("RoboLynx.QRCodeGenerator.NotPublishedContentController",
+angular.module("umbraco").controller("RoboLynx.QRCodeGenerator.NotPublishedContentController",
 	function ($scope, notificationsService) {
 
 		$scope.open = function (not) {

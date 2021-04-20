@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="ja" intName="Japanese" localName="日本語" lcid="" culture="ja-JP">
+  <area alias="scp">
+    <key alias="cancelText">中止</key>
+    <key alias="chooseText">選択</key>
+    <key alias="clearText">Clear Color Selection</key>
+    <key alias="noColorSelectedText">No Color Selected</key>
+    <key alias="togglePaletteMoreText">もっと</key>
+    <key alias="togglePaletteLessText">レス</key>
+  </area>
+</language>

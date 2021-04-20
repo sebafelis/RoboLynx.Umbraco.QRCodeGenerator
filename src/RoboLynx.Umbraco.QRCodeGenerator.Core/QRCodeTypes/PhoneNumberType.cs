@@ -1,9 +1,9 @@
-﻿using QRCoder;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
-using System;
 using System.Collections.Generic;
-using Umbraco.Core;
+using System.Text.RegularExpressions;
+using Umbraco.Core.Models;
+using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
 using static QRCoder.PayloadGenerator;
 
@@ -13,27 +13,22 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
     {
         const string numberArgumentName = "number";
 
-        public PhoneNumberType() : base(null)
-        {
-
-        }
-
-        public PhoneNumberType(IQRCodeSource source) : base(source)
+        public PhoneNumberType(ILocalizedTextService localizedTextService) : base(localizedTextService)
         {
             validators.Add(numberArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new PhoneNumberValidator() });
         }
 
-        public override string Value
+        public override string Id => "PhoneNumber";
+
+        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture)
         {
-            get
-            {
-                CheckSource();
+            var number = source.GetValue<string>(0, numberArgumentName, content, sourceSettings, culture);
 
-                var number = source.GetValue<string>(0, numberArgumentName);
-                RunValidator(numberArgumentName, number);
+            number = Regex.Replace(number, @"[\s\(\)-]", string.Empty);
 
-                return new QRCoder.PayloadGenerator.PhoneNumber(number).ToString();
-            }
+            RunValidator(numberArgumentName, number);
+
+            return new PhoneNumber(number).ToString();
         }
     }
 }

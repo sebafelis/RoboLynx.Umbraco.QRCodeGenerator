@@ -9,14 +9,14 @@
       "icon": "icon-qr-code",
       "editor": {
         "view": "~/App_Plugins/QRCodeGenerator/propertyEditors/qrCodeGenerator/qrCodeGenerator.html",
-        "hideLabel": true,
+        "hideLabel": false,
         "valueType": "JSON"
       },
       "prevalues": {
         "fields": [
           {
             "label": "Source provider",
-            "description": "Return the data to generate QR Code.",
+            "description": "Select source provider witch getting the data to generate code.",
             "key": "codeSource",
             "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeSourcePicker/qrCodeSourcePicker.html",
             "validation": [
@@ -27,13 +27,13 @@
           },
           {
             "label": "Source provider settings",
-            "description": "Settings passed to source provider. See source provider documentation to get details.",
+            "description": "Settings passed to source provider. To get details see source provider documentation or information bellow selected source provider.",
             "key": "codeSourceSettings",
             "view": "textarea"
           },
           {
-            "label": "QR Code type",
-            "description": "Property name which value will be use to generate QR Code.",
+            "label": "Code type",
+            "description": "Determine what data a code needed and how a code scanner will behave after scan.",
             "key": "codeType",
             "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeTypePicker/qrCodeTypePicker.html",
             "validation": [
@@ -44,43 +44,68 @@
           },
           {
             "label": "Default format",
-            "description": "",
+            "description": "The output format in which the code is written.",
             "key": "defaultFormat",
-            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html"
+            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.html",
+            "validation": [
+              {
+                "type": "Required"
+              }
+            ]
           },
           {
             "label": "Default pixel per module",
-            "description": "",
+            "description": "The size in pixels of one module (the module is the dark square the code is build of).",
             "key": "defaultSize",
-            "view": "number"
+            "view": "number",
+            "validation": [
+              {
+                "type": "Required"
+              }
+            ]
           },
           {
             "label": "Error correction level",
-            "description": "",
+            "description": "Level determine how much area of code can be unreadable but code is still readable.",
             "key": "defaultECCLevel",
-            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.html"
+            "view": "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.html",
+            "validation": [
+              {
+                "type": "Required"
+              }
+            ]
           },
           {
             "label": "Default dark color",
-            "description": "",
+            "description": "The color of dark squares.",
             "key": "defaultDarkColor",
-            "view": "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html"
+            "view": "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html",
+            "validation": [
+              {
+                "type": "Required"
+              }
+            ]
           },
           {
             "label": "Default light color",
-            "description": "",
+            "description": "The color of background.",
             "key": "defaultLightColor",
-            "view": "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html"
+            "view": "~/App_Plugins/SpectrumColorPicker/SpectrumColorPicker.html",
+            "validation": [
+              {
+                "type": "Required"
+              }
+            ]
           },
           {
             "label": "Default icon",
-            "description": "",
+            "description": "The icon in the center of code.",
             "key": "defaultIcon",
             "view": "mediapicker"
           },
           {
-            "label": "Default icon size (percent)",
-            "description": "",
+            "label": "Default icon size (%)",
+            "description": "The percent size of icon in the center of code.",
             "key": "defaultIconSizePercent",
             "view": "number"
             //"validation": [
@@ -88,29 +113,34 @@
             //    "type": "Range",
             //    "config": {
             //      "min": 0,
-            //      "max": 0
+            //      "max": 30
             //    }
             //  }
             //]
           },
           {
             "label": "Default icon border width",
-            "description": "",
+            "description": "The width of the border around the icon.",
             "key": "defaultIconBorderWidth",
             "view": "number"
           },
           {
             "label": "Default draw quite zone",
-            "description": "",
+            "description": "Draw or not the border around the code.",
             "key": "defaultDrawQuiteZone",
-            "view": "boolean"
+            "view": "boolean",
+            "validation": [
+              {
+                "type": "Required"
+              }
+            ]
           }
         ]
       },
       "defaultConfig": {
-        "codeSource": "UrlSource",
+        "codeSource": "AbsoluteUrl",
         "codeSourceSettings": "",
-        "codeType": "UrlType",
+        "codeType": "URL",
         "defaultSize": "40",
         "defaultFormat": "svg",
         "defaultDarkColor": "#000000",
@@ -118,22 +148,23 @@
         "defaultIcon": null,
         "defaultIconSizePercent": "10",
         "defaultIconBorderWidth": "1",
-        "defaultDrawQuiteZone": "1"
+        "defaultDrawQuiteZone": "1",
+        "defaultECCLevel": "M"
       }
     }
   ],
   "javascript": [
-    "~/App_Plugins/QRCodeGenerator/propertyEditors/qrCodeGenerator/qrCodeGenerator.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/services/qrCodeGenerator.Resources.js",
+	  "~/App_Plugins/QRCodeGenerator/propertyEditors/qrCodeGenerator/qrCodeGenerator.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeTypePicker/qrCodeTypePicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeSourcePicker/qrCodeSourcePicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeFormatPicker/qrCodeFormatPicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/parameterEditors/qrCodeLevelPicker/qrCodeLevelPicker.Controller.js",
     "~/App_Plugins/QRCodeGenerator/dialogs/generateQRCodeDialog/generateQRCodeDialog.Controller.js",
-    "/App_Plugins/QRCodeGenerator/notifications/openDirtyContent/openDirtyContent.Controller.js",
-    "/App_Plugins/QRCodeGenerator/notifications/notPublishedContent/notPublishedContent.Controller.js",
-    "/App_Plugins/QRCodeGenerator/notifications/notPublishedAnyContentVersion/notPublishedAnyContentVersion.Controller.js",
-    "~/App_Plugins/QRCodeGenerator/services/qrCodeGenerator.Resources.js",
-    "~/App_Plugins/QRCodeGenerator/libs/download.min.js"
+    "~/App_Plugins/QRCodeGenerator/notifications/openDirtyContent/openDirtyContent.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/notifications/notPublishedContent/notPublishedContent.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/notifications/notPublishedAnyContentVersion/notPublishedAnyContentVersion.Controller.js",
+    "~/App_Plugins/QRCodeGenerator/libs/downloadjs/download.min.js"
   ],
   "css": [
     "~/App_Plugins/QRCodeGenerator/qrCodeGeneratorStyle.min.css"

@@ -1,19 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
+	<PropertyGroup>
+		<TargetFramework>net462</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Authors>Sebastian Felis</Authors>
+		<PackageId>Umbraco.Tests</PackageId>
+	</PropertyGroup>
 
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="QRCodeGeneratorBaseTest.cs" />
+	  <Compile Remove="UmbracoBaseTest.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Moq" Version="4.16.1" />
+		<PackageReference Include="nunit" Version="3.13.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+		<PackageReference Include="Our.Umbraco.Community.Tests" Version="7.15.7" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator\RoboLynx.Umbraco.QRCodeGenerator.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator\RoboLynx.Umbraco.QRCodeGenerator.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="System.Web.ApplicationServices" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Configurations\UmbracoSettings\umbracoSettings.minimal.config">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 
 </Project>
