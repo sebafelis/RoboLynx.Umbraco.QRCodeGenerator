@@ -29,11 +29,11 @@
 		<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/services" orgPath="App_Plugins/QRCodeGenerator/services" />
 		<file path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/package.manifest" orgPath="/App_Plugins/QRCodeGenerator/package.manifest" />
 		<file path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/qrCodeGeneratorStyle.min.css" orgPath="/App_Plugins/QRCodeGenerator/qrCodeGeneratorStyle.min.css" />
-		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.dll" />
-		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" />
-		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/DotNetColorParser.Abstractions.dll" orgPath="/bin/DotNetColorParser.Abstractions.dll" />
-		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/DotNetColorParser.dll" orgPath="/bin/DotNetColorParser.dll" />
-		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/QRCoder.dll" orgPath="/bin/QRCoder.dll" />
+		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net462/RoboLynx.Umbraco.QRCodeGenerator.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.dll" />
+		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net462/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" />
+		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net462/DotNetColorParser.Abstractions.dll" orgPath="/bin/DotNetColorParser.Abstractions.dll" />
+		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net462/DotNetColorParser.dll" orgPath="/bin/DotNetColorParser.dll" />
+		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net462/QRCoder.dll" orgPath="/bin/QRCoder.dll" />
 		<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/SpectrumColorPicker" orgPath="App_Plugins/SpectrumColorPicker" />
 	</files>
 	<Actions />
