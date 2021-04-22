@@ -71,7 +71,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
         }
 
         [Test]
-        public void DefaultSettings_WhenSpecifyContentNotExist_ShouldReturnBadRequest()
+        public void DefaultSettings_WhenSpecifyContentNotExist_ShouldReturnNotFound()
         {
             //Arrange
             var expectedResponse = DefaultQRCodeSettings;
@@ -83,18 +83,18 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
 
             IQRCodeBuilder qrCodeBuilderMock = Mock.Of<IQRCodeBuilder>(b => b.GetDefaultSettings(publishedContent, propertyAlias) == DefaultQRCodeSettings);
 
-            var serviceContext = ServiceContext.CreatePartial(entityService: Mock.Of<IEntityService>(b => b.GetObjectType(contentId) == UmbracoObjectTypes.Document));
+            var serviceContext = ServiceContext.CreatePartial(entityService: Mock.Of<IEntityService>(b => b.GetObjectType(contentId) == UmbracoObjectTypes.Unknown));
             QRCodeController controller = new QRCodeController(qrCodeBuilderMock, formats, Mock.Of<IGlobalSettings>(), Mock.Of<IUmbracoContextAccessor>(), Mock.Of<ISqlContext>(), serviceContext, AppCaches.NoCache, Mock.Of<IProfilingLogger>(), Mock.Of<IRuntimeState>(), UmbracoHelper);
 
             //Act
             var actionResult = controller.DefaultSettings(contentId, propertyAlias);
 
             //Assert
-            Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), actionResult);
+            Assert.IsInstanceOf(typeof(NotFoundResult), actionResult);
         }
 
         [Test]
-        public void DefaultSettings_WhenSpecifyContentExistAndPropertyNotExist_ShouldReturnNotFound()
+        public void DefaultSettings_WhenSpecifyContentExistAndPropertyNotExist_ShouldReturnBadRequest()
         {
             //Arrange
             var expectedResponse = DefaultQRCodeSettings;
@@ -203,7 +203,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
         }
 
         [Test]
-        public void Image_WhenSpecifyContentNotExist_ShouldReturnBadRequest()
+        public void Image_WhenSpecifyContentNotExist_ShouldReturnNotFound()
         {
             //Arrange
             var expectedResponse = DefaultQRCodeSettings;
@@ -215,14 +215,14 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
             IQRCodeBuilder qrCodeBuilderMock = Mock.Of<IQRCodeBuilder>();
             Mock.Get(qrCodeBuilderMock).Setup(b => b.CreateQRCodeAsResponse(null, propertyAlias, It.IsAny<string>(), It.IsAny<QRCodeSettings>())).Throws(new ArgumentNullException());
 
-            var serviceContext = ServiceContext.CreatePartial(entityService: Mock.Of<IEntityService>(b => b.GetObjectType(contentId) == UmbracoObjectTypes.Document));
+            var serviceContext = ServiceContext.CreatePartial(entityService: Mock.Of<IEntityService>(b => b.GetObjectType(contentId) == UmbracoObjectTypes.Unknown));
             QRCodeController controller = new QRCodeController(qrCodeBuilderMock, formats, Mock.Of<IGlobalSettings>(), Mock.Of<IUmbracoContextAccessor>(), Mock.Of<ISqlContext>(), serviceContext, AppCaches.NoCache, Mock.Of<IProfilingLogger>(), Mock.Of<IRuntimeState>(), UmbracoHelper);
 
             //Act
             var actionResult = controller.Image(contentId, propertyAlias, null, culture);
 
             //Assert
-            Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), actionResult);
+            Assert.IsInstanceOf(typeof(NotFoundResult), actionResult);
         }
 
         [Test]
