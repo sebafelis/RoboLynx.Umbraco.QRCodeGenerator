@@ -36,7 +36,7 @@
 		<PackageReference Include="DotNetColorParser" Version="1.0.0" />
 		<PackageReference Include="LightInject" Version="5.5.0" />
 		<PackageReference Include="QRCoder" Version="1.4.1" />
-		<PackageReference Include="UmbracoCms.Core" Version="7.15.7" />
+		<PackageReference Include="UmbracoCms.Core" Version="7.15.0" />
 	</ItemGroup>
 
 	<ItemGroup>
