@@ -5,19 +5,19 @@ next-version: 8.0
 commit-message-incrementing: Enabled
 branches:
   develop:
-    regex: ^develop-u\d[/-]?
+    regex: ^develop-u8[/-]?
   main:
-    regex: ^main-u\d[/-]?
+    regex: ^main-u8[/-]?
   release:
-    regex: ^releases?-u\d[/-]?
+    regex: ^releases?-u8[/-]?
   feature:
-    regex: ^features?(-u\d)?[/-]?
+    regex: ^features?(-u8)?[/-]?
   pull-request:  
-    regex: ^(pull|pull\-requests|pr)(-u\d)?[/-]?
+    regex: ^(pull|pull\-requests|pr)(-u8)?[/-]?
   hotfix:
-    regex: ^hotfix(es)?-u\d[/-]?
+    regex: ^hotfix(es)?-u8[/-]?
   support:
-    regex: ^support(-u\d)?[/-]?
+    regex: ^support(-u8)?[/-]?
 ignore:
   sha: []
 merge-message-formats: {}
