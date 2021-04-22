@@ -11,9 +11,13 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
+using System.Web.Security;
 using Umbraco.Core;
+using Umbraco.Core.Configuration.UmbracoSettings;
+using Umbraco.Core.Dictionary;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
+using Umbraco.Core.Models.EntityBase;
 using Umbraco.Core.Models.Identity;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.SqlSyntax;
@@ -45,10 +49,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
             Size = 20
         };
 
-        public ApplicationContext applicationContext;
-        public UmbracoContext umbracoContext;
-        public UmbracoHelper umbracoHelper;
-        public BackOfficeUserManager<BackOfficeIdentityUser> backOfficeUserManager;
+        ApplicationContext applicationContext;
+        UmbracoContext umbracoContext;
+        UmbracoHelper umbracoHelper;
+        BackOfficeUserManager<BackOfficeIdentityUser> backOfficeUserManager;
+        IDynamicPublishedContentQuery dynamicPublishedContentQuery;
+        ITypedPublishedContentQuery typedPublishedContentQuery;
 
         [SetUp]
         public void Setup()
@@ -58,14 +64,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
 
             var logger = Mock.Of<ILogger>();
 
-            var applicationContext = ApplicationContext.EnsureContext(
+            applicationContext = ApplicationContext.EnsureContext(
                 new DatabaseContext(
                     Mock.Of<IDatabaseFactory2>(),
                     logger,
                     new SqlSyntaxProviders(new ISqlSyntaxProvider[0])
                     ),
                 new ServiceContext(
-                    contentService: Mock.Of<IContentService>() //, ...
+                    contentService: Mock.Of<IContentService>(), 
+                    entityService: Mock.Of<IEntityService>()
                     ),
                 CacheHelper.CreateDisabledCacheHelper(),
                 new ProfilingLogger(logger, Mock.Of<IProfiler>()),
@@ -84,9 +91,30 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
                 false
             );
 
-            umbracoHelper = new UmbracoHelper(umbracoContext);
+            typedPublishedContentQuery = Mock.Of<ITypedPublishedContentQuery>();
+            dynamicPublishedContentQuery = Mock.Of<IDynamicPublishedContentQuery>();
+            umbracoHelper = new UmbracoHelper(umbracoContext,
+                Mock.Of<IPublishedContent>(),
+                typedPublishedContentQuery,
+                dynamicPublishedContentQuery,
+                Mock.Of<ITagQuery>(),
+                Mock.Of<IDataTypeService>(),
+                GetUmbracoUrlProvider(umbracoContext),
+                Mock.Of<ICultureDictionary>(),
+                Mock.Of<IUmbracoComponentRenderer>(),
+                GetUmbracoMembershipHelper(umbracoContext));
 
             backOfficeUserManager = new BackOfficeUserManager<BackOfficeIdentityUser>(Mock.Of<IUserStore<BackOfficeIdentityUser, int>>());
+        }
+
+        public static MembershipHelper GetUmbracoMembershipHelper(UmbracoContext context, MembershipProvider membershipProvider = null, RoleProvider roleProvider = null)
+        {
+            return new MembershipHelper(context, membershipProvider ?? Mock.Of<MembershipProvider>(), roleProvider ?? Mock.Of<RoleProvider>());
+        }
+
+        public static UrlProvider GetUmbracoUrlProvider(UmbracoContext context, IWebRoutingSection routingSection = null, IEnumerable<IUrlProvider> urlProviders = null)
+        {
+            return new UrlProvider(context, routingSection ?? Mock.Of<IWebRoutingSection>(section => section.UrlProviderMode == UrlProviderMode.Auto.ToString()), urlProviders ?? new[] { Mock.Of<IUrlProvider>() });
         }
 
         [Test]
@@ -96,6 +124,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
             var expectedResponse = defaultQRCodeSettings;
             var contentId = 123;
             var publishedContent = Mock.Of<IPublishedContent>();
+
+            var entityServiceMock = Mock.Get(applicationContext.Services.EntityService);
+            entityServiceMock.Setup(e => e.GetObjectType(contentId)).Returns(UmbracoObjectTypes.Document);
+
+            var dynamicPublishedContentQueryMock = Mock.Get(dynamicPublishedContentQuery);
+            dynamicPublishedContentQueryMock.Setup(e => e.Content(contentId)).Returns(publishedContent);
 
             QRCodeFormatsCollection formats = new QRCodeFormatsCollection(new IQRCodeFormat[] { Mock.Of<IQRCodeFormat>() });
 
@@ -114,12 +148,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
         }
 
         [Test]
-        public void DefaultSettings_WhenSpecifyContentNotExist_ShouldReturnBadRequest()
+        public void DefaultSettings_WhenSpecifyContentNotExist_ShouldReturnNotFoundResult()
         {
             //Arrange
             var expectedResponse = defaultQRCodeSettings;
             var contentId = 123;
-            var publishedContent = Mock.Of<IPublishedContent>();   
+            var publishedContent = Mock.Of<IPublishedContent>();
+
+            var entityServiceMock = Mock.Get(applicationContext.Services.EntityService);
+            entityServiceMock.Setup(e => e.GetObjectType(contentId)).Returns(UmbracoObjectTypes.Unknown);
 
             QRCodeFormatsCollection formats = new QRCodeFormatsCollection(new IQRCodeFormat[] { Mock.Of<IQRCodeFormat>() });
 
@@ -131,16 +168,22 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
             var actionResult = controller.DefaultSettings(contentId, propertyAlias);
 
             //Assert
-            Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), actionResult);
+            Assert.IsInstanceOf(typeof(NotFoundResult), actionResult);
         }
 
         [Test]
-        public void DefaultSettings_WhenSpecifyContentExistAndPropertyNotExist_ShouldReturnNotFound()
+        public void DefaultSettings_WhenSpecifyContentExistAndPropertyNotExist_ShouldReturnBadRequest()
         {
             //Arrange
             var expectedResponse = defaultQRCodeSettings;
             var contentId = 123;
             var publishedContent = Mock.Of<IPublishedContent>();
+
+            var entityServiceMock = Mock.Get(applicationContext.Services.EntityService);
+            entityServiceMock.Setup(e => e.GetObjectType(contentId)).Returns(UmbracoObjectTypes.Document);
+
+            var dynamicPublishedContentQueryMock = Mock.Get(dynamicPublishedContentQuery);
+            dynamicPublishedContentQueryMock.Setup(e => e.Content(contentId)).Returns(publishedContent);
 
             QRCodeFormatsCollection formats = new QRCodeFormatsCollection(new IQRCodeFormat[] { Mock.Of<IQRCodeFormat>() });
 
@@ -220,6 +263,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
             var publishedContent = Mock.Of<IPublishedContent>();
             var httpContent = Mock.Of<HttpContent>();
 
+            var entityServiceMock = Mock.Get(applicationContext.Services.EntityService);
+            entityServiceMock.Setup(e => e.GetObjectType(contentId)).Returns(UmbracoObjectTypes.Document);
+
+            var dynamicPublishedContentQueryMock = Mock.Get(dynamicPublishedContentQuery);
+            dynamicPublishedContentQueryMock.Setup(e => e.Content(contentId)).Returns(publishedContent);
+
             QRCodeFormatsCollection formats = new QRCodeFormatsCollection(new IQRCodeFormat[0]);
 
             IQRCodeBuilder qrCodeBuilderMock = Mock.Of<IQRCodeBuilder>(b => b.CreateQRCodeAsResponse(publishedContent, propertyAlias, It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == httpContent);
@@ -241,12 +290,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
         }
 
         [Test]
-        public void Image_WhenSpecifyContentNotExist_ShouldReturnBadRequest()
+        public void Image_WhenSpecifyContentNotExist_ShouldReturnNotFound()
         {
             //Arrange
             var expectedResponse = defaultQRCodeSettings;
             var contentId = 123;
             string culture = null;
+
+            var entityServiceMock = Mock.Get(applicationContext.Services.EntityService);
+            entityServiceMock.Setup(e => e.GetObjectType(contentId)).Returns(UmbracoObjectTypes.Unknown);
 
             QRCodeFormatsCollection formats = new QRCodeFormatsCollection(new IQRCodeFormat[] { Mock.Of<IQRCodeFormat>() });
 
@@ -259,7 +311,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
             var actionResult = controller.Image(contentId, propertyAlias, null, culture);
 
             //Assert
-            Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), actionResult);
+            Assert.IsInstanceOf(typeof(NotFoundResult), actionResult);
         }
 
         [Test]
@@ -270,6 +322,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
             var contentId = 123;
             string culture = null;
             var publishedContent = Mock.Of<IPublishedContent>();
+
+            var entityServiceMock = Mock.Get(applicationContext.Services.EntityService);
+            entityServiceMock.Setup(e => e.GetObjectType(contentId)).Returns(UmbracoObjectTypes.Document);
+
+            var dynamicPublishedContentQueryMock = Mock.Get(dynamicPublishedContentQuery);
+            dynamicPublishedContentQueryMock.Setup(e => e.Content(contentId)).Returns(publishedContent);
 
             QRCodeFormatsCollection formats = new QRCodeFormatsCollection(new IQRCodeFormat[] { Mock.Of<IQRCodeFormat>() });
 

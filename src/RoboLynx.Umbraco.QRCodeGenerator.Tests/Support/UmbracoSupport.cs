@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -9,13 +8,9 @@ using Moq;
 using Umbraco.Core;
 using Umbraco.Core.Configuration.UmbracoSettings;
 using Umbraco.Core.Models;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.ObjectResolution;
 using Umbraco.Core.Persistence;
-using Umbraco.Core.PropertyEditors;
-using Umbraco.Core.PropertyEditors.ValueConverters;
 using Umbraco.Core.Services;
-using Umbraco.Tests.TestHelpers;
+//using Umbraco.Tests.TestHelpers;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.Routing;
@@ -126,12 +121,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Support
             }
         }
 
-        private void InitializeSettings()
-        {
-            // Stub up all the settings in Umbraco so we don't need a big app.config file.
-            settings = SettingsForTests.GenerateMockSettings();
-            SettingsForTests.ConfigureSettings(settings);
-        }
+        //private void InitializeSettings()
+        //{
+        //    // Stub up all the settings in Umbraco so we don't need a big app.config file.
+        //    settings = SettingsForTests.GenerateMockSettings();
+        //    SettingsForTests.ConfigureSettings(settings);
+        //}
 
         private void CreateCurrentPage()
         {
@@ -145,13 +140,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Support
             routeData = new RouteData();
         }
 
-        private void CreateContexts()
-        {
-            // Surface- and RenderMvcControllers need a routing context to fint the current content.
-            // Umbraco.Tests creates one and whips up the UmbracoContext in the process.
-            routingContext = GetRoutingContext("http://localhost", -1, routeData, true, settings);
-            umbracoContext = routingContext.UmbracoContext;
-        }
+        //private void CreateContexts()
+        //{
+        //    // Surface- and RenderMvcControllers need a routing context to fint the current content.
+        //    // Umbraco.Tests creates one and whips up the UmbracoContext in the process.
+        //    routingContext = GetRoutingContext("http://localhost", -1, routeData, true, settings);
+        //    umbracoContext = routingContext.UmbracoContext;
+        //}
 
         private void CreateHelper()
         {

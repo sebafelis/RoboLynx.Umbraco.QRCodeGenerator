@@ -8,8 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="QRCodeGeneratorBaseTest.cs" />
-	  <Compile Remove="UmbracoBaseTest.cs" />
+	  <Compile Remove="Support\UmbracoSupport.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,6 +31,10 @@
 	  <None Update="Configurations\UmbracoSettings\umbracoSettings.minimal.config">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Support\" />
 	</ItemGroup>
 
 </Project>

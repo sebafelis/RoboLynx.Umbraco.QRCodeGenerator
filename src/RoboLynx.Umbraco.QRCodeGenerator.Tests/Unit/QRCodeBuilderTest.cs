@@ -271,7 +271,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var propertyAlias = "qrCodePropertyAlias";
             var propertyTypeAlias = "propertyTypeAlias";
             var dataTypeDefinitionId = 1234;
-            IPublishedContent publishedContent = Mock.Of<IPublishedContent>();
+            IPublishedContent publishedContent = Mock.Of<IPublishedContent>(c => c.Id == contentId);
 
             var expectedResult = new QRCodeSettings()
             {
@@ -291,7 +291,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                    new QRCodeGenerator.QRCodeSources.QRCodeSourcesCollection(new IQRCodeSource[] { Mock.Of<IQRCodeSource>() }),
                    new QRCodeTypes.QRCodeTypesCollection(new IQRCodeType[] { Mock.Of<IQRCodeType>() }),
                    Mock.Of<IContentService>(s => s.GetById(contentId) == Mock.Of<IContent>(c => c.Properties == new PropertyCollection(new List<Property>() {
-                       new Property(new PropertyType(Mock.Of<IDataTypeDefinition>(d => d.Id == dataTypeDefinitionId), propertyAlias)) }
+                       new Property(new PropertyType(Mock.Of<IDataTypeDefinition>(d => d.Id == dataTypeDefinitionId && d.HasIdentity == true), propertyAlias)) }
                    ))),
                    Mock.Of<IDataTypeService>(s => s.GetPreValuesCollectionByDataTypeId(dataTypeDefinitionId) == new PreValueCollection(defaultPrevalues))
                );
@@ -318,7 +318,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var contentId = 123;
             var propertyAlias = "qrCodePropertyAlias";
             var dataTypeDefinitionId = 1234;
-            IPublishedContent publishedContent = Mock.Of<IPublishedContent>();
+            IPublishedContent publishedContent = Mock.Of<IPublishedContent>(c => c.Id == contentId);
 
             var builder = new QRCodeBuilder(
                    new QRCodeFormat.QRCodeFormatsCollection(new IQRCodeFormat[] { Mock.Of<IQRCodeFormat>() }),
@@ -353,7 +353,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                    new QRCodeFormat.QRCodeFormatsCollection(new IQRCodeFormat[] { Mock.Of<IQRCodeFormat>() }),
                    new QRCodeGenerator.QRCodeSources.QRCodeSourcesCollection(new IQRCodeSource[] { Mock.Of<IQRCodeSource>() }),
                    new QRCodeTypes.QRCodeTypesCollection(new IQRCodeType[] { Mock.Of<IQRCodeType>() }),
-                   Mock.Of<IContentService>(s => s.GetById(It.IsAny<int>()) == Mock.Of<IContent>(c => c.Properties == new PropertyCollection(new List<Property>() {
+                   Mock.Of<IContentService>(s => s.GetById(contentId) == Mock.Of<IContent>(c => c.Properties == new PropertyCollection(new List<Property>() {
                        new Property(new PropertyType(Mock.Of<IDataTypeDefinition>(d => d.Id == dataTypeDefinitionId), propertyAlias)) }
                    ))),
                    Mock.Of<IDataTypeService>(s => s.GetPreValuesCollectionByDataTypeId(dataTypeDefinitionId) == new PreValueCollection(defaultPrevalues))
@@ -398,7 +398,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                        Mock.Of<IQRCodeType>(t => t.Id == "Type3")
                    }),
                    Mock.Of<IContentService>(s => s.GetById(contentId) == Mock.Of<IContent>(c => c.Properties == new PropertyCollection(new List<Property>() {
-                       new Property(new PropertyType(Mock.Of<IDataTypeDefinition>(d => d.Id == dataTypeDefinitionId), propertyAlias)) }
+                       new Property(new PropertyType(Mock.Of<IDataTypeDefinition>(d => d.Id == dataTypeDefinitionId && d.HasIdentity == true), propertyAlias)) }
                    ))),
                    Mock.Of<IDataTypeService>(s => s.GetPreValuesCollectionByDataTypeId(dataTypeDefinitionId) == new PreValueCollection(defaultPrevalues))
                );
@@ -434,22 +434,22 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             string culture = null;
             var dataTypeDefinitionId = 1234;
 
-            IPublishedContent publishedContent = Mock.Of<IPublishedContent>(s => s.Id==contentId);
+            IPublishedContent publishedContent = Mock.Of<IPublishedContent>(s => s.Id == contentId);
 
             SetupPropertyValue(publishedContent, propertyAlias, string.Empty, propertyTypeAlias);
-            
+
             var httpContent = Mock.Of<HttpContent>();
             var svgFormat = Mock.Of<IQRCodeFormat>(f => f.Id == "svg" && f.ResponseContent(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == httpContent);
             var absoluteUrlSource = Mock.Of<IQRCodeSource>(s => s.Id == "AbsoluteUrl");
             var urlType = Mock.Of<IQRCodeType>(t => t.Id == "URL");
-            
+
 
             var builder = new QRCodeBuilder(
                    new QRCodeFormat.QRCodeFormatsCollection(new IQRCodeFormat[] { svgFormat }),
                    new QRCodeGenerator.QRCodeSources.QRCodeSourcesCollection(new IQRCodeSource[] { absoluteUrlSource }),
                    new QRCodeTypes.QRCodeTypesCollection(new IQRCodeType[] { urlType }),
-                   Mock.Of<IContentService>(s => s.GetById(It.IsAny<int>()) == Mock.Of<IContent>(c => c.Properties == new PropertyCollection(new List<Property>() {
-                       new Property(new PropertyType(Mock.Of<IDataTypeDefinition>(d => d.Id == dataTypeDefinitionId), propertyAlias)) }
+                   Mock.Of<IContentService>(s => s.GetById(contentId) == Mock.Of<IContent>(c => c.Properties == new PropertyCollection(new List<Property>() {
+                       new Property(new PropertyType(Mock.Of<IDataTypeDefinition>(d => d.Id == dataTypeDefinitionId && d.HasIdentity), propertyAlias)) }
                    ))),
                    Mock.Of<IDataTypeService>(s => s.GetPreValuesCollectionByDataTypeId(dataTypeDefinitionId) == new PreValueCollection(defaultPrevalues))
                );
