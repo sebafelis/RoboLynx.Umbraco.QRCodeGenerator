@@ -8,10 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Support\UmbracoSupport.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Moq" Version="4.16.1" />
 		<PackageReference Include="nunit" Version="3.13.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
@@ -31,10 +27,6 @@
 	  <None Update="Configurations\UmbracoSettings\umbracoSettings.minimal.config">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Support\" />
 	</ItemGroup>
 
 </Project>
