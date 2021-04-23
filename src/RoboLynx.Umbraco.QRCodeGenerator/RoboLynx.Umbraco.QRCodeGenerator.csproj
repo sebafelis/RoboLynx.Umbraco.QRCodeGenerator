@@ -33,6 +33,12 @@
 	<ItemGroup>
 		<None Remove="App_Plugins\QRCodeGenerator\lang\en-US.xml" />
 		<None Remove="App_Plugins\QRCodeGenerator\lang\pl-PL.xml" />
+		<None Remove="App_Plugins\QRCodeGenerator\notifications\notPublishedAnyContentVersion\notPublishedAnyContentVersion.Controller.js" />
+		<None Remove="App_Plugins\QRCodeGenerator\notifications\notPublishedAnyContentVersion\notPublishedAnyContentVersion.html" />
+		<None Remove="App_Plugins\QRCodeGenerator\notifications\notPublishedContent\notPublishedContent.Controller.js" />
+		<None Remove="App_Plugins\QRCodeGenerator\notifications\notPublishedContent\notPublishedContent.html" />
+		<None Remove="App_Plugins\QRCodeGenerator\notifications\openDirtyContent\openDirtyContent.Controller.js" />
+		<None Remove="App_Plugins\QRCodeGenerator\notifications\openDirtyContent\openDirtyContent.html" />
 		<None Remove="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeTypePicker\qrCodeTypePicker.Controller.js" />
 		<None Remove="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeTypePicker\qrCodeTypePicker.html" />
 	</ItemGroup>
@@ -43,6 +49,12 @@
 		<Content Include="App_Plugins\QRCodeGenerator\lang\en-GB.xml" />
 		<Content Include="App_Plugins\QRCodeGenerator\dialogs\generateQRCodeDialog\generateQRCodeDialog.Controller.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\dialogs\generateQRCodeDialog\generateQRCodeDialog.html" />
+		<Content Include="App_Plugins\QRCodeGenerator\notifications\notPublishedAnyContentVersion\notPublishedAnyContentVersion.Controller.js" />
+		<Content Include="App_Plugins\QRCodeGenerator\notifications\notPublishedAnyContentVersion\notPublishedAnyContentVersion.html" />
+		<Content Include="App_Plugins\QRCodeGenerator\notifications\notPublishedContent\notPublishedContent.Controller.js" />
+		<Content Include="App_Plugins\QRCodeGenerator\notifications\notPublishedContent\notPublishedContent.html" />
+		<Content Include="App_Plugins\QRCodeGenerator\notifications\openDirtyContent\openDirtyContent.Controller.js" />
+		<Content Include="App_Plugins\QRCodeGenerator\notifications\openDirtyContent\openDirtyContent.html" />
 		<Content Include="App_Plugins\QRCodeGenerator\package.manifest" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.Controller.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.html" />
