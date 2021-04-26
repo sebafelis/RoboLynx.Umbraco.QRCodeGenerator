@@ -111,6 +111,7 @@ steps:
     command: custom
     custom: 'tool'
     arguments: 'run UmbPack push $(Build.ArtifactStagingDirectory)\RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion).zip -k $(OurUmbracoApiKey) -a RoboLynx.Umbraco.QRCodeGenerator_8*' 
+    workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
 - task: GitHubRelease@1
   displayName: 'Publish on Github Release as Draft'
   condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/main-u8'), variables['publishOnGithubRelease'])
