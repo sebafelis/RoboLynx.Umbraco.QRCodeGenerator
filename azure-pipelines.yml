@@ -4,9 +4,17 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
-- main-u7
-- release-u7
-- develop-u7
+  branches:
+    include:
+    - main-u7
+    - release-u7
+    - develop-u7
+  tags:
+    exclude:
+    - v*
+  paths:
+    include:
+    - 'src/*'
 
 pool:
   vmImage: 'windows-latest'
@@ -124,7 +132,7 @@ steps:
     tagPattern: 'v*'
     isDraft: true
     isPreRelease: true
-    assets: '$(Build.ArtifactStagingDirectory)/*.zip'
+    assets: '$(Build.ArtifactStagingDirectory)'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
 - task: GitHubRelease@1
@@ -139,6 +147,6 @@ steps:
     tagPattern: 'v*'
     isDraft: false
     isPreRelease: false
-    assets: '$(Build.ArtifactStagingDirectory)/*.zip'
+    assets: '$(Build.ArtifactStagingDirectory)'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
