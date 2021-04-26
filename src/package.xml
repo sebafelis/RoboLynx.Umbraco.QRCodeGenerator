@@ -5,7 +5,7 @@
 			<name>RoboLynx.Umbraco.QRCodeGenerator</name>
 			<version>$Version$</version>
 			<iconUrl>https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u8/assets/RoboLynx.Umbraco.QRCodeGenerator_128.png</iconUrl>
-			<licence url="https://opensource.org/licenses/MIT">MIT</licence>
+			<license url="https://opensource.org/licenses/MIT">MIT</license>
 			<url>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</url>
 			<requirements type="strict">
 				<major>7</major>
