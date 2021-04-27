@@ -126,11 +126,12 @@ steps:
   inputs:
     gitHubConnection: 'github.com_sebafelis'
     repositoryName: '$(Build.Repository.Name)'
-    action: 'create'
+    action: create
     target: '$(Build.SourceVersion)'
-    tagSource: 'gitTag'
+    tagSource: gitTag
     tagPattern: 'v*'
     isDraft: false
     isPreRelease: false
+    assetUploadMode: delete
     assets: '$(Build.ArtifactStagingDirectory)/*'
     addChangeLog: false
