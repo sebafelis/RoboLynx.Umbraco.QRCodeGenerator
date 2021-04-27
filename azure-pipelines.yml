@@ -95,6 +95,7 @@ steps:
      git push origin v$(GitVersion.NuGetVersion) 
   condition: and(succeeded(), variables['addTagToRepository'])
   workingDirectory: $(Build.SourcesDirectory)
+  displayName: 'Add tag to commit'
 - task: NuGetAuthenticate@0
   displayName: 'Authenticate DevOps Artifacts Nuget'
 - task: NuGetCommand@2
