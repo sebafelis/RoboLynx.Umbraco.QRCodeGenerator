@@ -1,8 +1,8 @@
-﻿![Logo](https://github.com/sebafelis/RoboLynx.Umbraco.CodeGenerator/raw/main-u7/assets/RoboLynx.Umbraco.QRCodeGenerator_128.png)
+﻿![Logo](assets/RoboLynx.Umbraco.QRCodeGenerator_128.png)
 # QR Code Generator
 
-[![RoboLynx.Umbraco.QRCodeGenerator NuGet Package](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
-[![RoboLynx.Umbraco.QRCodeGenerator.Core NuGet Package](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Core)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
+[![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget%3ARoboLynx.Umbraco.QRCodeGenerator)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
+[![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Core?label=nuget%3ARoboLynx.Umbraco.QRCodeGenerator.Core)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
 [![Our Umbraco project page](https://img.shields.io/badge/our-umbraco-orange.svg)](https://our.umbraco.com/packages/backoffice-extensions/qr-code-generator/) 
 [![Build Status](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_apis/build/status/sebafelis.RoboLynx.Umbraco.QRCodeGenerator?branchName=develop-u7)](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_build/latest?definitionId=7&branchName=develop-u7)
 [![Licence](https://img.shields.io/github/license/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/blob/main-u7/LICENSE)
@@ -111,8 +111,3 @@ Supported formats:
 
 > **Attention!**
 > Custom format must be readable by \<img \/> element
-
-## Example
-
-* When user scan the code then will see position what you pin in document on map. **Geo-location (GEO)** and **Geo-location (Google Map)** **Code type** needs two arguments, the latitude and the longitude attributes. To achieve the aim you can use the property editor like [**Our.Umbraco.OsmMaps**](https://our.umbraco.com/packages/backoffice-extensions/openstreetmap-property-editor/) and create property with alias _location_. This editor save latitude and longitude in one string like `53.35055131839989,18.74267578125,7`. To get correct data we need select **Content Property** set correct configuration witch extract correct value by regular expression. In this case, I should look like this:
-`location{{^\d*(\.\d*)?}}, location{{(?<=,)\d*(\.\d*)?(?=,)}}`. 
