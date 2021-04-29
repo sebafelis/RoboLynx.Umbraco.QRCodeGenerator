@@ -1,17 +1,17 @@
-﻿![Logo](https://github.com/sebafelis/RoboLynx.Umbraco.CodeGenerator/raw/main-u8/assets/RoboLynx.Umbraco.QRCodeGenerator_128.png)
+﻿![Logo](assets/RoboLynx.Umbraco.QRCodeGenerator_128.png)
 # QR Code Generator
 
-[![RoboLynx.Umbraco.QRCodeGenerator NuGet Package](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
-[![RoboLynx.Umbraco.QRCodeGenerator.Core NuGet Package](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Core)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
+[![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget%3ARoboLynx.Umbraco.QRCodeGenerator)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
+[![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Core?label=nuget%3ARoboLynx.Umbraco.QRCodeGenerator.Core)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
+[![Our Umbraco project page](https://img.shields.io/badge/our-umbraco-orange.svg)](https://our.umbraco.com/packages/backoffice-extensions/qr-code-generator/) 
 [![Build Status](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_apis/build/status/sebafelis.RoboLynx.Umbraco.QRCodeGenerator?branchName=main-u8)](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_build/latest?definitionId=7&branchName=main-u8)
 ![Licence](https://img.shields.io/github/license/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)
 
-Property editor for Umbraco 8 allowing to generate QR codes straight from Umbraco Backoffice. 
-User can customize generating code by color, size, output format, error correction level, adding quiet zone and also by adding icon (not for all formats). Code is available to generated under specify document type, base on specify data source like current document property or URL. Source provider, code type and document type where code is available to generate is specify by developer. At this moment data source it can be document property (or part of selected by regular expression), document URL or custom ([see here](#source-providers)).
+_Property editor_ and _Content app_ for **Umbraco 8** allowing to generate QR codes straight from Umbraco Backoffice. 
 
-
-For [Umbraco 7](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
+>Version for Umbraco 7 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
  
+User can customize generating code by color, size, output format, error correction level, adding quiet zone and also by adding icon (not for all formats). Code is available to generated under specify document type, base on specify data source like current document property or URL. Source provider, code type and document type where code is available to generate is specify by developer. At this moment data source it can be document property (or part of selected by regular expression), document URL or custom ([see here](#source-providers)).
 
 > **Attention!**
 > 
@@ -28,15 +28,14 @@ or
 
 Download the Umbraco Package from: https://our.umbraco.com/packages/backoffice-extensions/qr-code-generator/
 
-* Versions starts with 7.* are intended for Umbraco 7.
-* Versions starts with 8.* are intended for Umbraco 8.
+>* Versions starts with 7.* are intended for Umbraco 7.
+>* Versions starts with 8.* are intended for Umbraco 8.
  
 ## Configuration
 
-1. Create a new data type under the Settings tab and select QR Code
+1. Create a new Data type under the Settings tab and select QR Code
 1. Select data source
 1. Set **Source provider settings** field ([see here](#source-providers))
-
 1. Select **Code type**
 1. Set default settings (all settings with prefix Default can be customize by backoffice user in when generating code but this value will be set up when user select this code type).
 1. Save data type
@@ -44,13 +43,13 @@ Download the Umbraco Package from: https://our.umbraco.com/packages/backoffice-e
 1. Add new property and select created before data type. Remember! Document type has to have all property names defined in **Source provider settings**. 
 1. Save document type. 
 
-   ![Configuration](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/raw/main-u8/assets/screenshots/screen3.png)
+   ![Configuration](assets/screenshots/screen3.png)
 
 1. Now you can open or create document of type where you add QR Code Generator property.
 1. If document is published you will see active QR Code icon between content icon and info icon. Click them.
 1. HearUmbraco backoffice users can create QR Codes and download them.
    
-    ![QR Code tab](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/raw/main-u8/assets/screenshots/screen4.png)
+    ![QR Code tab](assets/screenshots/screen4.png)
 
 ## Source providers
 
