@@ -25,7 +25,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 
             number = Regex.Replace(number, @"[\s\(\)-]", string.Empty);
 
-            RunValidator(numberArgumentName, number);
+            Validate(numberArgumentName, number);
 
             return new PhoneNumber(number).ToString();
         }

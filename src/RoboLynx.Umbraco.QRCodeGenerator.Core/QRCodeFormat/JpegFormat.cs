@@ -1,6 +1,7 @@
 ﻿using DotNetColorParser;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Net.Http;
 using Umbraco.Core.IO;
 using Umbraco.Core.Services;
@@ -15,15 +16,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         }
 
-        public override string Id => "jpeg";
+        ImageFormat imageFormat = ImageFormat.Jpeg;
 
-        public override string FileName => base.FileName + ".jpg";
+        public override string Id => "jpeg";
 
         public override string Mime => "image/jpeg";
 
-        public override HttpContent ResponseContent(string value, QRCodeSettings settings)
+        public override string FileExtension => "jpg";
+
+        public override Stream Stream(string value, QRCodeSettings settings)
         {
-            return RasterResponseContent(value, settings, ImageFormat.Jpeg);
+            return RasterStream(value, settings, imageFormat);
         }
     }
 }

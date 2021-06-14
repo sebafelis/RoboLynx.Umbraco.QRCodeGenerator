@@ -6,9 +6,22 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public interface IQRCodeType : IDiscoverable
     {
+        /// <summary>
+        /// Identifier
+        /// </summary>
         string Id { get; }
+
+        /// <summary>
+        /// Name
+        /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// Description
+        /// </summary>
         string Description { get; }
-        string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture);
+
+
+        IQRCodeTypeValueFactory CreateValueFactory(IFactory factory);
     }
 }

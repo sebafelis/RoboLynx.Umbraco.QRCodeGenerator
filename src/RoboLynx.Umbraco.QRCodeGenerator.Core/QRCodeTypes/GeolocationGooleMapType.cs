@@ -12,30 +12,35 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
     {
         const string latitudeArgumentName = "latitude";
         const string longitudeArgumentName = "longitude";
+        private readonly IQRCodeSource _source;
 
-        public GeolocationGooleMapType(ILocalizedTextService localizedTextService) : base(localizedTextService)
+        public GeolocationGooleMapType(ILocalizedTextService localizedTextService, IQRCodeSource source) : base(localizedTextService)
         {
             validators.Add(latitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LatitudeValidator() });
             validators.Add(longitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LongitudeValidator() });
+            
+            _source = source ?? throw new System.ArgumentNullException(nameof(source));
         }
 
         public override string Id => "GeolocationGooleMap";
 
-        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture)
+        public override string Value( bool validate = true)
         {
-            if (source is null)
-            {
-                throw new System.ArgumentNullException(nameof(source));
-            }
+            var latitude = _source.GetValue<double>(0, latitudeArgumentName);
+            if (validate)
+                Validate(latitudeArgumentName, latitude);
 
-            var latitude = source.GetValue<double>(0, latitudeArgumentName, content, sourceSettings, culture);
-            RunValidator(latitudeArgumentName, latitude);
-
-            var longitude = source.GetValue<double>(1, longitudeArgumentName, content, sourceSettings, culture);
-            RunValidator(longitudeArgumentName, longitude);
+            var longitude = _source.GetValue<double>(1, longitudeArgumentName);
+            if (validate)
+                Validate(longitudeArgumentName, longitude);
 
             var usCultureInfo = new CultureInfo("en-US", false);
             return new PayloadGenerator.Geolocation(latitude.ToString(usCultureInfo), longitude.ToString(usCultureInfo), PayloadGenerator.Geolocation.GeolocationEncoding.GoogleMaps).ToString();
+        }
+
+        public override string Value(bool validate = true)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

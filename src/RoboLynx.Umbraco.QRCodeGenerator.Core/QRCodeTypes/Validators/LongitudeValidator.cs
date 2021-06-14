@@ -9,9 +9,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
         {
             double? lng = null;
 
-            if (value is string)
+            if (value is string stringValue)
             {
-                if (double.TryParse((string)value, System.Globalization.NumberStyles.Any, NumberFormatInfo.InvariantInfo, out double latParsed))
+                if (double.TryParse(stringValue, System.Globalization.NumberStyles.Any, NumberFormatInfo.InvariantInfo, out double latParsed))
                 {
                     lng = latParsed;
                 }

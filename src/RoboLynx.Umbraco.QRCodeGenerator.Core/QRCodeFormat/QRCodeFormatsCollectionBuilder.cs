@@ -2,7 +2,7 @@
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
-    public class QRCodeFormatsCollectionBuilder : LazyCollectionBuilderBase<QRCodeFormatsCollectionBuilder, QRCodeFormatsCollection, IQRCodeFormat>
+    public class QRCodeFormatsCollectionBuilder : LazyCollectionBuilderBase<QRCodeFormatsCollectionBuilder, QRCodeFormatsCollection, IQRCodeFormatFactory>
     {
         protected override Lifetime CollectionLifetime => Lifetime.Scope;
 

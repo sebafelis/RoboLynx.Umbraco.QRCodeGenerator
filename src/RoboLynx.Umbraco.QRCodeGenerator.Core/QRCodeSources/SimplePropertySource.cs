@@ -51,52 +51,53 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             public IDictionary<object, SettingsItem> Properties { get; set; }
         }
 
-        public SimplePropertySource(ILocalizedTextService localizedTextService) : base(localizedTextService)
-        {
+        private readonly SilmplePropertySourceSettings _settings;
+        private readonly IPublishedContent _content;
+        private readonly string _culture;
 
+        public SimplePropertySource(ILocalizedTextService localizedTextService, IPublishedContent content, string sourceSettings, string culture) : base(localizedTextService)
+        {
+            if (content is null)
+            {
+                throw new ArgumentNullException(nameof(content));
+            }
+            
+            if (sourceSettings.DetectIsJson())
+            {
+                _settings = JsonConvert.DeserializeObject<SilmplePropertySourceSettings>(sourceSettings);
+            }
+            else
+            {
+                _settings = new SilmplePropertySourceSettings() { Properties = Regex.Matches(sourceSettings, @"\w+((\{\{).*?(\}\}))?").Cast<Match>().Select((m, i) => new { Key = i, Value = m.Value }).ToDictionary(k => (object)k.Key, v => (SettingsItem)v.Value) };
+            }
+
+            if (_settings is null)
+            {
+                throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure.");
+            }
+            _content = content;
+            _culture = culture;
         }
 
         public override string Id => "SilmpleProperty";
 
-        public override T GetValue<T>(int index, string key, IPublishedContent content, string sourceSettings, string culture)
+        public override T GetValue<T>(int index, string key)
         {
-
-
-            if (content is null)
-            {
-                throw new System.ArgumentNullException(nameof(content));
-            }
-
-            SilmplePropertySourceSettings settings;
-            if (sourceSettings.DetectIsJson())
-            {
-                settings = JsonConvert.DeserializeObject<SilmplePropertySourceSettings>(sourceSettings);
-            }
-            else
-            {
-                settings = new SilmplePropertySourceSettings() { Properties = Regex.Matches(sourceSettings, @"\w+((\{\{).*?(\}\}))?").Cast<Match>().Select((m, i) => new { Key = i, Value = m.Value }).ToDictionary(k => (object)k.Key, v => (SettingsItem)v.Value) };
-            }
-
-            if (settings is null)
-            {
-                throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure.");
-            }
-
             IPublishedProperty property = null;
             string regexPattern = null;
-            if (!string.IsNullOrEmpty(key) && (settings.Properties?.ContainsKey(key) ?? false) && settings.Properties[key] != null)
+            if (!string.IsNullOrEmpty(key) && (_settings.Properties?.ContainsKey(key) ?? false) && _settings.Properties[key] != null)
             {
                 setProperty(key);
             }
-            else if (settings.Properties.Count > index && settings.Properties[index] != null)
+            else if (_settings.Properties.Count > index && _settings.Properties[index] != null)
             {
                 setProperty(index);
             }
 
             void setProperty(object key)
             {
-                var settingItem = settings.Properties[key];
-                property = content.GetProperty(settingItem.Name);
+                var settingItem = _settings.Properties[key];
+                property = _content.GetProperty(settingItem.Name);
                 regexPattern = settingItem.Regex;
             }
 
@@ -105,7 +106,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
                 throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure correctly.");
             }
 
-            var propertyValue = property.Value(culture);
+            var propertyValue = property.Value(_culture);
 
             if (!string.IsNullOrEmpty(regexPattern) && propertyValue is string spropertyValue)
             {

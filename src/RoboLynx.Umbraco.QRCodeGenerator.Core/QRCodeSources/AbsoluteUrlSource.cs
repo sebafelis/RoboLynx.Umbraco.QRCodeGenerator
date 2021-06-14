@@ -7,21 +7,25 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 {
     public class AbsoluteUrlSource : QRCodeSource
     {
-        public AbsoluteUrlSource(ILocalizedTextService localizedTextService) : base(localizedTextService)
-        {
+        private readonly IPublishedContent _content;
+        private readonly string _culture;
 
+        public AbsoluteUrlSource(ILocalizedTextService localizedTextService, IPublishedContent content, string culture) : base(localizedTextService)
+        {
+            _content = content;
+            _culture = culture;
         }
 
         public override string Id => "AbsoluteUrl";
 
-        public override T GetValue<T>(int index, string key, IPublishedContent content, string sourceSettings, string culture)
+        public override T GetValue<T>(int index, string key)
         {
-            if (content is null)
+            if (_content is null)
             {
-                throw new ArgumentNullException(nameof(content));
+                throw new ArgumentNullException(nameof(_content));
             }
 
-            var url = content.Url(culture, UrlMode.Absolute);
+            var url = _content.Url(_culture, UrlMode.Absolute);
 
             return (T)Convert.ChangeType(url, typeof(T));
         }
