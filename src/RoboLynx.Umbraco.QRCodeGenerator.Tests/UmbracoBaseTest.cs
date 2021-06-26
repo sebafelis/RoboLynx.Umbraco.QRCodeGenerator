@@ -1,6 +1,8 @@
 ﻿using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Web;
 using System.Web.Security;
 using Umbraco.Core.Cache;
@@ -40,7 +42,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests
             this.SetupMembership();
 
             this.ServiceContext = ServiceContext.CreatePartial(userService: Mock.Of<IUserService>());
-            this.UmbracoHelper = new UmbracoHelper(Mock.Of<IPublishedContent>(), Mock.Of<ITagQuery>(), this.CultureDictionaryFactory.Object, Mock.Of<IUmbracoComponentRenderer>(), this.PublishedContentQuery.Object, this.MembershipHelper);
+            this.UmbracoHelper = new UmbracoHelper(Mock.Of<IPublishedContent>(), Mock.Of<ITagQuery>(), CultureDictionaryFactory.Object, Mock.Of<IUmbracoComponentRenderer>(), PublishedContentQuery.Object, MembershipHelper);
             this.UmbracoMapper = new UmbracoMapper(new MapDefinitionCollection(new List<IMapDefinition>()));
         }
 
@@ -89,6 +91,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests
             property.Setup(x => x.PropertyType).Returns(publishedPropertyType);
 
             publishedContentMock.Setup(x => x.GetProperty(alias)).Returns(property.Object);
+        }
+
+        protected Stream CreateMockStream(string content = "test stream")
+        {
+            return new MemoryStream(Encoding.UTF8.GetBytes(content));
         }
     }
 }

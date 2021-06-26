@@ -2,6 +2,7 @@
 using QRCoder;
 using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,31 +16,21 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public class SvgFormat : QRCodeFormat
     {
-        private readonly IColorParser colorParser;
+        private readonly IColorParser _colorParser;
 
-        public SvgFormat(ILocalizedTextService localizedTextService, UmbracoHelper umbracoHelper, IColorParser colorParser) : base(localizedTextService, umbracoHelper)
+        public SvgFormat(UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings settings) : base(umbracoHelper, hashIdFactory, codeType, settings)
         {
-            this.colorParser = colorParser;
+            _colorParser = colorParser;
         }
-
-        public override IEnumerable<string> RequiredSettings => new List<string> {
-            Constants.SizeFieldName,
-            Constants.FormatFieldName,
-            Constants.DarkColorFieldName,
-            Constants.LightColorFieldName,
-            Constants.DrawQuietZoneFieldName,
-            Constants.ECCLevelFieldName
-        };
-
-        public override string Id => "svg";
+        
 
         public override string Mime => "image/svg+xml";
 
         public override string FileExtension => "svg";
 
-        public override Stream Stream(string value, QRCodeSettings settings)
+        public override Stream Stream()
         {
-            var svgString = CreateSvgCode(value, settings);
+            var svgString = CreateSvgCode(CodeType.GetCodeContent(), Settings);
 
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream, Encoding.UTF8);
@@ -50,13 +41,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             return stream;
         }
 
-        private string CreateSvgCode(string value, QRCodeSettings settings)
+        private string CreateSvgCode(string codeContent, QRCodeSettings settings)
         {
-            var lightColor = colorParser.ParseColor(settings.LightColor);
-            var darkColor = colorParser.ParseColor(settings.DarkColor);
+            var lightColor = _colorParser.ParseColor(settings.LightColor);
+            var darkColor = _colorParser.ParseColor(settings.DarkColor);
 
             var qrGenerator = new QRCoder.QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, (QRCoder.QRCodeGenerator.ECCLevel)(int)settings.ECCLevel, true);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(codeContent, (QRCoder.QRCodeGenerator.ECCLevel)(int)settings.ECCLevel, true);
 
             SvgQRCode svgQrCode = new (qrCodeData);
 

@@ -14,6 +14,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         string FileExtension { get; }
 
+        string HashId { get; }
+
         Stream Stream();
     }
 }

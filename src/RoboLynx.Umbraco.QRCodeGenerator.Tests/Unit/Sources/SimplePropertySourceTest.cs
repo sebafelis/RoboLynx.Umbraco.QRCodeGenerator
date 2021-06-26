@@ -43,14 +43,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
             //Arrange
             string culture = null;
 
-            var source = new SimplePropertySource(Mock.Of<ILocalizedTextService>());
-
             var mockedPublishedContent = new Mock<IPublishedContent>();
-
             SetupPropertyValue(mockedPublishedContent, propertyName, propertyValue);
 
+            var source = new SimplePropertySource(mockedPublishedContent.Object, sourceSettings, culture);
+
             //Act
-            var value = source.GetValue<TReturn>(index, null, mockedPublishedContent.Object, sourceSettings, culture);
+            var value = source.GetValue<TReturn>(index, null);
 
             //Assert
             Assert.IsInstanceOf<TReturn>(value);
@@ -71,14 +70,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
             //Arrange
             string culture = null;
 
-            var source = new SimplePropertySource(Mock.Of<ILocalizedTextService>());
-
             var mockedPublishedContent = new Mock<IPublishedContent>();
-
             SetupPropertyValue(mockedPublishedContent, propertyName, propertyValue);
 
+            var source = new SimplePropertySource(mockedPublishedContent.Object, sourceSettings, culture);
+
             //Act
-            var value = source.GetValue<TReturn>(-1, key, mockedPublishedContent.Object, sourceSettings, culture);
+            var value = source.GetValue<TReturn>(-1, key);
 
             //Assert
             Assert.IsInstanceOf<TReturn>(value);

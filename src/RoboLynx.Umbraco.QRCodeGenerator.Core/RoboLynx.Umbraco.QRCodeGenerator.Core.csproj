@@ -15,6 +15,7 @@
 		<Authors>Sebastian Felis</Authors>
 		<LangVersion>latest</LangVersion>
 		<PackageIcon>RoboLynx.Umbraco.QRCodeGenerator_128.png</PackageIcon>
+		<RootNamespace>RoboLynx.Umbraco.QRCodeGenerator</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,12 +30,16 @@
 			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Tests</_Parameter1>
+			<_Parameter1>Umbraco.Tests</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Frontend</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="DotNetColorParser" Version="1.0.0" />
+		<PackageReference Include="Chronos.Abstractions" Version="2.0.24" />
+		<PackageReference Include="DotNetColorParser" Version="2.0.0" />
 		<PackageReference Include="QRCoder" Version="1.4.1" />
 		<PackageReference Include="UmbracoCms.Web" Version="[8.1,9)" />
 	</ItemGroup>

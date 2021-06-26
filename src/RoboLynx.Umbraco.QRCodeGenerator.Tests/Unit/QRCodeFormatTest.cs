@@ -1,7 +1,9 @@
 ﻿using DotNetColorParser;
 using Moq;
 using NUnit.Framework;
+using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using Umbraco.Core.IO;
 using Umbraco.Core.Services;
 
@@ -16,19 +18,24 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         {
 
             //Arrange
+            var hashId = "hash";
             var qrCodeFormat = new BmpFormat(
-                Mock.Of<ILocalizedTextService>(),
-                Mock.Of<IMediaFileSystem>(),
+               Mock.Of<IMediaFileSystem>(),
                 this.UmbracoHelper,
-                Mock.Of<IColorParser>()
+                Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),
+                Mock.Of<IColorParser>(),
+                Mock.Of<IQRCodeType>(s => s.GetCodeContent() == "testCode"),
+                DefaultQRCodeSettings
                 );
 
             //Act
-            var response = qrCodeFormat.ResponseContent("testCode", DefaultQRCodeSettings);
+            var responseStream = qrCodeFormat.Stream();
 
             //Assert
-            Assert.AreEqual("image/bmp", response.Headers.ContentType.MediaType);
-            Assert.NotZero(response.Headers.ContentLength.Value);
+            Assert.IsNotNull(responseStream);
+            Assert.NotZero(responseStream.Length);
+
+            responseStream.Dispose();
         }
 
         [Test]
@@ -36,19 +43,23 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         {
 
             //Arrange
+            var hashId = "hash";
             var qrCodeFormat = new SvgFormat(
-                Mock.Of<ILocalizedTextService>(),
                 this.UmbracoHelper,
-                Mock.Of<IColorParser>()
+                Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),
+                Mock.Of<IColorParser>(),
+                Mock.Of<IQRCodeType>(s => s.GetCodeContent() == "testCode"),
+                DefaultQRCodeSettings
                 );
 
             //Act
-            var response = qrCodeFormat.ResponseContent("testCode", DefaultQRCodeSettings);
+            var responseStream = qrCodeFormat.Stream();
 
             //Assert
-            Assert.AreEqual("image/svg+xml", response.Headers.ContentType.MediaType);
-            Assert.AreEqual("utf-8", response.Headers.ContentType.CharSet);
-            Assert.NotZero(response.Headers.ContentLength.Value);
+            Assert.IsNotNull(responseStream);
+            Assert.NotZero(responseStream.Length);
+
+            responseStream.Dispose();
         }
 
         [Test]
@@ -56,19 +67,24 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         {
 
             //Arrange
+            var hashId = "hash";
             var qrCodeFormat = new JpegFormat(
-                Mock.Of<ILocalizedTextService>(),
-                Mock.Of<IMediaFileSystem>(),
+              Mock.Of<IMediaFileSystem>(),
                 this.UmbracoHelper,
-                Mock.Of<IColorParser>()
+                Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),
+                Mock.Of<IColorParser>(),
+                Mock.Of<IQRCodeType>(s => s.GetCodeContent() == "testCode"),
+                DefaultQRCodeSettings
                 );
 
             //Act
-            var response = qrCodeFormat.ResponseContent("testCode", DefaultQRCodeSettings);
+            var responseStream = qrCodeFormat.Stream();
 
             //Assert
-            Assert.AreEqual("image/jpeg", response.Headers.ContentType.MediaType);
-            Assert.NotZero(response.Headers.ContentLength.Value);
+            Assert.IsNotNull(responseStream);
+            Assert.NotZero(responseStream.Length);
+
+            responseStream.Dispose();
         }
 
         [Test]
@@ -76,19 +92,24 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         {
 
             //Arrange
+            var hashId = "hash";
             var qrCodeFormat = new PngFormat(
-                Mock.Of<ILocalizedTextService>(),
                 Mock.Of<IMediaFileSystem>(),
                 this.UmbracoHelper,
-                Mock.Of<IColorParser>()
+                Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),
+                Mock.Of<IColorParser>(),
+                Mock.Of<IQRCodeType>(s=>s.GetCodeContent() == "testCode"),
+                DefaultQRCodeSettings
                 );
 
             //Act
-            var response = qrCodeFormat.ResponseContent("testCode", DefaultQRCodeSettings);
+            var responseStream = qrCodeFormat.Stream();
 
             //Assert
-            Assert.AreEqual("image/png", response.Headers.ContentType.MediaType);
-            Assert.NotZero(response.Headers.ContentLength.Value);
+            Assert.IsNotNull(responseStream);
+            Assert.NotZero(responseStream.Length);
+
+            responseStream.Dispose();
         }
     }
 }

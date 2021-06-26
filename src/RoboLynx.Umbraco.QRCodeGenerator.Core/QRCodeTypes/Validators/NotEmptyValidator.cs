@@ -6,9 +6,9 @@
         {
             bool isValid;
 
-            if (value is string)
+            if (value is string stringValue)
             {
-                isValid = !string.IsNullOrEmpty((string)value);
+                isValid = !string.IsNullOrEmpty(stringValue);
             }
             else
             {

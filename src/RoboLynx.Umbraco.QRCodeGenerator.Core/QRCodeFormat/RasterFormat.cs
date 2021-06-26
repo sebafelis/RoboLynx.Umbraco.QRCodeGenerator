@@ -1,6 +1,7 @@
 ﻿using DotNetColorParser;
 using QRCoder;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -18,29 +19,29 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         private readonly IMediaFileSystem _mediaFileSystem;
         private readonly IColorParser _colorParser;
 
-        public RasterFormat(IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IColorParser colorParser, string codeContent, QRCodeSettings settings) : base(umbracoHelper, codeContent, settings)
+        public RasterFormat(IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings Settings) : base(umbracoHelper, hashIdFactory, codeType, Settings)
         {
             _mediaFileSystem = mediaFileSystem;
             _colorParser = colorParser;
         }
 
-        protected MemoryStream RasterStream(string value, QRCodeSettings settings, ImageFormat imageFormat)
+        protected MemoryStream RasterStream(ImageFormat imageFormat)
         {
-            var lightColor = _colorParser.ParseColor(settings.LightColor);
-            var darkColor = _colorParser.ParseColor(settings.DarkColor);
+            var lightColor = _colorParser.ParseColor(Settings.LightColor);
+            var darkColor = _colorParser.ParseColor(Settings.DarkColor);
 
-            using var qrCodeBmp = GenerateBitmapQRCode(value, settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, ResolveIconUrl(settings.Icon), settings.IconSizePercent, settings.IconBorderWidth.Value, settings.ECCLevel.Value);
+            using var qrCodeBmp = GenerateBitmapQRCode(CodeType.GetCodeContent(), Settings.Size, darkColor, lightColor, Settings.DrawQuiteZone.Value, ResolveIconUrl(Settings.Icon), Settings.IconSizePercent, Settings.IconBorderWidth.Value, Settings.ECCLevel.Value);
 
-            using MemoryStream ms = new();
+            MemoryStream ms = new();
             qrCodeBmp.Save(ms, imageFormat);
 
             return ms;
         }
 
-        private Bitmap GenerateBitmapQRCode(string value, int size, Color darkColor, Color lightColor, bool drawQuiteZone, string iconUrl, int iconSizePercent, int iconBorderWidth, ECCLevel level)
+        private Bitmap GenerateBitmapQRCode(string codeContent, int size, Color darkColor, Color lightColor, bool drawQuiteZone, string iconUrl, int iconSizePercent, int iconBorderWidth, ECCLevel level)
         {
             var qrGenerator = new QRCoder.QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(value, (QRCoder.QRCodeGenerator.ECCLevel)((int)level), true);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(codeContent, (QRCoder.QRCodeGenerator.ECCLevel)((int)level), true);
 
             QRCode bmpQrCode = new(qrCodeData);
             if (!string.IsNullOrEmpty(iconUrl))

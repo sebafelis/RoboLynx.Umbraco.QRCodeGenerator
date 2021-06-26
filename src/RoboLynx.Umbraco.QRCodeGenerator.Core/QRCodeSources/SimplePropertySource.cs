@@ -55,7 +55,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
         private readonly IPublishedContent _content;
         private readonly string _culture;
 
-        public SimplePropertySource(ILocalizedTextService localizedTextService, IPublishedContent content, string sourceSettings, string culture) : base(localizedTextService)
+        public SimplePropertySource(IPublishedContent content, string sourceSettings, string culture) : base()
         {
             if (content is null)
             {
@@ -68,7 +68,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             }
             else
             {
-                _settings = new SilmplePropertySourceSettings() { Properties = Regex.Matches(sourceSettings, @"\w+((\{\{).*?(\}\}))?").Cast<Match>().Select((m, i) => new { Key = i, Value = m.Value }).ToDictionary(k => (object)k.Key, v => (SettingsItem)v.Value) };
+                _settings = new SilmplePropertySourceSettings() { Properties = Regex.Matches(sourceSettings, @"\w+((\{\{).*?(\}\}))?").Cast<Match>().Select((m, i) => new { Key = i, m.Value }).ToDictionary(k => (object)k.Key, v => (SettingsItem)v.Value) };
             }
 
             if (_settings is null)
@@ -78,8 +78,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             _content = content;
             _culture = culture;
         }
-
-        public override string Id => "SilmpleProperty";
 
         public override T GetValue<T>(int index, string key)
         {

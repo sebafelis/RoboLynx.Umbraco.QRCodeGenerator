@@ -3,9 +3,9 @@ using Umbraco.Core.Composing;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 {
-    public class QRCodeSourcesCollection : BuilderCollectionBase<IQRCodeSource>
+    public class QRCodeSourceFactoryCollection : BuilderCollectionBase<IQRCodeSourceFactory>
     {
-        public QRCodeSourcesCollection(IEnumerable<IQRCodeSource> items)
+        public QRCodeSourceFactoryCollection(IEnumerable<IQRCodeSourceFactory> items)
             : base(items)
         { }
     }

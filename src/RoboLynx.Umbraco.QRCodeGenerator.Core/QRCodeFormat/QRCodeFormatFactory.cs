@@ -1,27 +1,19 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
-using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
-using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using Umbraco.Core;
 using Umbraco.Core.Services;
-using Umbraco.Web;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public abstract class QRCodeFormatFactory : IQRCodeFormatFactory
     {
         protected ILocalizedTextService LocalizedTextService { get; }
-        protected UmbracoHelper UmbracoHelper { get; }
 
         protected struct QRCodeConfigContainer
         {
-            string CodeContent { get; }
-            QRCodeSettings Settings { get; }
+            public string CodeContent { get; }
+            public QRCodeSettings Settings { get; }
 
             public QRCodeConfigContainer(string codeContent, QRCodeSettings settings) : this()
             {
@@ -30,10 +22,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             }
         }
 
-        public QRCodeFormatFactory(ILocalizedTextService localizedTextService, UmbracoHelper umbracoHelper)
+        public QRCodeFormatFactory(ILocalizedTextService localizedTextService)
         {
             LocalizedTextService = localizedTextService;
-            UmbracoHelper = umbracoHelper;
         }
 
         public abstract string Id { get; }
@@ -42,6 +33,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         public abstract IEnumerable<string> RequiredSettings { get; }
 
-        public abstract IQRCodeFormat Create(string codeContent, QRCodeSettings settings);
+        public abstract IQRCodeFormat Create(IQRCodeType codeType, QRCodeSettings settings);
     }
 }

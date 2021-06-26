@@ -1,5 +1,7 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
 using System;
+using System.Collections.Generic;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
 
@@ -7,34 +9,47 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class TextType : QRCodeType
     {
-        const string textArgumentName = "text";
-        private string text;
+        const string TextArgumentName = "text";
 
-        public TextType(string text, ILocalizedTextService localizedTextService = null) : this(localizedTextService)
+        private string _text;
+        private readonly IQRCodeSource _source;
+        private readonly bool _validate;
+
+        public TextType(string text, bool validate = true) : this()
         {
             if (string.IsNullOrEmpty(text))
             {
-                throw new System.ArgumentException($"'{nameof(text)}' cannot be null or empty.", nameof(text));
+                throw new ArgumentException($"'{nameof(text)}' cannot be null or empty.", nameof(text));
             }
 
-            this.text = text;
+            _text = text;
+            _validate = validate;
         }
 
-        public TextType(ILocalizedTextService localizedTextService) : base(localizedTextService)
+        public TextType(IQRCodeSource source) : this()
         {
-
+            _source = source ?? throw new ArgumentNullException(nameof(source));
+            _validate = true;
         }
 
-        public override string Id => "Text";
-
-        public override string Value(bool validate = true)
+        private TextType() : base()
         {
-            if (validate)
+            Validators.Add(TextArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator() });
+        }
+
+        public override string GetCodeContent()
+        {
+            if (_source is not null)
             {
-                Validate(textArgumentName, text);
+               _text = _source.GetValue<string>(0, TextArgumentName);
             }
 
-            return text; 
+            if (_validate)
+            {
+                Validate(TextArgumentName, _text);
+                Validate(AllFieldsValidator, _text);
+            }
+            return _text; 
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Services;
 using Umbraco.Web;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
@@ -10,13 +9,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
         private readonly IPublishedContent _content;
         private readonly string _culture;
 
-        public AbsoluteUrlSource(ILocalizedTextService localizedTextService, IPublishedContent content, string culture) : base(localizedTextService)
+        public AbsoluteUrlSource(IPublishedContent content, string culture) : base()
         {
             _content = content;
             _culture = culture;
         }
-
-        public override string Id => "AbsoluteUrl";
 
         public override T GetValue<T>(int index, string key)
         {

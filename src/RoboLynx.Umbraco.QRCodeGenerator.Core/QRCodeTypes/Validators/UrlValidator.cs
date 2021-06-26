@@ -6,9 +6,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
     {
         bool IQRCodeTypeValidator.Validate(object url, out string message)
         {
-            if (url is string)
+            if (url is string @string)
             {
-                var isValidUrl = Uri.TryCreate((string)url, UriKind.Absolute, out _);
+                var isValidUrl = Uri.TryCreate(@string, UriKind.Absolute, out _);
 
                 message = !isValidUrl ? "Passed value is not a correct absolute URL." : null;
 

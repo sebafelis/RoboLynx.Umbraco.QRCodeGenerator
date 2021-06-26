@@ -1,4 +1,5 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
@@ -14,6 +15,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         IEnumerable<string> RequiredSettings { get; }
 
-        IQRCodeFormat Create(string codeContent, QRCodeSettings settings);
+        IQRCodeFormat Create(IQRCodeType codeType, QRCodeSettings settings);
     }
 }

@@ -10,24 +10,49 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class PhoneNumberType : QRCodeType
     {
-        const string numberArgumentName = "number";
+        const string NumberArgumentName = "number";
 
-        public PhoneNumberType(ILocalizedTextService localizedTextService) : base(localizedTextService)
+        private readonly IQRCodeSource _source;
+        private string _number;
+        private readonly bool _validate;
+
+        public PhoneNumberType(string number, bool validate = true) : this()
         {
-            validators.Add(numberArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new PhoneNumberValidator() });
+            _number = number;
+            _validate = validate;
         }
 
-        public override string Id => "PhoneNumber";
-
-        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture)
+        public PhoneNumberType(IQRCodeSource source)
         {
-            var number = source.GetValue<string>(0, numberArgumentName, content, sourceSettings, culture);
+            _source = source;
+            _validate = true;
+        }
 
-            number = Regex.Replace(number, @"[\s\(\)-]", string.Empty);
+        private PhoneNumberType() : base()
+        {
+            Validators.Add(NumberArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new PhoneNumberValidator() });
+        }
 
-            Validate(numberArgumentName, number);
+        public override string GetCodeContent()
+        {
+            if (_source is not null)
+            {
+                _number = _source.GetValue<string>(0, NumberArgumentName);
+            }
 
-            return new PhoneNumber(number).ToString();
+            var number = Regex.Replace(_number, @"[\s\(\)-]", string.Empty);
+
+            if (_validate)
+            {
+                Validate(NumberArgumentName, number);
+            }
+
+            var result = new PhoneNumber(number).ToString();
+            if (_validate)
+            {
+                Validate(AllFieldsValidator, result);
+            }
+            return result;
         }
     }
 }

@@ -2,68 +2,63 @@
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
 using System;
 using System.Collections.Generic;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Services;
 using static QRCoder.PayloadGenerator;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class UrlType : QRCodeType
     {
-        const string urlArgumentName = "url";
-        private string url;
+        const string UrlArgumentName = "url";
+
+        private readonly IQRCodeSource _source;
+        private string _url;
+        private readonly bool _validate;
 
         public class AbsoluteUrlSourceSettings
         {
             public bool Validate { get; set; } = true;
         }
 
-        public UrlType(string url, ILocalizedTextService localizedTextService = null) : this(localizedTextService)
+        public UrlType(string url, bool validate = true) : this()
         {
             if (string.IsNullOrEmpty(url))
             {
                 throw new System.ArgumentException($"'{nameof(url)}' cannot be null or empty.", nameof(url));
             }
 
-            this.url = url;
+            _url = url; 
+            _validate = validate;
         }
 
-        public UrlType(ILocalizedTextService localizedTextService) : base(localizedTextService)
+        public UrlType(IQRCodeSource source)
         {
-            validators.Add(urlArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new UrlValidator() });
+            _source = source ?? throw new ArgumentNullException(nameof(source));
+            _validate = true;
         }
 
-        public override string Id => "URL";
-
-        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture, bool validate = true)
+        public UrlType() : base()
         {
-            if (url != null)
-            {
-                throw new InvalidOperationException(message: $"Argument {nameof(url)} was passed in constructor. Is not possible to use source to build type value in this case.");
-            }
-            url = source.GetValue<string>(0, urlArgumentName, content, sourceSettings, culture);
-
-            if (validate)
-            {
-                Validate(urlArgumentName, url);
-            }
-
-            return new Url(url).ToString();
+            Validators.Add(UrlArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new UrlValidator() });
         }
 
-        public override string Value(bool validate = true)
+        public override string GetCodeContent()
         {
-            if (url == null)
+            if (_source is not null)
             {
-                throw new InvalidOperationException(message: $"Argument {nameof(url)} was not passed in constructor. Is not possible to use value of this argument to build type value in this case.");
+                _url = _source.GetValue<string>(0, UrlArgumentName);
             }
 
-            if (validate)
+            if (_validate)
             {
-                Validate(urlArgumentName, url);
+                Validate(UrlArgumentName, _url);
             }
 
-            return new Url(url).ToString();
+            var result = new Url(_url).ToString();
+            if (_validate)
+            {
+                Validate(AllFieldsValidator, result);
+            }
+            return result;
         }
     }
 }

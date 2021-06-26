@@ -18,9 +18,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
     [AngularJsonOnlyConfiguration]
     public class QRCodeSourcePickerController : UmbracoAuthorizedJsonController
     {
-        private readonly QRCodeSourcesCollection sources;
+        private readonly QRCodeSourceFactoryCollection sources;
 
-        public QRCodeSourcePickerController(QRCodeSourcesCollection sources, IGlobalSettings globalSettings, IUmbracoContextAccessor umbracoContextAccessor,
+        public QRCodeSourcePickerController(QRCodeSourceFactoryCollection sources, IGlobalSettings globalSettings, IUmbracoContextAccessor umbracoContextAccessor,
                                 ISqlContext sqlContext, ServiceContext services, AppCaches appCaches,
                                 IProfilingLogger logger, IRuntimeState runtimeState, UmbracoHelper umbracoHelper) : base(globalSettings,
                                                                                                                          umbracoContextAccessor,

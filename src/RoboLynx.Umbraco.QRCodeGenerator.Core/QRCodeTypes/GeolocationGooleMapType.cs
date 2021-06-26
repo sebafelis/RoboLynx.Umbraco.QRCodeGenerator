@@ -1,6 +1,7 @@
 ﻿using QRCoder;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Umbraco.Core.Models.PublishedContent;
@@ -10,37 +11,64 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class GeolocationGooleMapType : QRCodeType
     {
-        const string latitudeArgumentName = "latitude";
-        const string longitudeArgumentName = "longitude";
+        const string LatitudeArgumentName = "latitude";
+        const string LongitudeArgumentName = "longitude";
+
         private readonly IQRCodeSource _source;
+        private string _latitude;
+        private string _longitude;
+        private readonly bool _validate;
 
-        public GeolocationGooleMapType(ILocalizedTextService localizedTextService, IQRCodeSource source) : base(localizedTextService)
+        public GeolocationGooleMapType(string latitude, string longitude, bool validate = true) : this()
         {
-            validators.Add(latitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LatitudeValidator() });
-            validators.Add(longitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LongitudeValidator() });
-            
-            _source = source ?? throw new System.ArgumentNullException(nameof(source));
+            if (string.IsNullOrEmpty(latitude))
+            {
+                throw new ArgumentException($"'{nameof(latitude)}' cannot be null or empty.", nameof(latitude));
+            }
+
+            if (string.IsNullOrEmpty(longitude))
+            {
+                throw new ArgumentException($"'{nameof(longitude)}' cannot be null or empty.", nameof(longitude));
+            }
+
+            _latitude = latitude;
+            _longitude = longitude;
+            _validate = validate;
         }
 
-        public override string Id => "GeolocationGooleMap";
-
-        public override string Value( bool validate = true)
+        public GeolocationGooleMapType(IQRCodeSource source) : this()
         {
-            var latitude = _source.GetValue<double>(0, latitudeArgumentName);
-            if (validate)
-                Validate(latitudeArgumentName, latitude);
-
-            var longitude = _source.GetValue<double>(1, longitudeArgumentName);
-            if (validate)
-                Validate(longitudeArgumentName, longitude);
-
-            var usCultureInfo = new CultureInfo("en-US", false);
-            return new PayloadGenerator.Geolocation(latitude.ToString(usCultureInfo), longitude.ToString(usCultureInfo), PayloadGenerator.Geolocation.GeolocationEncoding.GoogleMaps).ToString();
+            _source = source ?? throw new ArgumentNullException(nameof(source));
+            _validate = true;
         }
 
-        public override string Value(bool validate = true)
+        private GeolocationGooleMapType() : base()
         {
-            throw new System.NotImplementedException();
+            Validators.Add(LatitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LatitudeValidator() });
+            Validators.Add(LongitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LongitudeValidator() });
+        }
+
+        public override string GetCodeContent()
+        {
+            if (_source is not null)
+            {
+                _latitude = _source.GetValue<string>(0, LatitudeArgumentName);
+                _longitude = _source.GetValue<string>(1, LongitudeArgumentName);
+            }
+
+            if (_validate)
+            {
+                Validate(LatitudeArgumentName, _latitude);
+                Validate(LongitudeArgumentName, _longitude);
+            }
+
+            var result = new PayloadGenerator.Geolocation(_latitude, _longitude, PayloadGenerator.Geolocation.GeolocationEncoding.GoogleMaps).ToString();
+            if (_validate)
+            {
+                Validate(AllFieldsValidator, result);
+            }
+
+            return result;
         }
     }
 }

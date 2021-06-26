@@ -1,62 +1,35 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
-using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
-using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System;
-using System.Collections.Generic;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.IO;
-using System.Net.Http;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using Umbraco.Core;
-using Umbraco.Core.Services;
 using Umbraco.Web;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public abstract class QRCodeFormat : IQRCodeFormat
     {
-        protected readonly UmbracoHelper _umbracoHelper;
-        private readonly string _codeContent;
-        private readonly QRCodeSettings _settings;
+        protected UmbracoHelper UmbracoHelper { get; }
+        protected IQRCodeHashIdFactory HashIdFactory { get; }
+        protected IQRCodeType CodeType { get; }
+        protected QRCodeSettings Settings { get; }
 
-        protected struct QRCodeConfigContainer
+        public QRCodeFormat(UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IQRCodeType codeType, QRCodeSettings settings)
         {
-            string CodeContent { get; }
-            QRCodeSettings Settings { get; }
-
-            public QRCodeConfigContainer(string codeContent, QRCodeSettings settings) : this()
-            {
-                CodeContent = codeContent;
-                Settings = settings;
-            }
-        }
-
-        public QRCodeFormat(UmbracoHelper umbracoHelper, string codeContent, QRCodeSettings settings)
-        {
-            _umbracoHelper = umbracoHelper;
-            _codeContent = codeContent;
-            _settings = settings;
+            UmbracoHelper = umbracoHelper;
+            HashIdFactory = hashIdFactory;
+            CodeType = codeType;
+            Settings = settings;
         }
 
         public abstract string Mime { get; }
 
-        public virtual string FileName => $"{ComputeHash(_codeContent, _settings)}.{FileExtension}";
+        public virtual string FileName => $"{HashId}.{FileExtension}";
 
         public abstract string FileExtension { get; }
 
+        public virtual string HashId => HashIdFactory.ComputeHash(CodeType.GetCodeContent(), Settings);
+
         public abstract Stream Stream();
-
-
-        /// <summary>
-        /// Compute hash by code content and settings. Hash is use to identify the identical QR codes. Is use to build file name also.
-        /// </summary>
-        /// <param name="codeContent">Content of the code.</param>
-        /// <param name="settings">Settings of the code.</param>
-        /// <returns>MD5 hash</returns>
-        protected string ComputeHash(string value, QRCodeSettings settings)
-        {
-            return HashHelper.ComputeHash(value, settings);
-        }
 
         /// <summary>
         /// Resolve icon source
@@ -69,11 +42,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             {
                 if (int.TryParse(icon, out int mediaId))
                 {
-                    return _umbracoHelper.Media(mediaId)?.Url();
+                    return UmbracoHelper.Media(mediaId)?.Url();
                 }
                 if (Udi.TryParse(icon, out Udi mediaUdi))
                 {
-                    return _umbracoHelper.Media(mediaUdi)?.Url();
+                    return UmbracoHelper.Media(mediaUdi)?.Url();
                 }
                 return icon;
             }

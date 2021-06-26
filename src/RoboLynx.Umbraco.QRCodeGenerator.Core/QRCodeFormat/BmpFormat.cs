@@ -1,5 +1,6 @@
 ﻿using DotNetColorParser;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net.Http;
@@ -11,14 +12,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public class BmpFormat : RasterFormat
     {
-        public BmpFormat(IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IColorParser colorParser, string codeContent, QRCodeSettings settings) : base(mediaFileSystem, umbracoHelper, colorParser, codeContent, settings)
+        readonly ImageFormat _imageFormat = ImageFormat.Bmp;
+
+        public BmpFormat(IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings settings) : base(mediaFileSystem, umbracoHelper, hashIdFactory, colorParser, codeType, settings)
         {
 
         }
-
-        ImageFormat _imageFormat = ImageFormat.Bmp;
-
-        public override string Id => "bmp";
 
         public override string Mime => "image/bmp";
 
@@ -26,7 +25,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         public override Stream Stream()
         {
-            return RasterStream(value, settings, _imageFormat);
+            return RasterStream(_imageFormat);
         }
     }
 }

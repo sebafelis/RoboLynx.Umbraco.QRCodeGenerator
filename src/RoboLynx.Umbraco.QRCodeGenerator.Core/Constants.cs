@@ -19,6 +19,16 @@
         public const string DefaultDrawQuietZoneFieldName = "defaultDrawQuiteZone";
         public const string DefaultECCLevelFieldName = "defaultECCLevel";
 
+        public const int DefaultSizeFieldValue = 40;
+        public const string DefaultFormatFieldValue = "svg";
+        public const string DefaultDarkColorFieldValue = "#000000";
+        public const string DefaultLightColorFieldValue = "#ffffff";
+        public const string DefaultIconFieldValue = null;
+        public const int DefaultIconSizePercentFieldValue = 10;
+        public const int DefaultIconBorderWidthFieldValue = 6;
+        public const bool DefaultDrawQuietZoneFieldValue = true;
+        public const ECCLevel DefaultECCLevelFieldValue = ECCLevel.M;
+
         public const string SizeFieldName = "size";
         public const string FormatFieldName = "format";
         public const string DarkColorFieldName = "darkColor";
@@ -28,5 +38,8 @@
         public const string IconBorderWidthFieldName = "iconBorderWidth";
         public const string DrawQuietZoneFieldName = "drawQuiteZone";
         public const string ECCLevelFieldName = "eccLevel";
+
+        private const string BackofficeCacheNameValue = "Backoffice";
+        public static string BackofficeCacheName { get; set; } = BackofficeCacheNameValue;
     }
 }

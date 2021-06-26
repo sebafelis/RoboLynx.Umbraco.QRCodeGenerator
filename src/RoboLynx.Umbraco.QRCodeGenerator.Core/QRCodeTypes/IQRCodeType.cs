@@ -1,27 +1,12 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
-using Umbraco.Core.Composing;
-using Umbraco.Core.Models.PublishedContent;
-
-namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
+﻿namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
-    public interface IQRCodeType : IDiscoverable
+    public interface IQRCodeType
     {
         /// <summary>
-        /// Identifier
+        /// Get value of QR Code content by using value passed into constructor.
         /// </summary>
-        string Id { get; }
-
-        /// <summary>
-        /// Name
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
-        /// Description
-        /// </summary>
-        string Description { get; }
-
-
-        IQRCodeTypeValueFactory CreateValueFactory(IFactory factory);
+        /// <returns>Code content</returns>
+        /// <exception cref="RoboLynx.Umbraco.QRCodeGenerator.Exceptions.ValidationQRCodeGeneratorException">Throw when value passed in constructor is invalid.</exception>
+        string GetCodeContent();
     }
 }

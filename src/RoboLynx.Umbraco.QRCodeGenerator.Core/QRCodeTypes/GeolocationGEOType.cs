@@ -1,6 +1,7 @@
 ﻿using QRCoder;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
+using System;
 using System.Collections.Generic;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
@@ -9,49 +10,65 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class GeolocationGEOType : QRCodeType
     {
-        const string _latitudeArgumentName = "latitude";
-        const string _longitudeArgumentName = "longitude";
+        const string LatitudeArgumentName = "latitude";
+        const string LongitudeArgumentName = "longitude";
 
-        public GeolocationGEOType(ILocalizedTextService localizedTextService) : base(localizedTextService)
+        private readonly IQRCodeSource _source;
+        private string _latitude;
+        private string _longitude;
+        private readonly bool _validate;
+
+        public GeolocationGEOType(string latitude, string longitude, bool validate = true) : this()
         {
-            validators.Add(_latitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LatitudeValidator() });
-            validators.Add(_longitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LongitudeValidator() });
+            if (string.IsNullOrEmpty(latitude))
+            {
+                throw new ArgumentException($"'{nameof(latitude)}' cannot be null or empty.", nameof(latitude));
+            }
+
+            if (string.IsNullOrEmpty(longitude))
+            {
+                throw new ArgumentException($"'{nameof(longitude)}' cannot be null or empty.", nameof(longitude));
+            }
+
+            _latitude = latitude;
+            _longitude = longitude;
+            _validate = validate;
         }
 
-        public override string Id => "GeolocationGEO";
-
-        public override string Value(IQRCodeSource source, string sourceSettings, IPublishedContent content, string culture, bool validate = true)
+        public GeolocationGEOType(IQRCodeSource source) : this()
         {
-            if (source is null)
-            {
-                throw new System.ArgumentNullException(nameof(source));
-            }
-
-            if (latitude != null)
-            {
-                throw new InvalidOperationException(message: $"Argument {nameof(url)} was passed in constructor. Is not possible to use source to build type value in this case.");
-            }
-
-            
-
-            var latitude = source.GetValue<string>(0, _latitudeArgumentName, content, sourceSettings, culture);
-            if (validate)
-            {
-                Validate(_latitudeArgumentName, latitude);
-            }
-
-            var longitude = source.GetValue<string>(1, _longitudeArgumentName, content, sourceSettings, culture);
-            if (validate)
-            {
-                Validate(_longitudeArgumentName, longitude);
-            }
-
-            return new PayloadGenerator.Geolocation(latitude, longitude, PayloadGenerator.Geolocation.GeolocationEncoding.GEO).ToString();
+            _source = source ?? throw new ArgumentNullException(nameof(source));
+            _validate = true;
         }
 
-        public override string Value(bool validate = true)
+        private GeolocationGEOType() : base()
         {
-            throw new System.NotImplementedException();
+            Validators.Add(LatitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LatitudeValidator() });
+            Validators.Add(LongitudeArgumentName, new List<IQRCodeTypeValidator>() { new NotEmptyValidator(), new LongitudeValidator() });
+        }
+
+        public override string GetCodeContent()
+        {
+            if (_source is not null)
+            {
+                _latitude = _source.GetValue<string>(0, LatitudeArgumentName);
+                _longitude = _source.GetValue<string>(1, LongitudeArgumentName);
+            }
+
+
+            if (_validate)
+            {
+                Validate(LatitudeArgumentName, _latitude);
+                Validate(LongitudeArgumentName, _longitude);
+            }
+
+            var result = new PayloadGenerator.Geolocation(_latitude, _longitude, PayloadGenerator.Geolocation.GeolocationEncoding.GEO).ToString();
+            if (_validate)
+            {
+                Validate(AllFieldsValidator, result);
+            }
+
+            return result;
         }
     }
 }
