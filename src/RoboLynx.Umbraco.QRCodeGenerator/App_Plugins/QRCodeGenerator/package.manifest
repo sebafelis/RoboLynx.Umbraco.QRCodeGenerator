@@ -147,7 +147,7 @@
         "defaultLightColor": "#ffffff",
         "defaultIcon": null,
         "defaultIconSizePercent": "10",
-        "defaultIconBorderWidth": "1",
+        "defaultIconBorderWidth": "6",
         "defaultDrawQuiteZone": "1",
         "defaultECCLevel": "M"
       }
