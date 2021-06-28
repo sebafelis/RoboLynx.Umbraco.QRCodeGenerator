@@ -2,7 +2,7 @@
 # QR Code Generator
 
 [![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget%3ARoboLynx.Umbraco.QRCodeGenerator)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
-[![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Core?label=nuget%3ARoboLynx.Umbraco.QRCodeGenerator.Core)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
+[![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget%3ARoboLynx.Umbraco.QRCodeGenerator)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
 [![Our Umbraco project page](https://img.shields.io/badge/our-umbraco-orange.svg)](https://our.umbraco.com/packages/backoffice-extensions/qr-code-generator/) 
 [![Build Status](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_apis/build/status/sebafelis.RoboLynx.Umbraco.QRCodeGenerator?branchName=main-u8)](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_build/latest?definitionId=7&branchName=main-u8)
 ![Licence](https://img.shields.io/github/license/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)
