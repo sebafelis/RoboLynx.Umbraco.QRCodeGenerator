@@ -71,5 +71,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         {
             return GetCache(cacheName)?.UrlSupport() ?? false;
         }
+
+        public DateTimeOffset? Expired(string hashId, string cacheName)
+        {
+            return GetCache(cacheName)?.Expired(hashId);
+        }
     }
 }

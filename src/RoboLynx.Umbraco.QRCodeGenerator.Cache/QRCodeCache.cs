@@ -1,4 +1,5 @@
 ﻿using Chronos.Abstractions;
+using System;
 using System.IO;
 using System.Linq;
 using Umbraco.Core;
@@ -170,9 +171,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             }
         }
 
+        /// <inheritdoc/>
         public bool UrlSupport()
         {
             return _urlProvider != null;
+        }
+
+        /// <inheritdoc/>
+        public DateTimeOffset? Expired(string hashId)
+        {
+            return GetCacheItem(hashId)?.ExpiryDate;
         }
     }
 }
