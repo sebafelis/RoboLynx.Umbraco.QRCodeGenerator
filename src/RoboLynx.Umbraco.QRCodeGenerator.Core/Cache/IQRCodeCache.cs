@@ -8,6 +8,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
     public interface IQRCodeCache
     {
         /// <summary>
+        /// Name of the cache
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
         /// Initialize cache. Called by QRCodeCacheManager. 
         /// </summary>
         void Initialize();

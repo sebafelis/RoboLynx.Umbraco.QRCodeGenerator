@@ -2,6 +2,7 @@
 using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
 using System;
 using Umbraco.Core;
+using Umbraco.Core.Cache;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Exceptions;
 using Umbraco.Core.IO;
@@ -20,8 +21,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
             if (!config.Disable)
             {
-                composition.Register<IQRCodeCacheFileSystem>(f => new QRCodeCacheFileSystem(new PhysicalFileSystem(config.CacheLocation), TimeSpan.FromDays(config.MaxDays), f.GetInstance<ILogger>(), f.GetInstance<IDateTimeOffsetProvider>()));
-                composition.RegisterAuto<IQRCodeCache>();
+                composition.Register<IQRCodeCache>(f=> new QRCodeCache<IBackofficeQRCodeCache>(Constants.BackofficeCacheName,
+                    f.GetInstance<AppCaches>(), new QRCodeCacheFileSystem(new PhysicalFileSystem(config.CacheLocation), 
+                    TimeSpan.FromDays(config.MaxDays), f.GetInstance<ILogger>(), f.GetInstance<IDateTimeOffsetProvider>()), 
+                    null, f.GetInstance<IRuntimeState>(), 
+                    f.GetInstance<IProfilingLogger>(), f.GetInstance<IDateTimeOffsetProvider>()));
             }
         }
 

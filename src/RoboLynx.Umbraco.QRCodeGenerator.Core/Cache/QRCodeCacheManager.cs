@@ -13,9 +13,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
     {
         private readonly IDictionary<string, IQRCodeCache> _caches;
 
-        public QRCodeCacheManager(IDictionary<string, IQRCodeCache> caches)
+        public QRCodeCacheManager(QRCodeCachCollection caches)
         {
-            this._caches = caches;
+            _caches = caches.ToDictionary(k=>k.Name, v=>v);
         }
 
         private IQRCodeCache GetCache(string cacheName)
@@ -60,11 +60,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         public string GetUrl(string hashId, UrlMode uriKind, string cacheName)
         {
             return GetCache(cacheName)?.Url(hashId, uriKind);
-        }
-
-        public bool IsEnable(string cacheName)
-        {
-            throw new NotImplementedException();
         }
 
         public bool UrlSupport(string cacheName)

@@ -19,24 +19,25 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         private readonly BackgroundTaskRunner<IBackgroundTask> _cleanCacheRunner;
         private readonly IAppPolicyCache _isolatedCache;
         private readonly IQRCodeCacheFileSystem _fileSystem;
-        private readonly QRCodeCacheRefresher<T> _cacheRefresher;
         private readonly IQRCodeCacheUrlProvider _urlProvider;
 
-        public QRCodeCache(IProfilingLogger logger, IDateTimeOffsetProvider dateTimeProvider, AppCaches appCaches, IRuntimeState runtime,
-            IQRCodeCacheFileSystem fileSystem, QRCodeCacheRefresher<T> cacheRefresher, IQRCodeCacheUrlProvider urlProvider)
+        public QRCodeCache(string name, AppCaches appCaches, IQRCodeCacheFileSystem fileSystem, IQRCodeCacheUrlProvider urlProvider,
+            IRuntimeState runtime, IProfilingLogger logger, IDateTimeOffsetProvider dateTimeProvider)
         {
             _isolatedCache = appCaches.IsolatedCaches.GetOrCreate<T>();
             _cleanCacheRunner = new BackgroundTaskRunner<IBackgroundTask>("CleanQRCodeCache", logger);
+            Name = name;
             this._logger = logger;
             this._dateTimeProvider = dateTimeProvider;
             this._runtime = runtime;
             this._fileSystem = fileSystem;
-            this._cacheRefresher = cacheRefresher;
             this._urlProvider = urlProvider;
         }
 
         public int DelayBeforeWeStart { get; set; } = 60000; // 60000ms = 1min
         public int HowOftenWeRepeat { get; set; } = 3600000; // 3600000 = 1hour
+        public string Name { get; }
+        public TimeSpan Timeout { get; }
 
         /// <inheritdoc/>
         public void Initialize()
@@ -51,26 +52,35 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             if (!IsCached(hashId))
             {
                 //TODO Change format source to property value from QRCodeFormat class getting by Id.
-                var expiryDateFiles = _fileSystem.AddCacheFile(hashId, extension, stream);
+                var cachedFile = _fileSystem.AddCacheFile(hashId, extension, stream);
 
-                var runtimeCacheRefreshData = new QRCodeCacheRefresher<T>.JsonPayload(hashId, QRCodeCacheChangeType.Add, expiryDateFiles.Path, expiryDateFiles.ExpiryDate);
-
-                _cacheRefresher.Refresh(runtimeCacheRefreshData.AsEnumerableOfOne().ToArray());
+                _isolatedCache.InsertCacheItem(hashId, () => new FileCacheData
+                {
+                    HashId = hashId,
+                    Path = cachedFile.Path,
+                    ExpiryDate = cachedFile.ExpiryDate
+                },  
+                cachedFile.ExpiryDate.UtcDateTime - _dateTimeProvider.UtcNow);
             }
         }
 
         /// <inheritdoc/>
         public void Clear(string hashId)
         {
-            var runtimeCacheRefreshData = new QRCodeCacheRefresher<T>.JsonPayload(hashId, QRCodeCacheChangeType.Remove);
+            var cacheItem = GetCacheItem(hashId);
 
-            _cacheRefresher.Refresh(runtimeCacheRefreshData.AsEnumerableOfOne().ToArray());
+            _fileSystem.DeleteCacheFiles(cacheItem.Path.AsEnumerableOfOne());
+
+            _isolatedCache.Clear(hashId);
         }
 
         /// <inheritdoc/>
         public void ClearAll()
         {
-            _cacheRefresher.RefreshAll();
+            var files = _fileSystem.GetAllCacheFiles();
+            _fileSystem.DeleteCacheFiles(files.Select(f => f.Path));
+
+            _isolatedCache.Clear();
         }
 
         /// <inheritdoc/>
@@ -80,10 +90,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
             if (_fileSystem.FileExists(cacheItem.Path))
             {
-                throw new FileNotFoundException();
+                return _fileSystem.OpenFile(cacheItem.Path); 
             }
 
-            return _fileSystem.OpenFile(cacheItem.Path);
+            return null;
         }
 
         /// <inheritdoc/>
@@ -142,7 +152,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         {
             var task = new CleanCacheTask<T>(_cleanCacheRunner, DelayBeforeWeStart, HowOftenWeRepeat, _runtime, _logger, this);
 
-            //As soon as we add our task to the runner it will start to run (after its delay period)
             _cleanCacheRunner.TryAdd(task);
         }
 

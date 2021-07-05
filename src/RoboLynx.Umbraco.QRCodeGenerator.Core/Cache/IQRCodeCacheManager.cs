@@ -67,13 +67,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         bool IsCached(string hashId, string cacheName);
 
         /// <summary>
-        /// Check is cache with specify name is enable now.
-        /// </summary>
-        /// <param name="cacheName">Cache name<</param>
-        /// <returns></returns>
-        bool IsEnable(string cacheName);
-
-        /// <summary>
         /// Get cache item expiring date/time
         /// </summary>
         /// <param name="hashId">Unique code ID base on hash code.</param>
