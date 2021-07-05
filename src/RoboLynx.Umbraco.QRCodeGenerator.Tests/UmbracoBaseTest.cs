@@ -97,5 +97,14 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests
         {
             return new MemoryStream(Encoding.UTF8.GetBytes(content));
         }
+
+        protected byte[] StreamToByteArray(Stream input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
     }
 }
