@@ -27,7 +27,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
         {
             if (!InputType.HasValue)
             {
-                InputType = GetInputType(InputType);
+                InputType = GetInputType(value);
             }
 
             if (!InputType.HasValue)
@@ -64,45 +64,24 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
 
         private int GetMaxLenght(QRCodeInputType inputType)
         {
-            switch (inputType)
+            return inputType switch
             {
-                case QRCodeInputType.Numeric:
-                    return 7089;
-                case QRCodeInputType.Binary:
-                    return 2953;
-                case QRCodeInputType.Kanji:
-                    return 1817;
-                case QRCodeInputType.Alphanumeric:
-                default:
-                    return 4296;
-            }
+                QRCodeInputType.Numeric => 7089,
+                QRCodeInputType.Binary => 2953,
+                QRCodeInputType.Kanji => 1817,
+                _ => 4296,
+            };
         }
 
         private QRCodeInputType? GetInputType(object value)
         {
-            switch (value)
+            return value switch
             {
-                case string strValue:
-                    return QRCodeInputType.Alphanumeric;
-                case sbyte sbyteValue:
-                case byte byteValue:
-                case short shortValue:
-                case ushort ushortValue:
-                case int intValue:
-                case uint uintValue:
-                case long longValue:
-                case ulong ulongValue:
-                case nint nintValue:
-                case nuint nuintValue:
-                case double doubleValue:
-                case float floatValue:
-                case decimal decimalValue:
-                    return QRCodeInputType.Numeric;
-                case byte[] strValue:
-                    return QRCodeInputType.Binary;
-                default:
-                    return null;
-            }
+                string => QRCodeInputType.Alphanumeric,
+                sbyte or byte or short or ushort or int or uint or long or ulong or nint or nuint or double or float or decimal => QRCodeInputType.Numeric,
+                byte[] => QRCodeInputType.Binary,
+                _ => null,
+            };
         }
     }
 }

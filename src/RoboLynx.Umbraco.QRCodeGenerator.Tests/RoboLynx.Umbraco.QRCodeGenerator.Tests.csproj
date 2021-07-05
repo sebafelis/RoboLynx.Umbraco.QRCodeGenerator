@@ -32,6 +32,7 @@
 		<PackageReference Include="nunit" Version="3.13.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
+		<PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -40,6 +41,10 @@
 
 	<ItemGroup>
 		<Reference Include="System.Web.ApplicationServices" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Unit\Cache\" />
 	</ItemGroup>
 
 </Project>

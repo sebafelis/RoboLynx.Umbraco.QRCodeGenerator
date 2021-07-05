@@ -20,7 +20,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 
         public override IQRCodeType Create(IQRCodeSource qrCodeSource)
         {
-            return new SmsType(qrCodeSource);
+            return new PhoneNumberType(qrCodeSource);
         }
     }
 }

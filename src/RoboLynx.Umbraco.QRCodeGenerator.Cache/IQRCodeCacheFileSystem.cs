@@ -20,6 +20,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         void DeleteCacheFiles(IEnumerable<string> files);
 
-        public DateTimeOffset GetExpiryDate(string file);
+        DateTimeOffset GetExpiryDate(string file);
     }
 }
