@@ -24,14 +24,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         private readonly QRCodeFormatFactoryCollection _formats;
         private readonly QRCodeSourceFactoryCollection _sources;
         private readonly QRCodeTypeFactoryCollection _types;
-        private readonly IQRCodeCacheManager _cacheManager;
+
+        public IQRCodeCacheManager CacheManager { get; }
 
         public QRCodeBuilder(QRCodeFormatFactoryCollection formats, QRCodeSourceFactoryCollection sources, QRCodeTypeFactoryCollection types, IQRCodeCacheManager cacheManager)
         {
             _formats = formats ?? throw new ArgumentNullException(nameof(formats));
             _sources = sources ?? throw new ArgumentNullException(nameof(sources));
             _types = types ?? throw new ArgumentNullException(nameof(types));
-            _cacheManager = cacheManager ?? throw new ArgumentNullException(nameof(cacheManager));
+            CacheManager = cacheManager ?? throw new ArgumentNullException(nameof(cacheManager));
         }
 
         public IQRCodeFormat GetFormat(IQRCodeType codeType, QRCodeSettings settings)
@@ -129,15 +130,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         public HttpResponseMessage CreateResponse(HttpRequestMessage request, QRCodeConfig config, bool attachment = false, string cacheName = null)
         {
             HttpResponseMessage response;
+            var hashId = config.Format.HashId;
 
-            if (!_cacheManager.UrlSupport(cacheName))
+            if (!CacheManager.UrlSupport(cacheName))
             {
                 response = request.CreateResponse(System.Net.HttpStatusCode.OK);
 
-                var stream = CreateQRCodeAsStream(config, cacheName);
+                var stream = CreateStream(config, cacheName);
 
                 var httpContent = new StreamContent(stream);
                 httpContent.Headers.ContentType = new MediaTypeHeaderValue(config.Format.Mime);
+                httpContent.Headers.Expires = CacheManager.Expired(hashId, cacheName);
 
                 if (attachment)
                 {
@@ -157,36 +160,35 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             }
             else
             {
-                response = request.CreateResponse(System.Net.HttpStatusCode.Moved);
+                response = request.CreateResponse(System.Net.HttpStatusCode.Redirect);                
 
-                var hashId = config.Format.FileName;
-
-                if (!_cacheManager.IsCached(hashId, cacheName))
+                if (!CacheManager.IsCached(hashId, cacheName))
                 {
-                    _ = CreateQRCodeAsStream(config, cacheName);
+                    _ = CreateStream(config, cacheName);
                 }
-                var cacheUrl = _cacheManager.GetUrl(hashId, UrlMode.Default, cacheName);
-
+                var cacheUrl = CacheManager.GetUrl(hashId, UrlMode.Default, cacheName);
+                
                 response.Headers.Location = new Uri(cacheUrl);
+                response.Headers.CacheControl = new CacheControlHeaderValue() { NoStore = true };
             }
 
             return response;
         }
 
-        public Stream CreateQRCodeAsStream(QRCodeConfig config, string cacheName)
+        public Stream CreateStream(QRCodeConfig config, string cacheName)
         {
             var hashId = config.Format.HashId;
             var extension = config.Format.FileExtension;
 
-            if (_cacheManager.IsCached(hashId, cacheName))
+            if (CacheManager.IsCached(hashId, cacheName))
             {
-                return _cacheManager.GetStream(hashId, cacheName);
+                return CacheManager.GetStream(hashId, cacheName);
             }
             else
             {
                 var qrCodeStream = config.Format.Stream();
 
-                _cacheManager.Add(hashId, extension, qrCodeStream, cacheName);
+                CacheManager.Add(hashId, extension, qrCodeStream, cacheName);
 
                 return qrCodeStream;
             }
@@ -196,13 +198,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         {
             var hashId = config.Format.HashId;
 
-            if (_cacheManager.UrlSupport(cacheName))
+            if (CacheManager.UrlSupport(cacheName))
             {
-                if (!_cacheManager.IsCached(hashId, cacheName))
+                if (!CacheManager.IsCached(hashId, cacheName))
                 {
-                    _ = CreateQRCodeAsStream(config, cacheName);
+                    _ = CreateStream(config, cacheName);
                 }
-                var cacheUrl = _cacheManager.GetUrl(hashId, UrlMode.Default, cacheName);
+                return CacheManager.GetUrl(hashId, UrlMode.Default, cacheName);
             }
             throw new NotSupportedException("Configuration not allow URL direct to cache.");
         }
@@ -251,9 +253,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
                 throw new ArgumentNullException(nameof(defaultSettings));
             }
 
-            var settings = (QRCodeSettings)defaultSettings.Clone();
+            var settings = (QRCodeSettings)defaultSettings?.Clone();
 
-            if (userSettings != null)
+            if (userSettings is not null)
             {
                 foreach (var settingsProperty in typeof(QRCodeSettings).GetAllProperties())
                 {
