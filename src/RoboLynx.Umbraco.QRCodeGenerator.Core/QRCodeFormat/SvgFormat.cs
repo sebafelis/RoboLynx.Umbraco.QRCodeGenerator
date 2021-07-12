@@ -36,7 +36,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             var writer = new StreamWriter(stream, Encoding.UTF8);
             writer.Write(svgString);
             writer.Flush();
-            stream.Position = 0;
+            stream.Seek(0, SeekOrigin.Begin);
 
             return stream;
         }

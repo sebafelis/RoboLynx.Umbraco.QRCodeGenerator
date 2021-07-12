@@ -29,7 +29,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         public abstract string Id { get; }
 
-        public virtual string Name => LocalizedTextService.Localize($"qrCodeFormats/{GetType().Name.ToFirstLower()}Name");
+        public virtual string Name => LocalizedTextService.Localize($"qrCodeFormats/{GetType().Name.Replace("Factory", "").ToFirstLower()}Name");
 
         public abstract IEnumerable<string> RequiredSettings { get; }
 
