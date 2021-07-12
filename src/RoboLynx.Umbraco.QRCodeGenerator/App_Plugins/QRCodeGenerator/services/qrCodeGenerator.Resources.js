@@ -91,6 +91,7 @@ angular.module("umbraco")
                 }
                 return $http.get(qrCodeApiUrl + 'Image', {
                     responseType: "blob",
+                    cache: true,
                     params: {
                         nodeId: nodeId, propertyAlias: propertyAlias, culture: culture, size: settings.size, format: settings.format,
                         darkColor: settings.darkColor, lightColor: settings.lightColor, icon: settings.icon,
@@ -115,13 +116,22 @@ angular.module("umbraco")
                             return deferred.promise;
                         },
                         function (error) {
+                            $log.error(error);
                             var deferred = $q.defer();
-                            _readAsJson(error.data).then(function (errorObj) {
-                                deferred.reject(errorObj.message);
-                            }, function (readerError) {
-                                deferred.reject(readerError);
-                            });
+
+                            if (error.data) {
+                                _readAsJson(error.data).then(function (errorObj) {
+                                    deferred.reject(errorObj.message);
+                                }, function (readerError) {
+                                    deferred.reject(readerError);
+                                });
+                            }
+                            else {
+                                deferred.reject("Unknown error");
+                            }
+                            
                             return deferred.promise;
+
                         }
                     );
             },
@@ -130,6 +140,7 @@ angular.module("umbraco")
                     function (response) {
                         return response.data;
                     }, function (error) {
+                        $log.error(error);
                         return $q.reject(error.data.message);
                     });
             },
