@@ -13,7 +13,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
     public class QRCodeCacheFileSystem : FileSystemWrapper, IQRCodeCacheFileSystem
     {
-        const string _defaultPath = "/";
+        const string _defaultPath = "";
 
         private readonly ILogger _logger;
         private readonly IDateTimeOffsetProvider _dateTimeProvider;
@@ -73,7 +73,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         protected string GetCachePath(string hash, string extension)
         {
-            return $"{_defaultPath.EndsWith("/")}{hash}.{extension}";
+            var path = $"{_defaultPath}{hash}";
+            if (!string.IsNullOrEmpty(extension))
+            {
+                path += $".{extension}";
+            }
+            return path;
         }
 
         public FileCacheData AddCacheFile(string hashId, string extension, Stream stream)
@@ -97,7 +102,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             AddFile(filePath, stream, true);
             var expiryDate = GetExpiryDate(filePath);
 
-            _logger.Info<QRCodeCacheFileSystem>("New cache file was add. Hash: {hash}", hashId);
+            _logger.Info<QRCodeCacheFileSystem>("New cache file was add. Hash: {hashId}", hashId);
 
             return new FileCacheData()
             {
@@ -113,9 +118,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             {
                 throw new ArgumentException($"'{nameof(file)}' cannot be null or empty.", nameof(file));
             }
-
-            var lastModified = GetLastModified(file);
-            return lastModified.Add(ExpirationTimeSpan);
+            if (ExpirationTimeSpan.Ticks < 0)
+            {
+                var lastModified = GetLastModified(file);
+                return lastModified.Add(ExpirationTimeSpan);
+            }
+            return _dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(365));
         }
 
         public IEnumerable<FileCacheData> GetAllCacheFiles(string path = null)
@@ -132,7 +140,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
                 yield return new FileCacheData
                 {
                     HashId = Path.GetFileNameWithoutExtension(file),
-                    Path = path,
+                    Path = file,
                     ExpiryDate = expiryDate
                 };
             }
