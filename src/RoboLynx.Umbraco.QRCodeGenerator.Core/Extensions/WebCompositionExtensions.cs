@@ -16,8 +16,5 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
         public static QRCodeFormatFactoryCollectionBuilder QRCodeFormats(this Composition composition)
             => composition.WithCollectionBuilder<QRCodeFormatFactoryCollectionBuilder>();
-
-        public static QRCodeCachCollectionBuilder QRCodeCaches(this Composition composition)
-            => composition.WithCollectionBuilder<QRCodeCachCollectionBuilder>();
     }
 }
