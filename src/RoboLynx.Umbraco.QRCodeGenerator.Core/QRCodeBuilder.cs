@@ -182,14 +182,18 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
             if (CacheManager.IsCached(hashId, cacheName))
             {
-                return CacheManager.GetStream(hashId, cacheName);
+                var stream = CacheManager.GetStream(hashId, cacheName);
+
+                return stream;
             }
             else
             {
                 var qrCodeStream = config.Format.Stream();
+                qrCodeStream.Seek(0, SeekOrigin.Begin);
 
                 CacheManager.Add(hashId, extension, qrCodeStream, cacheName);
 
+                qrCodeStream.Seek(0, SeekOrigin.Begin);
                 return qrCodeStream;
             }
         }

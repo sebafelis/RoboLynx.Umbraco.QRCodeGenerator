@@ -8,7 +8,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
     public static class Constants
     {
-        public static string DefaultLocalCacheLocation => $"~/TEMP/QRCodeGenerator/{BackofficeCacheName}/";
+        public static string DefaultLocalCacheLocation => $"~/App_Data/TEMP/QRCodeGeneratorCache/{BackofficeCacheName}";
         public const string BackofficeCacheName = "Backoffice";
 
         public static class Configuration

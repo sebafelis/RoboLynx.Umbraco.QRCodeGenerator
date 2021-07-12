@@ -32,10 +32,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
             using var qrCodeBmp = GenerateBitmapQRCode(CodeType.GetCodeContent(), Settings.Size, darkColor, lightColor, Settings.DrawQuiteZone.Value, ResolveIconUrl(Settings.Icon), Settings.IconSizePercent, Settings.IconBorderWidth.Value, Settings.ECCLevel.Value);
 
-            MemoryStream ms = new();
-            qrCodeBmp.Save(ms, imageFormat);
+            MemoryStream memoryStream = new();
+            qrCodeBmp.Save(memoryStream, imageFormat);
+            memoryStream.Seek(0, SeekOrigin.Begin);
 
-            return ms;
+            return memoryStream;
         }
 
         private Bitmap GenerateBitmapQRCode(string codeContent, int size, Color darkColor, Color lightColor, bool drawQuiteZone, string iconUrl, int iconSizePercent, int iconBorderWidth, ECCLevel level)

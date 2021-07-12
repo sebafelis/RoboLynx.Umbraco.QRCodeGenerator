@@ -25,13 +25,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             IRuntimeState runtime, IProfilingLogger logger, IDateTimeOffsetProvider dateTimeProvider)
         {
             _isolatedCache = appCaches.IsolatedCaches.GetOrCreate<T>();
-            _cleanCacheRunner = new BackgroundTaskRunner<IBackgroundTask>("CleanQRCodeCache", logger);
+            _cleanCacheRunner = new BackgroundTaskRunner<IBackgroundTask>("CleanQRCodeCache-" + name, logger);
             Name = name;
-            this._logger = logger;
-            this._dateTimeProvider = dateTimeProvider;
-            this._runtime = runtime;
-            this._fileSystem = fileSystem;
-            this._urlProvider = urlProvider;
+            _logger = logger;
+            _dateTimeProvider = dateTimeProvider;
+            _runtime = runtime;
+            _fileSystem = fileSystem;
+            _urlProvider = urlProvider;
+
+            Initialize();
         }
 
         public int DelayBeforeWeStart { get; set; } = 60000; // 60000ms = 1min
@@ -40,28 +42,30 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         public TimeSpan Timeout { get; }
 
         /// <inheritdoc/>
-        public void Initialize()
-        {
-            UpdateRuntimeCache();
-            InitializeTaskRunner();
-        }
-
-        /// <inheritdoc/>
         public void Add(string hashId, string extension, Stream stream)
         {
-            if (!IsCached(hashId))
+            if (string.IsNullOrEmpty(extension))
             {
-                //TODO Change format source to property value from QRCodeFormat class getting by Id.
-                var cachedFile = _fileSystem.AddCacheFile(hashId, extension, stream);
-
-                _isolatedCache.InsertCacheItem(hashId, () => new FileCacheData
-                {
-                    HashId = hashId,
-                    Path = cachedFile.Path,
-                    ExpiryDate = cachedFile.ExpiryDate
-                },  
-                cachedFile.ExpiryDate.UtcDateTime - _dateTimeProvider.UtcNow);
+                throw new ArgumentException($"'{nameof(extension)}' cannot be null or empty.", nameof(extension));
             }
+
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            stream.Seek(0, SeekOrigin.Begin);
+
+            var cachedFile = _fileSystem.AddCacheFile(hashId, extension, stream);
+
+            var timeout = cachedFile.ExpiryDate.UtcDateTime - _dateTimeProvider.UtcNow;
+            _isolatedCache.InsertCacheItem(hashId, () => new FileCacheData
+            {
+                HashId = hashId,
+                Path = cachedFile.Path,
+                ExpiryDate = cachedFile.ExpiryDate
+            },
+            timeout);
         }
 
         /// <inheritdoc/>
@@ -90,7 +94,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
             if (_fileSystem.FileExists(cacheItem.Path))
             {
-                return _fileSystem.OpenFile(cacheItem.Path); 
+                return _fileSystem.OpenFile(cacheItem.Path);
             }
 
             return null;
@@ -109,7 +113,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         {
             var cacheItem = GetCacheItem(hashId);
 
-            return cacheItem != null && cacheItem.ExpiryDate > _dateTimeProvider.UtcNow;
+            return cacheItem != null && cacheItem.ExpiryDate.UtcDateTime > _dateTimeProvider.UtcNow;
         }
 
         /// <inheritdoc/>
@@ -142,7 +146,21 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         private FileCacheData GetCacheItem(string hashId)
         {
+            if (string.IsNullOrWhiteSpace(hashId))
+            {
+                throw new ArgumentException($"'{nameof(hashId)}' cannot be null or whitespace.", nameof(hashId));
+            }
+
             return _isolatedCache.GetCacheItem<FileCacheData>(hashId);
+        }
+
+        /// <summary>
+        /// Initialize cache.
+        /// </summary>
+        protected void Initialize()
+        {
+            UpdateRuntimeCache();
+            InitializeTaskRunner();
         }
 
         /// <summary>

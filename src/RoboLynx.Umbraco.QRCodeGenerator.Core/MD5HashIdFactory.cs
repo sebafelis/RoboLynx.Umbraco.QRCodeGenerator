@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
-    public class QRCodeHashIdFactory : IQRCodeHashIdFactory
+    public class MD5HashIdFactory : IQRCodeHashIdFactory
     {
+        [Serializable]
         protected struct QRCodeConfigContainer
         {
             public string CodeContent { get; }
             public QRCodeSettings Settings { get; }
-
+            
             public QRCodeConfigContainer(string codeContent, QRCodeSettings settings) : this()
             {
                 CodeContent = codeContent;
@@ -30,6 +31,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             BinaryFormatter binaryFormatter = new();
             using MemoryStream memoryStream = new();
             binaryFormatter.Serialize(memoryStream, configContainer);
+            memoryStream.Seek(0, SeekOrigin.Begin);
 
             var hashAlgoritm = System.Security.Cryptography.HashAlgorithm.Create(System.Security.Cryptography.HashAlgorithmName.MD5.Name);
             var hashData = hashAlgoritm.ComputeHash(memoryStream);
