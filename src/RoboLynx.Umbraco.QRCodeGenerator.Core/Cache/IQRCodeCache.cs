@@ -13,11 +13,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         public string Name { get; }
 
         /// <summary>
-        /// Initialize cache. Called by QRCodeCacheManager. 
-        /// </summary>
-        void Initialize();
-
-        /// <summary>
         /// Check is the code cached.
         /// </summary>
         /// <param name="codeId">Unique code ID base on hash code.</param>
