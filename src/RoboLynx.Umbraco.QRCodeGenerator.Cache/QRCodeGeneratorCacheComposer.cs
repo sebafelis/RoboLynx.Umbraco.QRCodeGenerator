@@ -22,7 +22,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
             if (!config.Disable)
             {
-                composition.Register(f=> new QRCodeCache<IBackofficeQRCodeCache>(CacheName,
+                composition.Register<IQRCodeCache>(f=> new QRCodeCache<IBackofficeQRCodeCache>(CacheName,
                     f.GetInstance<AppCaches>(), new QRCodeCacheFileSystem(new PhysicalFileSystem(config.CacheLocation), 
                     TimeSpan.FromDays(config.MaxDays), f.GetInstance<ILogger>(), f.GetInstance<IDateTimeOffsetProvider>()), 
                     null, f.GetInstance<IRuntimeState>(), 
