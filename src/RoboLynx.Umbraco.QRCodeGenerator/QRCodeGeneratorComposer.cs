@@ -17,8 +17,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
     {
         public void Compose(Composition composition)
         {
-            composition.Register<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
-
             composition.Register<QRCodeController>(Lifetime.Request);
             composition.Register<QRCodeFormatPickerController>(Lifetime.Request);
             composition.Register<QRCodeLevelPickerController>(Lifetime.Request);

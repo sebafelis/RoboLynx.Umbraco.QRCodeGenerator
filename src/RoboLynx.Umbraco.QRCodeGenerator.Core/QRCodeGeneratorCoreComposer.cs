@@ -1,4 +1,5 @@
-﻿using Chronos.Abstractions;
+﻿using Chronos;
+using Chronos.Abstractions;
 using DotNetColorParser;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
@@ -14,6 +15,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
     {
         public void Compose(Composition composition)
         {
+            composition.Register<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
+
             composition.QRCodeTypes().Add(() => composition.TypeLoader.GetTypes<IQRCodeTypeFactory>());
 
             composition.QRCodeSources().Add(() => composition.TypeLoader.GetTypes<IQRCodeSourceFactory>());

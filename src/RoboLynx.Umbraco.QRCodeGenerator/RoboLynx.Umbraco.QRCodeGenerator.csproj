@@ -60,7 +60,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Chronos.Net" Version="2.0.24" />
 		<PackageReference Include="UmbracoCms.Web" Version="[8.1,9)" />
 		<PackageReference Include="Our.Umbraco.ColorPickr" Version="1.0.1" />
 	</ItemGroup>
