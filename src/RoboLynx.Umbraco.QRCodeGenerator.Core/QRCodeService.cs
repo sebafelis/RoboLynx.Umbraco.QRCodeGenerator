@@ -13,9 +13,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
     {
         protected IQRCodeBuilder CodeBuilder { get; }
 
-        internal QRCodeService(IQRCodeBuilder codeBuilder)
+        public QRCodeService(IQRCodeBuilder codeBuilder)
         {
-            CodeBuilder = codeBuilder;
+            CodeBuilder = codeBuilder ?? throw new System.ArgumentNullException(nameof(codeBuilder));
         }
 
         public Stream GetStream(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings settings, string cacheName = null)
