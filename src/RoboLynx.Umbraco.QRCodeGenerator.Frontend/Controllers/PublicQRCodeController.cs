@@ -14,11 +14,12 @@ using Umbraco.Web.WebApi;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
 {
-    public class QRCodePublicController : UmbracoApiController
+    [PluginController(RoboLynx.Umbraco.QRCodeGenerator.Constants.PluginAlias)]
+    public class PublicQRCodeController : UmbracoApiController
     {
         private readonly IQRCodeBuilder _qrCodeBuilder;
 
-        public QRCodePublicController(IQRCodeBuilder qrCodeBuilder)
+        public PublicQRCodeController(IQRCodeBuilder qrCodeBuilder)
         {
             _qrCodeBuilder = qrCodeBuilder;
         }

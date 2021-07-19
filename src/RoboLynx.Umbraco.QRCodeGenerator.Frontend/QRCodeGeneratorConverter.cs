@@ -1,31 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http.Routing;
+using Umbraco.Core;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
+using Umbraco.Core.Composing;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 {
-    public class QRCodeGeneratorValueConverter : PropertyValueConverterBase
+    public class QRCodeGeneratorConverter : PropertyValueConverterBase
     {
-        private readonly UrlHelper _urlHelper;
-        private readonly IQRCodeBuilder _qrCodeBuilder;
+        private readonly IFactory _factory;
 
-        public QRCodeGeneratorValueConverter(HttpRequestMessage httpRequestMessage, IQRCodeBuilder qrCodeBuilder)
+        public QRCodeGeneratorConverter(IFactory factory)
         {
-            _urlHelper = new UrlHelper(httpRequestMessage);
-            _qrCodeBuilder = qrCodeBuilder ?? throw new ArgumentNullException(nameof(qrCodeBuilder));
+            _factory = factory;
         }
 
         public override object ConvertSourceToIntermediate(IPublishedElement owner, IPublishedPropertyType propertyType, object source, bool preview)
         {
             if (owner is IPublishedContent content)
             {
-                return new QRCodeProperty(_urlHelper, content, propertyType.Alias, _qrCodeBuilder);
+                var qrCodeService = _factory.GetInstance<IQRCodeService>();
+
+                return new QRCode(qrCodeService, content, propertyType.Alias, Constants.FrontendCacheName);
             }
             return null;
         }
@@ -37,7 +33,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 
         public override Type GetPropertyValueType(IPublishedPropertyType propertyType)
         {
-            return typeof(QRCodeProperty);
+            return typeof(QRCode);
         }
 
         public override bool IsConverter(IPublishedPropertyType propertyType)
