@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web.Mvc;
@@ -18,10 +19,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
     public class PublicQRCodeController : UmbracoApiController
     {
         private readonly IQRCodeBuilder _qrCodeBuilder;
+        private readonly ILogger _logger;
 
-        public PublicQRCodeController(IQRCodeBuilder qrCodeBuilder)
+        public PublicQRCodeController(IQRCodeBuilder qrCodeBuilder, ILogger logger)
         {
             _qrCodeBuilder = qrCodeBuilder;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -41,7 +44,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
 
         [HttpGet]
         //[CompressContent]
-        public IHttpActionResult Get(Udi nodeUdi, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
+        public IHttpActionResult Get(Guid nodeKey, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
+        {
+            var objectType = Services.EntityService.GetObjectType(nodeKey);
+            var nodeUdi = Udi.Create(objectType.GetUdiType(), nodeKey);
+
+            return Get(nodeUdi, propertyAlias, settings, culture);
+        }
+
+        //[HttpGet]
+        //[CompressContent]
+        private IHttpActionResult Get(Udi nodeUdi, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
         {
             var publishedContent = Umbraco.PublishedContent(nodeUdi);
 
@@ -55,12 +68,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
 
                     return ResponseMessage(response);
                 }
-                catch (QRCodeGeneratorException qrex)
+                catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException || ex is QRCodeGeneratorException)
                 {
-                    return BadRequest(qrex.Message);
-                }
-                catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
-                {
+                    _logger.Error<PublicQRCodeController>("Occur an exception during QR code generation.", ex);
                     return BadRequest();
                 }
             }
