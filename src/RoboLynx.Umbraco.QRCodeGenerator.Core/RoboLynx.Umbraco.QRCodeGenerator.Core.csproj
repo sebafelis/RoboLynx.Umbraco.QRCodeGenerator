@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net472</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Description>QR code generator for Umbraco 7 and Umbraco 8. It generate QR codes for specify data source (e.g. published document property value, URL, any custom source).</Description>
+		<Description>Core library of QR Code property editor for Umbraco 7 and Umbraco 8.</Description>
 		<Copyright>Sebastian Felis @ 2021</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
