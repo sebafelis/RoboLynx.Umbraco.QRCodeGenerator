@@ -6,11 +6,23 @@ using Umbraco.Core.Services;
 using Umbraco.Web;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Net.Http;
+using System;
+using Umbraco.Core;
+using Composing = Umbraco.Core.Composing;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
     public class QRCodeService : IQRCodeService
     {
+        #region Static 
+
+        /// <summary>
+        /// Gets the current instance of QR Code Service
+        /// </summary>
+        public static IQRCodeService Current => Composing.Current.Factory?.GetInstance<IQRCodeService>();
+
+        #endregion
+
         protected IQRCodeBuilder CodeBuilder { get; }
 
         public QRCodeService(IQRCodeBuilder codeBuilder)
