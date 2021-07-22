@@ -1,4 +1,5 @@
-﻿using Chronos.Abstractions;
+﻿using Chronos;
+using Chronos.Abstractions;
 using DotNetColorParser;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
@@ -14,10 +15,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
     {
         public void Compose(Composition composition)
         {
-            composition.RegisterAuto<IQRCodeTypeFactory>();
-            composition.RegisterAuto<IQRCodeFormatFactory>();
-            composition.RegisterAuto<IQRCodeSourceFactory>();
+            composition.Register<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
 
+            composition.QRCodeTypes().Add(() => composition.TypeLoader.GetTypes<IQRCodeTypeFactory>());
+
+            composition.QRCodeSources().Add(() => composition.TypeLoader.GetTypes<IQRCodeSourceFactory>());
+
+            composition.QRCodeFormats().Add(() => composition.TypeLoader.GetTypes<IQRCodeFormatFactory>());
+
+            composition.RegisterUnique<IQRCodeHashIdFactory, MD5HashIdFactory>();
             composition.Register<IQRCodeCacheManager, QRCodeCacheManager>(Lifetime.Singleton);
             composition.Register<IColorNotationProvider>(f => new ColorNotationProvider(true), Lifetime.Singleton);
             composition.Register<IColorParser, ColorParser>(Lifetime.Singleton);

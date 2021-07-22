@@ -16,9 +16,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 
         public abstract string Id { get; }
 
-        public virtual string Name => _localizedTextService.Localize($"qrCodeSources/{GetType().Name.ToFirstLower()}Name") ?? GetType().Name;
+        public virtual string Name => _localizedTextService.Localize($"qrCodeSources/{GetType().Name.Replace("Factory", "").ToFirstLower()}Name") ?? GetType().Name;
 
-        public virtual string Description => _localizedTextService.Localize($"qrCodeSources/{GetType().Name.ToFirstLower()}Description") ?? string.Empty;
+        public virtual string Description => _localizedTextService.Localize($"qrCodeSources/{GetType().Name.Replace("Factory", "").ToFirstLower()}Description") ?? string.Empty;
 
         public abstract IQRCodeSource Create(IPublishedContent publishedContent, string sourceSettings, string culture);
     }

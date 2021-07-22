@@ -1,4 +1,5 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
+using System;
 using System.IO;
 using Umbraco.Core.Models.PublishedContent;
 
@@ -7,9 +8,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
     public interface IQRCodeCache
     {
         /// <summary>
-        /// Initialize cache. Called by QRCodeCacheManager. 
+        /// Name of the cache
         /// </summary>
-        void Initialize();
+        public string Name { get; }
 
         /// <summary>
         /// Check is the code cached.
@@ -17,6 +18,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <param name="codeId">Unique code ID base on hash code.</param>
         /// <returns><c>true</c> if is cached.</returns>
         bool IsCached(string hashId);
+
+        /// <summary>
+        /// Get cache item expiring date/time
+        /// </summary>
+        /// <param name="hashId">Unique code ID base on hash code.</param>
+        /// <returns></returns>
+        DateTimeOffset? Expired(string hashId);
 
         /// <summary>
         /// Get stream containing QR code file.

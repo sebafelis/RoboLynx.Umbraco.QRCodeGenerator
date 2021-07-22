@@ -1,4 +1,5 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Cache;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using Umbraco.Core.Composing;

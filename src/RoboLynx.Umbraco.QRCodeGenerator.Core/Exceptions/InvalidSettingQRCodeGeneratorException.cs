@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Exceptions
 {
     [System.Serializable]
+    [ExcludeFromCodeCoverage]
     public class InvalidSettingQRCodeGeneratorException : QRCodeGeneratorException
     {
         public InvalidSettingQRCodeGeneratorException(string settingName) : base($"Attribute: {settingName}") { }

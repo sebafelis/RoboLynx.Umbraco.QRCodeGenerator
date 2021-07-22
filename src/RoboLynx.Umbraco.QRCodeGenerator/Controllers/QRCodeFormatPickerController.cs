@@ -18,7 +18,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
     [AngularJsonOnlyConfiguration]
     public class QRCodeFormatPickerController : UmbracoAuthorizedJsonController
     {
-        private readonly QRCodeFormatFactoryCollection formats;
+        private readonly QRCodeFormatFactoryCollection _formats;
 
         public QRCodeFormatPickerController(QRCodeFormatFactoryCollection formats, IGlobalSettings globalSettings, IUmbracoContextAccessor umbracoContextAccessor,
                                 ISqlContext sqlContext, ServiceContext services, AppCaches appCaches,
@@ -31,13 +31,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
                                                                                                                          runtimeState,
                                                                                                                          umbracoHelper)
         {
-            this.formats = formats;
+            _formats = formats;
         }
 
         [HttpGet]
         public IHttpActionResult Get()
         {
-            var result = formats.Select(ct => new { id = ct.Id, name = ct.Name });
+            var result = _formats.Select(ct => new { id = ct.Id, name = ct.Name });
 
             return Ok(result);
         }

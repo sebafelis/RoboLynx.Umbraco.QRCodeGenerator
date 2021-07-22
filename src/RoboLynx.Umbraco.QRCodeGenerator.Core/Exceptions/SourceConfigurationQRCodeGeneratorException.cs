@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Exceptions
 {
     [System.Serializable]
+    [ExcludeFromCodeCoverage]
     public class SourceConfigurationQRCodeGeneratorException : QRCodeGeneratorException
     {
         public SourceConfigurationQRCodeGeneratorException(Type sourceType, string message) : base($"Source provider: {sourceType.Name}; {message}") { }

@@ -1,0 +1,42 @@
+
+# Change Log
+All notable changes to this project will be documented in this file.
+ 
+
+## [Unreleased]
+  
+I you doesn't extended this package you don't have to change anything to update to this version. All configuration and stored data are unchanged.
+
+If you extend property editor with custom QR code Format, Source or Type you need to change your code because extensions architecture was cache. 
+
+### Added
+
+- Service
+- Hash ID Factory to generate unique names
+- `IQRCodeFormatFactory` interface and `QRCodeFormatFactory` base class
+- `IQRCodeSourceFactory` interface and `QRCodeSourceFactory` base class
+- `IQRCodeTypeFactory` interface and `QRCodeTypeFactory` base class
+- Controller to access QR code from frontend page
+- Property converter for **QR Code** property editor
+- Extension methods for `UrlHelper`
+- Extension methods for `IQRCodeService`
+- Cache for QR Code Generator
+- Separate cache for umbraco backoffice
+- Separate cache for frontend pages
+
+
+### Changed
+  
+- `IQRCodeFormat` interface end depend classes
+- `IQRCodeSource` interface end depend classes
+- `IQRCodeType` interface end depend classes
+- `IQRCodeBuilder` interface end depend classes
+ 
+## [8.0.0] - 2021-04-29
+ 
+### Added
+
+- Property editor for Umbraco Backoffice
+- Support output formats: BMP, JPEG, PNG, SVG
+- Support code content types: SMS, Phone Number, Text, URL, Geolocation (GEO), Geolocation (Google Maps)
+- Support code content source: Absolute URL, Simple Property

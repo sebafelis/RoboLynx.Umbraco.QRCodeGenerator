@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Exceptions
 {
 
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public class QRCodeGeneratorException : Exception
     {
         public QRCodeGeneratorException() { }

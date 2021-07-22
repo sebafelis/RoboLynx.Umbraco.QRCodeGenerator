@@ -22,12 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGene
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local", "RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local\RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local.csproj", "{D818CC87-DBFD-4EBD-92C5-9CBD535B49A8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGenerator.Cache.Local", "RoboLynx.Umbraco.QRCodeGenerator.Cache.Local\RoboLynx.Umbraco.QRCodeGenerator.Cache.Local.csproj", "{ACDC41CD-8B8A-413F-B290-CDA6B31D5B0D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{A7CD6993-17BE-4578-B598-0EDC8AEE296D}"
-	ProjectSection(SolutionItems) = preProject
-		..\doc\Create a custom format.md = ..\doc\Create a custom format.md
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboLynx.Umbraco.QRCodeGenerator.Cache.Local", "RoboLynx.Umbraco.QRCodeGenerator.Cache.Local\RoboLynx.Umbraco.QRCodeGenerator.Cache.Local.csproj", "{ACDC41CD-8B8A-413F-B290-CDA6B31D5B0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

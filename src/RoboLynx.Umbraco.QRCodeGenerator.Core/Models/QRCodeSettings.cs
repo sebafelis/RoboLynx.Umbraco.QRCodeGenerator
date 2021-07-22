@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Models
 {
+    [Serializable]
     public class QRCodeSettings : ICloneable
     {
         [Range(1, int.MaxValue)]
