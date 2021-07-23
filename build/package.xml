@@ -17,7 +17,7 @@
 			<name>Sebastian Felis</name>
 			<website>https://github.com/sebafelis/</website>
 		</author>
-		<readme><![CDATA[QR code generator for Umbraco 7 and Umbraco 8. It generate QR codes for specify data source (e.g. published document property value, URL, any custom source). Generated codes are accessible from Backoffice and Frontend page.]]></readme>
+		<readme><![CDATA[QR code generator for Umbraco 8. It generate QR codes for specify data source (e.g. published document property value, URL, any custom source). Generated codes are accessible from Backoffice and Frontend page.]]></readme>
 	</info>
 	<files>
 		<folder path="RoboLynx.Umbraco.QRCodeGenerator/App_Plugins/QRCodeGenerator/contentApps" orgPath="App_Plugins/QRCodeGenerator/contentApps" />

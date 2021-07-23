@@ -20,13 +20,17 @@ pool:
 variables:
   solution: '**/*.sln'
   testProject: '**/*Tests/*.csproj'
-  gitVersionPath: 'src\GitVersion.yml'
+  gitVersionPath: 'build/GitVersion.yml'
+  umbracoPackageDefinitionPath: '$(System.DefaultWorkingDirectory)/build/package.xml'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   publishOnGithubRelease: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
   publishUmbracoPackage: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
   publishOnNugetOrg: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
   addTagToRepository: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
+  updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
+  gitEmail: 'devops@robolynx.pl'
+  gitUserName: 'DevOps Pipeline' 
 
 steps:
 - checkout: self
@@ -49,6 +53,43 @@ steps:
   inputs:
     useConfigFile: true
     configFilePath: '$(gitVersionPath)'
+- script: |
+    git config --global user.email $gitEmail
+    git config --global user.name "$gitUserName"
+  displayName: 'Set GIT Author identity'
+- powershell: | 
+    $regex_current_version = $current_version -replace '\.','\.'
+    $changelog = Get-Content -Path .\CHANGELOG.md -Raw
+    if ($changelog -match "##\s?\[Unreleased\]") 
+    {
+        $current_date = Get-Date -UFormat "%Y-%m-%d"
+        $changelog -replace "##\s?\[Unreleased\].*","## [$current_version] - $current_date" | Set-Content -Path .\CHANGELOG.md
+
+        Write-Host "Unreleased section in CHANGELOG.md was updated into current version [$current_version] - $current_date."
+        Write-Host "##vso[task.setvariable variable=changelogUpdated]true"
+    }
+    elseif ($changelog -match "##\s?\[$regex_current_version\]")
+    {
+        Write-Host "##vso[task.LogIssue type=warning;]CHANGELOG.md already contains section with current version."
+        Write-Host "##vso[task.setvariable variable=changelogUpdated]false"
+    }
+    else
+    {
+        Write-Host "##vso[task.LogIssue type=error;]CHANGELOG.md do not contains Unreleased section with new changes."
+        Write-Host "##vso[task.setvariable variable=changelogUpdated]false"
+        exit 1
+    }
+  displayName: 'Update Unrelease section in CHANGELOG to current version'
+  condition: and(succeeded(), eq(variables['updateChangelogVersion'], true))
+  env:
+    current_version: $(GitVersion.NuGetVersion)
+- script: |
+    git add CHANGELOG.md 
+    git commit -m "CHNAGELOG.md update"
+    git push origin $(Build.SourceBranchName)
+  condition: and(succeeded(), and(eq(variables['updateChangelogVersion'], true), eq(variables['changelogUpdated'], true)))
+  workingDirectory: $(Build.SourcesDirectory)
+  displayName: 'Commit changes in CHANGELOG.md'
 - task: DotNetCoreCLI@2
   displayName: 'Build project ($(buildConfiguration) configuration)'
   inputs:
@@ -84,7 +125,7 @@ steps:
   inputs:
     command: custom
     custom: 'tool'
-    arguments: 'run UmbPack pack $(System.DefaultWorkingDirectory)\src\package.xml -v $(GitVersion.NuGetVersion) -o $(Build.ArtifactStagingDirectory) -p BuildConfiguration=$(buildConfiguration)'
+    arguments: 'run UmbPack pack $(umbracoPackageDefinitionPath) -v $(GitVersion.NuGetVersion) -o $(Build.ArtifactStagingDirectory) -p BuildConfiguration=$(buildConfiguration)'
     workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
@@ -121,6 +162,27 @@ steps:
     custom: 'tool'
     arguments: 'run UmbPack push $(Build.ArtifactStagingDirectory)\RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion).zip -k $(OurUmbracoApiKey) -a RoboLynx.Umbraco.QRCodeGenerator_8*  -w v8130,v8120,v8110,v8100,v890,v880,v870,v860,v850,v840,v830,v820,v810' 
     workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
+- powershell: | 
+    $regex_current_version = $current_version -replace '\.','\.'
+    $regex_pattern = "(?s)(?:\n##\s\[$regex_current_version\].*?\r\n(?:\s*\r\n)*)(?<content>.*?)(?:\r\n##\s\[\d+\.\d+\.\d+].*?\r\n|\s*\Z)"
+
+    $changelog = Get-Content -Path .\CHANGELOG.md -Raw
+    if ($changelog -match "##\s?\[$regex_current_version\]") 
+    {
+        $changes = $changelog | Select-String -Pattern $regex_pattern
+        $releaseNotes = $changes.Matches[0].Groups['content'] -replace "\r\n","%0D%0A"
+        Write-Host "##vso[task.setvariable variable=releaseNotes]$releaseNotes"
+        Write-Host "Extracted release note:"
+        Write-Host "$releaseNotes"
+    }
+    else 
+    {
+        Write-Host "##vso[task.LogIssue type=error;]CHANGELOG.md don't contains section for current version."
+    }
+  displayName: 'Extract release note from CHANGELOG.md'
+  condition: and(succeeded(), eq(variables['publishOnGithubRelease'], true))
+  env:
+    current_version: $(GitVersion.NuGetVersion)
 - task: GitHubRelease@1
   displayName: 'Publish on Github Release'
   condition: and(succeeded(), eq(variables['publishOnGithubRelease'], true))
@@ -135,5 +197,7 @@ steps:
     isPreRelease: false
     assetUploadMode: delete
     assets: '$(Build.ArtifactStagingDirectory)/*'
-    addChangeLog: false    
+    addChangeLog: false   
+    releaseNotesSource: inline
+    releaseNotesInline: $(releaseNotes)
     
