@@ -32,9 +32,9 @@
 		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.dll" />
 		<file path="RoboLynx.Umbraco.QRCodeGenerator.Core/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Core.dll" />
 		<file path="RoboLynx.Umbraco.QRCodeGenerator.Cache/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.Cache.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Cache.dll" />
-		<file path="RoboLynx.Umbraco.QRCodeGenerator.Cache.Local/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local" />
+		<file path="RoboLynx.Umbraco.QRCodeGenerator.Cache.Local/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local.dll" />
 		<file path="RoboLynx.Umbraco.QRCodeGenerator.Frontend/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.Frontend.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Frontend.dll" />
-		<file path="RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local" />
+		<file path="RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local/bin/$BuildConfiguration$/net472/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local.dll" orgPath="/bin/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local.dll" />
 		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/DotNetColorParser.Abstractions.dll" orgPath="/bin/DotNetColorParser.Abstractions.dll" />
 		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/DotNetColorParser.dll" orgPath="/bin/DotNetColorParser.dll" />
 		<file path="RoboLynx.Umbraco.QRCodeGenerator/bin/$BuildConfiguration$/net472/QRCoder.dll" orgPath="/bin/QRCoder.dll" />
