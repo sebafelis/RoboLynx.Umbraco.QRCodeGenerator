@@ -4,10 +4,12 @@ All notable changes to this project will be documented in this file.
  
 
 ## [Unreleased]
+
+### Updating
   
 I you doesn't extended this package you don't have to change anything to update to this version. All configuration and stored data are unchanged.
 
-If you extend property editor with custom QR code Format, Source or Type you need to change your code because extensions architecture was cache. 
+If you extend property editor with custom QR code Format, Source or Type you need to change your code because extensions architecture was change. 
 
 ### Added
 
