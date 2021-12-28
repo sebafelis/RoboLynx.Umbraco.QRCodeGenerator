@@ -1,24 +1,32 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
+using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
+using Serilog.Core;
 using System.IO;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
+using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
+using Umbraco.Web.PublishedCache;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public abstract class QRCodeFormat : IQRCodeFormat
     {
-        protected UmbracoHelper UmbracoHelper { get; }
+        protected ILogger Logger { get; }
+        protected IUmbracoHelperAccessor UmbracoHelperAccessor { get; }
         protected IQRCodeHashIdFactory HashIdFactory { get; }
         protected IQRCodeType CodeType { get; }
         protected QRCodeSettings Settings { get; }
 
-        public QRCodeFormat(UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IQRCodeType codeType, QRCodeSettings settings)
+        public QRCodeFormat(IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, ILogger logger, IQRCodeType codeType, 
+            QRCodeSettings settings)
         {
-            UmbracoHelper = umbracoHelper;
+            UmbracoHelperAccessor = umbracoHelperAccessor;
             HashIdFactory = hashIdFactory;
             CodeType = codeType;
             Settings = settings;
+            Logger = logger;
         }
 
         public abstract string Mime { get; }
@@ -42,15 +50,25 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             {
                 if (int.TryParse(icon, out int mediaId))
                 {
-                    return UmbracoHelper.Media(mediaId)?.Url();
+                    return GetUmbracoHelper()?.Media(mediaId)?.Url();
                 }
                 if (Udi.TryParse(icon, out Udi mediaUdi))
                 {
-                    return UmbracoHelper.Media(mediaUdi)?.Url();
+                    return GetUmbracoHelper()?.Media(mediaUdi)?.Url();
                 }
                 return icon;
             }
             return null;
         }
-    }
+
+        UmbracoHelper GetUmbracoHelper()
+        {
+            if (UmbracoHelperAccessor.TryGetUmbracoHelper(out var umbracoHelper))
+            {
+                return umbracoHelper;
+            }
+            Logger.Warn<QRCodeFormat>("Umbraco Helper not found.");
+            return null;
+        }
+}
 }

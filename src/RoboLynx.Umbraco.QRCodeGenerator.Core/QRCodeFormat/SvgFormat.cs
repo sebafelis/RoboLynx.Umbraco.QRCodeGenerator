@@ -1,6 +1,7 @@
 ﻿using DotNetColorParser;
 using QRCoder;
 using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
+using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 
@@ -18,7 +20,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
     {
         private readonly IColorParser _colorParser;
 
-        public SvgFormat(UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings settings) : base(umbracoHelper, hashIdFactory, codeType, settings)
+        public SvgFormat(IUmbracoHelperAccessor _umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, ILogger logger,  IQRCodeType codeType, QRCodeSettings settings) : base(_umbracoHelperAccessor, hashIdFactory, logger, codeType, settings)
         {
             _colorParser = colorParser;
         }

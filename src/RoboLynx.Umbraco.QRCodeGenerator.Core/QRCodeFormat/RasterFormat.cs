@@ -1,5 +1,6 @@
 ﻿using DotNetColorParser;
 using QRCoder;
+using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Umbraco.Core.IO;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 
@@ -19,7 +21,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         private readonly IMediaService _mediaService;
         private readonly IColorParser _colorParser;
 
-        public RasterFormat(IMediaService mediaService, UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings Settings) : base(umbracoHelper, hashIdFactory, codeType, Settings)
+        public RasterFormat(IMediaService mediaService, IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, ILogger logger, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings Settings) : base(umbracoHelperAccessor, hashIdFactory, logger, codeType, Settings)
         {
             _mediaService = mediaService;
             _colorParser = colorParser;

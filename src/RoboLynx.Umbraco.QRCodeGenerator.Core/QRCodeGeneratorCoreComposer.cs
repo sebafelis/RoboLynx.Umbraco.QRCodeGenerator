@@ -2,12 +2,12 @@
 using Chronos.Abstractions;
 using DotNetColorParser;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
+using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
-using Umbraco.Web;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
@@ -15,6 +15,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
     {
         public void Compose(Composition composition)
         {
+            composition.RegisterUnique<IUmbracoHelperAccessor, UmbracoHelperAccessor>();
+
             composition.Register<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
 
             composition.QRCodeTypes().Add(() => composition.TypeLoader.GetTypes<IQRCodeTypeFactory>());
