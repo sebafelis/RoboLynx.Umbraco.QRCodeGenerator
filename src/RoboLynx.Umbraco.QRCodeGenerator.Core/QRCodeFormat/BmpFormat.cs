@@ -14,7 +14,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
     {
         readonly ImageFormat _imageFormat = ImageFormat.Bmp;
 
-        public BmpFormat(IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings settings) : base(mediaFileSystem, umbracoHelper, hashIdFactory, colorParser, codeType, settings)
+        public BmpFormat(IMediaService mediaService, UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings settings) : base(mediaService, umbracoHelper, hashIdFactory, colorParser, codeType, settings)
         {
 
         }

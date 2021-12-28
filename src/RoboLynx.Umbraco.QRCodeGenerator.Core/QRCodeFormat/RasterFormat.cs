@@ -16,12 +16,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public abstract class RasterFormat : QRCodeFormat
     {
-        private readonly IMediaFileSystem _mediaFileSystem;
+        private readonly IMediaService _mediaService;
         private readonly IColorParser _colorParser;
 
-        public RasterFormat(IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings Settings) : base(umbracoHelper, hashIdFactory, codeType, Settings)
+        public RasterFormat(IMediaService mediaService, UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings Settings) : base(umbracoHelper, hashIdFactory, codeType, Settings)
         {
-            _mediaFileSystem = mediaFileSystem;
+            _mediaService = mediaService;
             _colorParser = colorParser;
         }
 
@@ -47,7 +47,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             QRCode bmpQrCode = new(qrCodeData);
             if (!string.IsNullOrEmpty(iconUrl))
             {
-                using var iconStream = _mediaFileSystem.OpenFile(iconUrl);
+                using var iconStream = _mediaService.GetMediaFileContentStream(iconUrl);
                 using var iconBmp = new Bitmap(iconStream);
                 if (!(iconBmp is null))
                 {

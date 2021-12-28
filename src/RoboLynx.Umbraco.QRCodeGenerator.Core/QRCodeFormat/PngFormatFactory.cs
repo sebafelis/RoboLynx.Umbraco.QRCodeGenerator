@@ -13,14 +13,14 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public class PngFormatFactory : QRCodeFormatFactory
     {
-        private readonly IMediaFileSystem _mediaFileSystem;
+        private readonly IMediaService _mediaService;
         private readonly UmbracoHelper _umbracoHelper;
         private readonly IQRCodeHashIdFactory _hashIdFactory;
         private readonly IColorParser _colorParser;
 
-        public PngFormatFactory(ILocalizedTextService localizedTextService, IMediaFileSystem mediaFileSystem, UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser) : base(localizedTextService)
+        public PngFormatFactory(ILocalizedTextService localizedTextService, IMediaService mediaService, UmbracoHelper umbracoHelper, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser) : base(localizedTextService)
         {
-            _mediaFileSystem = mediaFileSystem;
+            _mediaService = mediaService;
             _umbracoHelper = umbracoHelper;
             _hashIdFactory = hashIdFactory;
             _colorParser = colorParser;
@@ -29,20 +29,20 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         public override string Id => "png";
 
         public override IEnumerable<string> RequiredSettings => new List<string> {
-            Constants.SizeFieldName,
-            Constants.FormatFieldName,
-            Constants.DarkColorFieldName,
-            Constants.LightColorFieldName,
-            Constants.DrawQuietZoneFieldName,
-            Constants.IconBorderWidthFieldName,
-            Constants.IconFieldName,
-            Constants.IconSizePercentFieldName,
-            Constants.ECCLevelFieldName
+            Constants.FieldsNames.SizeFieldName,
+            Constants.FieldsNames.FormatFieldName,
+            Constants.FieldsNames.DarkColorFieldName,
+            Constants.FieldsNames.LightColorFieldName,
+            Constants.FieldsNames.DrawQuietZoneFieldName,
+            Constants.FieldsNames.IconBorderWidthFieldName,
+            Constants.FieldsNames.IconFieldName,
+            Constants.FieldsNames.IconSizePercentFieldName,
+            Constants.FieldsNames.ECCLevelFieldName
         };
 
         public override IQRCodeFormat Create(IQRCodeType codeType, QRCodeSettings settings)
         {
-            return new PngFormat(_mediaFileSystem, _umbracoHelper, _hashIdFactory, _colorParser, codeType, settings);
+            return new PngFormat(_mediaService, _umbracoHelper, _hashIdFactory, _colorParser, codeType, settings);
         }
     }
 }
