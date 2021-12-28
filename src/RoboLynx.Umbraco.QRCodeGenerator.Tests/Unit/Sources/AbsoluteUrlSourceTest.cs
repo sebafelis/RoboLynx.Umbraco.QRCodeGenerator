@@ -21,10 +21,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
     public class AbsoluteUrlSourceTest : QRCodeGeneratorBaseTest
     {
         [Test]
-        public void GetValue_WhenNUllKeyAndNullIndexIsPassAndContentExist_ShouldReturnStringValue()
+        public void GetValue_WhenNullKeyAndNullIndexIsPassAndContentExist_ShouldReturnStringValue()
         {
             //Arrange
-            var publishedContent = Mock.Of<IPublishedContent>(c=>c.ContentType == Mock.Of<IPublishedContentType>(t=>t.ItemType == PublishedItemType.Content));
+            var publishedContent = Mock.Of<IPublishedContent>(c=> c.ItemType == PublishedItemType.Content && c.ContentType == Mock.Of<IPublishedContentType>(t=>t.ItemType == PublishedItemType.Content));
             var culture = "en";
             var source = new AbsoluteUrlSource(publishedContent, culture);
             var url = @"https:\\testurl.cc\content\";

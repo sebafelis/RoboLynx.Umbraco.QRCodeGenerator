@@ -726,7 +726,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var mime = "format/mime";
             var cacheName = "TestCache";
             var hashId = "TestHashId";
-            var cacheUrl = "http://test.com/cache/item.ext";
+            var requestUrl = new Uri("http://test.com");
+            var cacheUrl = $"{requestUrl}/cache/item.ext";
 
             var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
 
@@ -753,7 +754,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                    new QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { }),
                    cacheManager
                );
-            var httpRequest = new HttpRequestMessage();
+            var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUrl);
 
             //Act
             var httpRespones = builder.CreateResponse(httpRequest, qrCodeConfig, attachment: true, cacheName: cacheName);
@@ -778,7 +779,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var mime = "format/mime";
             var cacheName = "TestCache";
             var hashId = "TestHashId";
-            var cacheUrl = "http://test.com/cache/item.ext";
+            var requestUrl = new Uri("http://test.com");
+            var cacheUrl = $"{requestUrl}/cache/item.ext";
 
             var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
 
@@ -805,7 +807,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                    new QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { }),
                    cacheManager
                );
-            var httpRequest = new HttpRequestMessage();
+            var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUrl);
 
             //Act
             var httpRespones = builder.CreateResponse(httpRequest, qrCodeConfig, attachment: true, cacheName: cacheName);

@@ -20,7 +20,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             //Arrange
             var hashId = "hash";
             var qrCodeFormat = new BmpFormat(
-               Mock.Of<IMediaFileSystem>(),
+               Mock.Of<IMediaService>(),
                 this.UmbracoHelper,
                 Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),
                 Mock.Of<IColorParser>(),
@@ -69,7 +69,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             //Arrange
             var hashId = "hash";
             var qrCodeFormat = new JpegFormat(
-              Mock.Of<IMediaFileSystem>(),
+              Mock.Of<IMediaService>(),
                 this.UmbracoHelper,
                 Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),
                 Mock.Of<IColorParser>(),
@@ -94,7 +94,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             //Arrange
             var hashId = "hash";
             var qrCodeFormat = new PngFormat(
-                Mock.Of<IMediaFileSystem>(),
+                Mock.Of<IMediaService>(),
                 this.UmbracoHelper,
                 Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),
                 Mock.Of<IColorParser>(),
