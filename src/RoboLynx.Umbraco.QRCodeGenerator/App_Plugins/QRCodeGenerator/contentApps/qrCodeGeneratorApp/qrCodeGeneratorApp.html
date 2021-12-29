@@ -25,6 +25,15 @@
             </p>
         </div>
 
+        <div ng-if="content.trashed" class="alert alert-danger">
+            <h4><localize key="general_error">Error</localize></h4>
+            <p>
+                <localize key="qrCode_isTrashedMsg">This item is current in trash. You need to restore this item before you can generate QR code.</localize>
+            </p>
+        </div>
+
+
+
         <div class="qrcode-container">
             <div class="qrcode-vertical-center">
                 <div ng-if="vm.qrCodeLoaded" class="qrcode-vertical-center">
@@ -59,7 +68,7 @@
 
                         <ng-form name="propertyForm" class="ng-pristine ng-valid" ng-model-options="{ debounce: 1000 }">
                             <div ng-repeat="property in vm.settingsModel | orderBy:'order'" ng-init="property.change(property)">
-                                <umb-control-group label="{{property.label}}" description="{{property.description}}"  ng-if="property.show">
+                                <umb-control-group label="{{property.label}}" description="{{property.description}}" ng-if="property.show">
                                     <umb-property-editor model="property"></umb-property-editor>
                                 </umb-control-group>
                             </div>

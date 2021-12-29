@@ -4,11 +4,17 @@
     angular.module("umbraco")
         .controller("RoboLynx.Umbraco.QRCodeContentAppController", qrCodeContentApp);
 
-    qrCodeContentApp.$inject = ['$scope', 'editorState', 'eventsService', 'contentResource', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService', 'assetsService'];
+    qrCodeContentApp.$inject = ['$scope', 'editorState', 'eventsService', 'contentResource', 'mediaResource', 'memberResource', 'udiParser', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService', 'assetsService'];
 
-    function qrCodeContentApp($scope, editorState, eventsService, contentResource, qrCodeGeneratorResources, $q, notificationsService, assetsService) {
+    function qrCodeContentApp($scope, editorState, eventsService, contentResource, mediaResource, memberResource, udiParser, qrCodeGeneratorResources, $q, notificationsService, assetsService) {
 
         var vm = this;
+        const documentNodeType = "document",
+            mediaNodeType = "media",
+            memberNodeType = "member",
+            unknownNodeType = "unknown",
+            supportedNodeTypes = [documentNodeType, mediaNodeType, memberNodeType];
+
 
         var defaultSettings = {},
             requierdSettingsForFormats = {},
@@ -19,7 +25,7 @@
             onContentSaved;
 
         vm.appActive = false;
-        vm.currentNodeId = editorState.current.id;
+        vm.currentNodeUdi = editorState.current.udi;
         vm.qrCodeProperties = null;
         vm.selectedQRCodePropertyAlias = null;
         vm.qrCodeLoaded = false;
@@ -176,6 +182,12 @@
             download(vm.qrCode, vm.qrCodeFileName);
         };
 
+        function getNodeType(udi) {
+            return _.find(supportedNodeTypes, function (item) {
+                return udi.startsWith("umb://" + item + "/");
+            }) || unknownNodeType;
+        }
+
         function formatChange(formatModel) {
             _.each(vm.settingsModel, function (property) {
                 property.show = formatModel.value && _.contains(requierdSettingsForFormats[formatModel.value], property.alias);
@@ -229,8 +241,8 @@
         function watchSettings() {
             var callGetQRCode = function () {
                 if (vm.selectedQRCodePropertyAlias) {
-                    var culture = getCurrentCulture($scope.content.variants);
-                    getQRCode(vm.currentNodeId, vm.selectedQRCodePropertyAlias, culture, mapSettings(vm.settingsModel));
+                    var culture = getNodeType(vm.currentNodeUdi) == documentNodeType ? getCurrentCulture($scope.content.variants) : null;
+                    getQRCode(vm.currentNodeUdi, vm.selectedQRCodePropertyAlias, culture, mapSettings(vm.settingsModel));
                 }
             }
 
@@ -329,9 +341,30 @@
 
 
         function findProperties() {
-            var culture = getCurrentCulture($scope.content.variants);
-            return contentResource.getById(vm.currentNodeId, culture).then(function (node) {
-                var prop = _.flatten(_.pluck(_.flatten(node.variants[0].tabs, true), 'properties'));
+            var udi = udiParser.parse(vm.currentNodeUdi);
+
+            if (udi.entityType == documentNodeType) {
+                var culture = getCurrentCulture($scope.content.variants);
+                return contentResource.getById(vm.currentNodeUdi, culture).then(function (node) {
+                    resolveNode(node.variants[0].tabs);
+                });
+            }
+            else if (udi.entityType == mediaNodeType) {
+                return mediaResource.getById(vm.currentNodeUdi).then(function (node) {
+                    resolveNode(node.tabs);
+                });
+            }
+            else if (udi.entityType == memberNodeType) {
+                return memberResource.getByKey(udi.value).then(function (node) {
+                    resolveNode(node.tabs);
+                });
+            }
+            else {
+                throw "Unsupported node type";
+            }
+
+            function resolveNode(tabs) {
+                var prop = _.flatten(_.pluck(_.flatten(tabs, true), 'properties'));
                 vm.qrCodeProperties = _.filter(prop,
                     function (prop) {
                         return prop.view.endsWith('qrCodeGenerator.html');
@@ -344,12 +377,10 @@
                 vm.selectedQRCodePropertyAlias = vm.qrCodeProperties[0].alias;
 
                 return vm.selectedQRCodePropertyAlias;
-            });
+            }
         }
 
         function oninit() {
-
-            $scope.model.disabled = true;
 
             unwatchQRCodePropertyAlias = $scope.$watch("vm.selectedQRCodePropertyAlias", function (newValue, oldValue) {
                 if (newValue && oldValue != newValue) {
@@ -357,7 +388,7 @@
 
                     $q.all([
                         getRequiredSettingsForFormats(),
-                        getQRCodeSettings(vm.currentNodeId, vm.selectedQRCodePropertyAlias),
+                        getQRCodeSettings(vm.currentNodeUdi, vm.selectedQRCodePropertyAlias),
                         loadDownloadJs()
                     ]).then(function () {
                         setDefaultSettings();
@@ -366,9 +397,13 @@
                 }
             });
 
-            unwatchContentState = $scope.$watch("variantContent.state", function (newValue, oldValue) {
-                $scope.model.disabled = newValue != "Published";
-            }, true);
+            if (getNodeType(vm.currentNodeUdi) == documentNodeType) {
+                $scope.model.disabled = true;
+
+                unwatchContentState = $scope.$watch("variantContent.state", function (newValue, oldValue) {
+                    $scope.model.disabled = newValue != "Published";
+                }, true);
+            }
 
             unwatchAppActive = $scope.$watch("model.active", function (newValue, oldValue) {
                 if (newValue == true) {

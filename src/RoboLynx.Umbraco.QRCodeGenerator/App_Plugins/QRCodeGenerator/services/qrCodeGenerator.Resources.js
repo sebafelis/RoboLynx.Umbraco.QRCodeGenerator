@@ -82,8 +82,8 @@ angular.module("umbraco")
         }
 
         return {
-            getQRCode: function (nodeId, propertyAlias, culture, settings) {
-                if (!nodeId) {
+            getQRCode: function (nodeUdi, propertyAlias, culture, settings) {
+                if (!nodeUdi) {
                     throw new Error("Content ID cannot be empty.");
                 }
                 if (!propertyAlias) {
@@ -93,15 +93,15 @@ angular.module("umbraco")
                     responseType: "blob",
                     cache: true,
                     params: {
-                        nodeId: nodeId, propertyAlias: propertyAlias, culture: culture, size: settings.size, format: settings.format,
+                        nodeUdi: nodeUdi, propertyAlias: propertyAlias, culture: culture, size: settings.size, format: settings.format,
                         darkColor: settings.darkColor, lightColor: settings.lightColor, icon: settings.icon,
                         iconSizePercent: settings.iconSizePercent, iconBorderWidth: settings.iconBorderWidth,
                         drawQuiteZone: _convertToBool(settings.drawQuiteZone), eccLevel: settings.eccLevel
                     }
                 }).then(function (response) { return response; }, function (error) { return $q.reject(error); });
             },
-            getQRCodeAsBase64: function (nodeId, propertyAlias, culture, settings) {
-                return this.getQRCode(nodeId, propertyAlias, culture, settings)
+            getQRCodeAsBase64: function (nodeUdi, propertyAlias, culture, settings) {
+                return this.getQRCode(nodeUdi, propertyAlias, culture, settings)
                     .then(
                         function (response) {
                             var deferred = $q.defer();
@@ -135,8 +135,8 @@ angular.module("umbraco")
                         }
                     );
             },
-            getQRCodeSettings: function (nodeId, propertyAlias) {
-                return $http.get(qrCodeApiUrl + 'DefaultSettings?nodeId=' + nodeId + '&propertyAlias=' + propertyAlias).then(
+            getQRCodeSettings: function (nodeUdi, propertyAlias) {
+                return $http.get(qrCodeApiUrl + 'DefaultSettings?nodeUdi=' + nodeUdi + '&propertyAlias=' + propertyAlias).then(
                     function (response) {
                         return response.data;
                     }, function (error) {
