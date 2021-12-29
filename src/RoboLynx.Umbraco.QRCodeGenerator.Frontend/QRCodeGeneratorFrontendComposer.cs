@@ -1,4 +1,6 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers;
+using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
+using System;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 
@@ -9,7 +11,26 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
     {
         public void Compose(Composition composition)
         {
-            composition.Register<PublicQRCodeController>(Lifetime.Request);
+            var config = CreateConfiguration();
+
+            if (!config.Disable)
+            {
+                composition.Register<PublicQRCodeController>(Lifetime.Request);
+            }
+        }
+
+        private QRCodeFrontendConfig CreateConfiguration()
+        {
+
+            var disable = ConfigurationHelper.GetAppSetting(Constants.Configuration.DisableKey) != null
+                            && ConfigurationHelper.GetAppSetting(Constants.Configuration.DisableKey)
+                            .Equals("true", StringComparison.InvariantCultureIgnoreCase);
+
+
+            return new QRCodeFrontendConfig
+            {
+                Disable = disable
+            };
         }
     }
 }

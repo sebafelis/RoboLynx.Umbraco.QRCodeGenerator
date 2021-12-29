@@ -1,15 +1,9 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
-using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
@@ -29,32 +23,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
 
         [HttpGet]
         //[CompressContent]
-        public IHttpActionResult Get(int nodeId, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
-        {
-            var objectType = Services.EntityService.GetObjectType(nodeId);
-            var nodeKey = Services.EntityService.GetKey(nodeId, objectType);
-            if (!nodeKey.Success)
-            {
-                return NotFound();
-            }
-            var nodeUdi = Udi.Create(objectType.GetUdiType(), nodeKey.Result);
-
-            return Get(nodeUdi, propertyAlias, settings, culture);
-        }
-
-        [HttpGet]
-        //[CompressContent]
-        public IHttpActionResult Get(Guid nodeKey, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
-        {
-            var objectType = Services.EntityService.GetObjectType(nodeKey);
-            var nodeUdi = Udi.Create(objectType.GetUdiType(), nodeKey);
-
-            return Get(nodeUdi, propertyAlias, settings, culture);
-        }
-
-        //[HttpGet]
-        //[CompressContent]
-        private IHttpActionResult Get(Udi nodeUdi, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
+        public IHttpActionResult Get(Udi nodeUdi, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
         {
             var publishedContent = Umbraco.PublishedContent(nodeUdi);
 

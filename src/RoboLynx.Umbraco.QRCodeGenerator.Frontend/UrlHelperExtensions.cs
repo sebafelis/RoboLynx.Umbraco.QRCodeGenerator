@@ -1,4 +1,5 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Frontend;
+﻿using RoboLynx.Umbraco.QRCodeGenerator;
+using RoboLynx.Umbraco.QRCodeGenerator.Frontend;
 using RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
@@ -25,7 +26,7 @@ namespace Umbraco.Web
         {
             var routeValues = new RouteValueDictionary(settings)
             {
-                { "nodeKey", publishedContent.Key },
+                { "nodeUdi", publishedContent.GetUdi() },
                 { "propertyAlias", propertyAlias },
                 { "culture", culture }
             };
@@ -97,7 +98,7 @@ namespace Umbraco.Web
         {
             var routeValues = new RouteValueDictionary(settings)
             {
-                { "nodeKey", publishedContent.Key },
+                { "nodeUdi", publishedContent.GetUdi() },
                 { "propertyAlias", propertyAlias },
                 { "culture", culture }
             };
