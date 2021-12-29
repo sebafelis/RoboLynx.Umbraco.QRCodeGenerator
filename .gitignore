@@ -242,3 +242,5 @@ package-lock.json
 #Custom
 /TestWebsite/App_Data
 *.zip
+/src/RoboLynx.Umbraco.QRCodeGenerator.Core/vpproject/RoboLynx.Umbraco.QRCodeGenerator.Core.vpp
+/Class schema.vsdx
