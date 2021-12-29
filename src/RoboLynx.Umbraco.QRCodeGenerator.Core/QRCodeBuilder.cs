@@ -16,6 +16,8 @@ using Umbraco.Core.Composing;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Scoping;
 using Umbraco.Core.Services;
+using Umbraco.Web;
+using Constants = RoboLynx.Umbraco.QRCodeGenerator.Constants;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
@@ -37,17 +39,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
         public IQRCodeFormat GetFormat(IQRCodeType codeType, QRCodeSettings settings)
         {
-            return _formats.FirstOrDefault(f => f.Id == settings.Format).Create(codeType, settings) ?? throw new ArgumentException($"{Constants.FormatFieldName} parameter has wrong value.");
+            return _formats.FirstOrDefault(f => f.Id == settings.Format).Create(codeType, settings) ?? throw new ArgumentException($"{Constants.FieldsNames.FormatFieldName} parameter has wrong value.");
         }
 
         private IQRCodeSource GetSource(string id, IPublishedContent publishedContent, string culture, string sourceSettings)
         {
-            return _sources.FirstOrDefault(f => f.Id == id).Create(publishedContent, sourceSettings, culture) ?? throw new ArgumentException($"{Constants.FormatFieldName} parameter has wrong value.");
+            return _sources.FirstOrDefault(f => f.Id == id).Create(publishedContent, sourceSettings, culture) ?? throw new ArgumentException($"{Constants.FieldsNames.FormatFieldName} parameter has wrong value.");
         }
 
         private IQRCodeType GetType(string id, IQRCodeSource qtCodeSource)
         {
-            return _types.FirstOrDefault(f => f.Id == id).Create(qtCodeSource) ?? throw new ArgumentException($"{Constants.FormatFieldName} parameter has wrong value.");
+            return _types.FirstOrDefault(f => f.Id == id).Create(qtCodeSource) ?? throw new ArgumentException($"{Constants.FieldsNames.FormatFieldName} parameter has wrong value.");
         }
 
         public QRCodeSettings GetDefaultSettings(IPublishedContent publishedContent, string propertyAlias)
@@ -67,9 +69,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             if (dataTypePrevalue != null)
             {
                 var finalSettings = MargeSettings(CreateDefaultSettings(dataTypePrevalue), userSettings);
-                var codeSourceSettings = dataTypePrevalue.ContainsKey(Constants.CodeSourceSettingsFieldName) ? dataTypePrevalue[Constants.CodeSourceSettingsFieldName] : string.Empty;
-                var codeSource = dataTypePrevalue.ContainsKey(Constants.CodeSourceFieldName) ? ((GetSource(dataTypePrevalue[Constants.CodeSourceFieldName], publishedContent, culture, codeSourceSettings)) ?? throw new ArgumentException($"{Constants.CodeSourceFieldName} parameter has wrong value.")) : throw new ArgumentException($"{Constants.CodeSourceFieldName} parameter is not set up.");
-                var codeType = dataTypePrevalue.ContainsKey(Constants.CodeTypeFieldName) ? ((GetType(dataTypePrevalue[Constants.CodeTypeFieldName], codeSource)) ?? throw new ArgumentException($"{Constants.CodeTypeFieldName} parameter has wrong value.")) : throw new ArgumentException($"{Constants.CodeTypeFieldName} parameter is not set up.");
+                var codeSourceSettings = dataTypePrevalue.ContainsKey(Constants.FieldsNames.CodeSourceSettingsFieldName) ? dataTypePrevalue[Constants.FieldsNames.CodeSourceSettingsFieldName] : string.Empty;
+                var codeSource = dataTypePrevalue.ContainsKey(Constants.FieldsNames.CodeSourceFieldName) ? ((GetSource(dataTypePrevalue[Constants.FieldsNames.CodeSourceFieldName], publishedContent, culture, codeSourceSettings)) ?? throw new ArgumentException($"{Constants.FieldsNames.CodeSourceFieldName} parameter has wrong value.")) : throw new ArgumentException($"{Constants.FieldsNames.CodeSourceFieldName} parameter is not set up.");
+                var codeType = dataTypePrevalue.ContainsKey(Constants.FieldsNames.CodeTypeFieldName) ? ((GetType(dataTypePrevalue[Constants.FieldsNames.CodeTypeFieldName], codeSource)) ?? throw new ArgumentException($"{Constants.FieldsNames.CodeTypeFieldName} parameter has wrong value.")) : throw new ArgumentException($"{Constants.FieldsNames.CodeTypeFieldName} parameter is not set up.");
                 var codeFormat = GetFormat(codeType, finalSettings);
 
                 CompleteSettings(ref finalSettings);
@@ -103,28 +105,28 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         private void CompleteSettings(ref QRCodeSettings userSettings)
         {
             if (string.IsNullOrEmpty(userSettings.DarkColor))
-                userSettings.DarkColor = Constants.DefaultDarkColorFieldValue;
+                userSettings.DarkColor = Constants.DefaultFieldsValues.DefaultDarkColorFieldValue;
 
             if (string.IsNullOrEmpty(userSettings.LightColor))
-                userSettings.DarkColor = Constants.DefaultLightColorFieldValue;
+                userSettings.DarkColor = Constants.DefaultFieldsValues.DefaultLightColorFieldValue;
 
             if (userSettings.Size <= 0)
-                userSettings.Size = Constants.DefaultSizeFieldValue;
+                userSettings.Size = Constants.DefaultFieldsValues.DefaultSizeFieldValue;
 
             if (!userSettings.ECCLevel.HasValue)
-                userSettings.ECCLevel = Constants.DefaultECCLevelFieldValue;
+                userSettings.ECCLevel = Constants.DefaultFieldsValues.DefaultECCLevelFieldValue;
 
             if (!userSettings.DrawQuiteZone.HasValue)
-                userSettings.DrawQuiteZone = Constants.DefaultDrawQuietZoneFieldValue;
+                userSettings.DrawQuiteZone = Constants.DefaultFieldsValues.DefaultDrawQuietZoneFieldValue;
 
             if (userSettings.IconSizePercent <= 0)
-                userSettings.IconSizePercent = Constants.DefaultIconSizePercentFieldValue;
+                userSettings.IconSizePercent = Constants.DefaultFieldsValues.DefaultIconSizePercentFieldValue;
 
             if (userSettings.IconBorderWidth < 0)
-                userSettings.IconBorderWidth = Constants.DefaultIconBorderWidthFieldValue;
+                userSettings.IconBorderWidth = Constants.DefaultFieldsValues.DefaultIconBorderWidthFieldValue;
 
             if (string.IsNullOrEmpty(userSettings.Format))
-                userSettings.Format = Constants.DefaultFormatFieldValue;
+                userSettings.Format = Constants.DefaultFieldsValues.DefaultFormatFieldValue;
         }
 
         public HttpResponseMessage CreateResponse(HttpRequestMessage request, QRCodeConfig config, bool attachment = false, string cacheName = null)
@@ -222,15 +224,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
             var settings = new QRCodeSettings()
             {
-                Size = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultSizeFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultSizeFieldName]) : 0,
-                IconSizePercent = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultIconSizePercentFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultIconSizePercentFieldName]) : 0,
-                Format = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFormatFieldName) ? dataTypePrevalue[Constants.DefaultFormatFieldName] : null,
-                DarkColor = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultDarkColorFieldName) ? dataTypePrevalue[Constants.DefaultDarkColorFieldName] : null,
-                LightColor = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultLightColorFieldName) ? dataTypePrevalue[Constants.DefaultLightColorFieldName] : null,
-                DrawQuiteZone = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultDrawQuietZoneFieldName) ? dataTypePrevalue[Constants.DefaultDrawQuietZoneFieldName]?.StringToBoolean(false) : null,
-                IconBorderWidth = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultIconBorderWidthFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultIconBorderWidthFieldName]) : -1,
-                Icon = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultIconFieldName) ? dataTypePrevalue[Constants.DefaultIconFieldName] : null,
-                ECCLevel = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultECCLevelFieldName) ? (ECCLevel)Enum.Parse(typeof(ECCLevel), dataTypePrevalue[Constants.DefaultECCLevelFieldName]) : null
+                Size = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultSizeFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultSizeFieldName]) : 0,
+                IconSizePercent = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultIconSizePercentFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultIconSizePercentFieldName]) : 0,
+                Format = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultFormatFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultFormatFieldName] : null,
+                DarkColor = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultDarkColorFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultDarkColorFieldName] : null,
+                LightColor = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultLightColorFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultLightColorFieldName] : null,
+                DrawQuiteZone = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultDrawQuietZoneFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultDrawQuietZoneFieldName]?.StringToBoolean(false) : null,
+                IconBorderWidth = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultIconBorderWidthFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultIconBorderWidthFieldName]) : -1,
+                Icon = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultIconFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultIconFieldName] : null,
+                ECCLevel = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultECCLevelFieldName) ? (ECCLevel)Enum.Parse(typeof(ECCLevel), dataTypePrevalue[Constants.DefaultFieldsNames.DefaultECCLevelFieldName]) : null
             };
 
             CompleteSettings(ref settings);

@@ -5,6 +5,7 @@ using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Web;
 using Umbraco.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
