@@ -7,7 +7,7 @@
 
 ## Description
 
-_Property editor_ and _Content app_ for **Umbraco 8** allowing to generate QR codes straight from Umbraco Backoffice. 
+_Property editor_ and _Content app_ for **Umbraco 8** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
 
 >Version for Umbraco 7 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
  
