@@ -13,9 +13,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         public static class Configuration
         {
-            public const string DisableKey = "QRCodeGenerator.Disable";
-            public const string LocationKey = "QRCodeGenerator.Location";
-            public const string MaxDaysKey = "QRCodeGenerator.MaxDays";
+            public const string DisableKey = "QRCodeGenerator.Cache.Disable";
+            public const string LocationKey = "QRCodeGenerator.Cache.Location";
+            public const string MaxDaysKey = "QRCodeGenerator.Cache.MaxDays";
         }
     }
 }

@@ -1,10 +1,7 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Umbraco.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
@@ -15,7 +12,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         public QRCodeCacheManager(IEnumerable<IQRCodeCache> caches)
         {
-            _caches = caches.ToDictionary(k=>k.Name, v=>v);
+            _caches = caches?.ToDictionary(k=>k.Name, v=>v) ?? new Dictionary<string, IQRCodeCache>();
         }
 
         private IQRCodeCache GetCache(string cacheName)
@@ -59,6 +56,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         public string GetUrl(string hashId, UrlMode uriKind, string cacheName)
         {
+            if (!UrlSupport(cacheName))
+            {
+                throw new NotSupportedException();
+            }
             return GetCache(cacheName)?.Url(hashId, uriKind);
         }
 

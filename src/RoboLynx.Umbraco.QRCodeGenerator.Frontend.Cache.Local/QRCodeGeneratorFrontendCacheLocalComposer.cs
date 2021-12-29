@@ -14,7 +14,7 @@ using FrontendConstants = RoboLynx.Umbraco.QRCodeGenerator.Frontend.Constants;
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache
 {
     [ComposeBefore(typeof(QRCodeGeneratorCoreComposer))]
-    public class QRCodeGeneratorFrontendCacheComposer : IUserComposer
+    public class QRCodeGeneratorFrontendCacheLocalComposer : IUserComposer
     {
         private string CacheName => FrontendConstants.FrontendCacheName;
 
@@ -25,11 +25,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache
 
             if (!config.Disable)
             {
-                composition.RegisterFor<IQRCodeCache, IFrontendQRCodeCache>(f=> new QRCodeCache<IFrontendQRCodeCache>(CacheName,
-                    f.GetInstance<AppCaches>(), new QRCodeCacheFileSystem(new PhysicalFileSystem(config.CacheLocation), 
-                    TimeSpan.FromDays(config.MaxDays), f.GetInstance<ILogger>(), f.GetInstance<IDateTimeOffsetProvider>()), 
-                    null, f.GetInstance<IRuntimeState>(), 
-                    f.GetInstance<IProfilingLogger>(), f.GetInstance<IDateTimeOffsetProvider>()));
+                composition.RegisterFor<IQRCodeCache, FrontendQRCodeCache>(f=> f.GetInstance<IQRCodeCacheFactory>().CreateCache<FrontendQRCodeCache>(
+                    CacheName,
+                    f.GetInstance<IQRCodeCacheFileSystemFactory>().CreateFileSystem(new PhysicalFileSystem(config.CacheLocation), TimeSpan.FromDays(config.MaxDays)),
+                    null)
+                , Lifetime.Singleton);
             }
         }
 

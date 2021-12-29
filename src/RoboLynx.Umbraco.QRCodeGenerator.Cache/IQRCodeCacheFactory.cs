@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
-    public interface IBackofficeQRCodeCache
+    public interface IQRCodeCacheFactory
     {
+        IQRCodeCache CreateCache<T>(string name, IQRCodeCacheFileSystem fileSystem, IQRCodeCacheUrlProvider urlProvider);
     }
 }

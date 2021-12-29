@@ -7,11 +7,12 @@ using Umbraco.Core.Cache;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Sync;
+using Umbraco.Web;
 using Umbraco.Web.Scheduling;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
-    public class QRCodeCache<T> : IQRCodeCache
+    public class QRCodeCache<T> : IQRCodeCache, IDisposable
     {
         private readonly IProfilingLogger _logger;
         private readonly IDateTimeOffsetProvider _dateTimeProvider;
@@ -95,6 +96,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             if (_fileSystem.FileExists(cacheItem.Path))
             {
                 return _fileSystem.OpenFile(cacheItem.Path);
+            }
+            else
+            {
+                Clear(hashId);
             }
 
             return null;
@@ -208,6 +213,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         public DateTimeOffset? Expired(string hashId)
         {
             return GetCacheItem(hashId)?.ExpiryDate;
+        }
+
+        public void Dispose()
+        {
+            _cleanCacheRunner.Dispose();
         }
     }
 }

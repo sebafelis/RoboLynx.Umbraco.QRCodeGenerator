@@ -1,4 +1,5 @@
-﻿using Umbraco.Core.Models.PublishedContent;
+﻿using System;
+using Umbraco.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
