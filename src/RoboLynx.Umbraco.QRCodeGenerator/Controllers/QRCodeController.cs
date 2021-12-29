@@ -2,26 +2,18 @@
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using System;
-using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Configuration;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
-using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
-using Umbraco.Web.PublishedCache;
 using Umbraco.Web.WebApi;
-using System.Net.Http.Headers;
-using Umbraco.Core.Composing;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 {
@@ -41,20 +33,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         {
             _qrCodeBuilder = qrCodeBuilder;
             _formats = formats ?? throw new ArgumentNullException(nameof(formats));
-        }
-
-        [HttpGet]
-        public IHttpActionResult DefaultSettings(int nodeId, string propertyAlias)
-        {
-            var objectType = Services.EntityService.GetObjectType(nodeId);
-            var nodeKey = Services.EntityService.GetKey(nodeId, objectType);
-            if (!nodeKey.Success)
-            {
-                return NotFound();
-            }
-            var nodeUdi = Udi.Create(objectType.GetUdiType(), nodeKey.Result);
-
-            return DefaultSettings(nodeUdi, propertyAlias);
         }
 
         [HttpGet]
@@ -96,20 +74,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
             return Ok(requierdSettingsForFormats);
         }
 
-        [HttpGet]
-        //[CompressContent]
-        public IHttpActionResult Image(int nodeId, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
-        {
-            var objectType = Services.EntityService.GetObjectType(nodeId);
-            var nodeKey = Services.EntityService.GetKey(nodeId, objectType);
-            if (!nodeKey.Success)
-            {
-                return NotFound();
-            }
-            var nodeUdi = Udi.Create(objectType.GetUdiType(), nodeKey.Result);
-
-            return Image(nodeUdi, propertyAlias, settings, culture);
-        }
 
         [HttpGet]
         //[CompressContent]
