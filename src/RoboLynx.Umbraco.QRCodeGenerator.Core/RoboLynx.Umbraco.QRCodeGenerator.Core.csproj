@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net472</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Description>Core library of QR Code property editor for Umbraco 7 and Umbraco 8.</Description>
+		<Description>QR Code Generator for Umbraco. Core implements service to generates QR codes from code.</Description>
 		<Copyright>Sebastian Felis @ 2021</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
@@ -30,10 +30,22 @@
 			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Frontend</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Cache</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Cache.Local</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
 			<_Parameter1>Umbraco.Tests</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Frontend</_Parameter1>
+			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Tests</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 	
