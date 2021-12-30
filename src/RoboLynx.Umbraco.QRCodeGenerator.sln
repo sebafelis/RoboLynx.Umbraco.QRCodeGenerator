@@ -26,6 +26,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGene
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGenerator.Cache.Local", "RoboLynx.Umbraco.QRCodeGenerator.Cache.Local\RoboLynx.Umbraco.QRCodeGenerator.Cache.Local.csproj", "{ACDC41CD-8B8A-413F-B290-CDA6B31D5B0D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{30C4EFCA-D805-4880-9D29-DDDCEDB2119B}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\Create a custom format.md = ..\doc\Create a custom format.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +68,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{30C4EFCA-D805-4880-9D29-DDDCEDB2119B} = {0DB16C92-AB9C-46DD-A45D-0E3C9B8B278B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E126F21B-3EBC-4024-9F39-204C97B20B01}

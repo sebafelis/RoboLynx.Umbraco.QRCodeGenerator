@@ -13,6 +13,8 @@ _Property editor_ and _Content app_ for **Umbraco 8** allowing to generate QR co
  
 User can customize generated code by color, size, output format, error correction level, adding quiet zone and also by adding icon (not for all formats). Code is available to generated from specify document type, base on specify data source like current document property or URL. The source from where the code content is get, the code type and the document type from which code can be generated are specify by developer. At this moment data source it can be property of current document (or part of it selected by regular expression), document URL or custom ([see **Source providers**](#source-providers)).
 
+Since `version 8.1` QR code can be insert on to frontend page. Generated codes are also cached. Backoffice and frontend use separate cache for secure reasons.
+
 
 ## Table of Contents
 
@@ -241,7 +243,7 @@ Supported formats:
 
 > **Attention!**
 > 
-> Custom format must be readable by \<img \/> element.
+> Custom format must be readable by \<img \/> element otherwise preview in umbraco backoffice will be not available.
 
 ## Use examples
 
@@ -250,7 +252,7 @@ Supported formats:
 #### The expected result:
 When user scan the code then will see position on map in default map application. Position is easy to set on map in Umbraco Backoffice. 
     
-#### How to achieve:
+#### How to achieve this result:
 To achieve the aim you can use the property editor like [**Our.Umbraco.OsmMaps**](https://our.umbraco.com/packages/backoffice-extensions/openstreetmap-property-editor/) to change geographic position on the map in Umbraco Backoffice. 
 * Install **Our.Umbraco.OsmMaps**
 * In some Document Type (for this example I use Document Type named _ItemLocation_) add new property with alias _location_ and select **Open street maps** editor.
