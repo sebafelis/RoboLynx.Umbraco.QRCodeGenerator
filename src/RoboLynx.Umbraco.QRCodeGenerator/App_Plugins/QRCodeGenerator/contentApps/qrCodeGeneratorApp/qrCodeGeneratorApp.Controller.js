@@ -190,7 +190,7 @@
 
         function formatChange(formatModel) {
             _.each(vm.settingsModel, function (property) {
-                property.show = formatModel.value && _.contains(requierdSettingsForFormats[formatModel.value], property.alias);
+                property.show = property.alias == "format" || (formatModel.value && _.contains(requierdSettingsForFormats[formatModel.value], property.alias));
             });
         }
 
