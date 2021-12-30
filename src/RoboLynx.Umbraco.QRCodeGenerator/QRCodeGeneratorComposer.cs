@@ -1,14 +1,7 @@
-﻿using DotNetColorParser;
-using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
-using RoboLynx.Umbraco.QRCodeGenerator.Cache;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Web;
-using Chronos.Abstractions;
-using Chronos;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
