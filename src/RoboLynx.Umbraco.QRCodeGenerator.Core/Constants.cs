@@ -1,13 +1,13 @@
 ﻿namespace RoboLynx.Umbraco.QRCodeGenerator
 {
-    internal class Constants
+    public class Constants
     {
-        public const string PluginAlias = "QRCodeGenerator";
-        public const string PluginName = "QR Code Generator";
+        internal const string PluginAlias = "QRCodeGenerator";
+        internal const string PluginName = "QR Code Generator";
         public const string PropertyEditorAlias = "qrCodeGenerator";
-        public const string ContentAppAlias = "qrCodeGenerator";
+        internal const string ContentAppAlias = "qrCodeGenerator";
 
-        public class DefaultFieldsNames
+        internal class DefaultFieldsNames
         {
             public const string DefaultSizeFieldName = "defaultSize";
             public const string DefaultFormatFieldName = "defaultFormat";
@@ -20,7 +20,7 @@
             public const string DefaultECCLevelFieldName = "defaultECCLevel";
         }
 
-        public class DefaultFieldsValues
+        internal class DefaultFieldsValues
         {
             public const int DefaultSizeFieldValue = 40;
             public const string DefaultFormatFieldValue = "svg";
@@ -33,7 +33,7 @@
             public const ECCLevel DefaultECCLevelFieldValue = ECCLevel.M;
         }
 
-        public class FieldsNames
+        internal class FieldsNames
         {
             public const string CodeSourceFieldName = "codeSource";
             public const string CodeSourceSettingsFieldName = "codeSourceSettings";
@@ -47,6 +47,18 @@
             public const string IconBorderWidthFieldName = "iconBorderWidth";
             public const string DrawQuietZoneFieldName = "drawQuiteZone";
             public const string ECCLevelFieldName = "eccLevel";
+        }
+
+        public class SettingProperties
+        {
+            public const string Size = FieldsNames.SizeFieldName;
+            public const string DarkColor = FieldsNames.DarkColorFieldName;
+            public const string LightColor = FieldsNames.LightColorFieldName;
+            public const string Icon = FieldsNames.IconFieldName;
+            public const string IconSizePercent = FieldsNames.IconSizePercentFieldName;
+            public const string IconBorderWidth = FieldsNames.IconBorderWidthFieldName;
+            public const string DrawQuietZone = FieldsNames.DrawQuietZoneFieldName;
+            public const string ECCLevel = FieldsNames.ECCLevelFieldName;
         }
 
         private const string BackofficeCacheNameValue = "Backoffice";

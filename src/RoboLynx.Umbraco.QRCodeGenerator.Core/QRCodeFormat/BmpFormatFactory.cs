@@ -34,15 +34,14 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         public override string Id => "bmp";
 
         public override IEnumerable<string> RequiredSettings => new List<string> {
-            Constants.FieldsNames.SizeFieldName,
-            Constants.FieldsNames.FormatFieldName,
-            Constants.FieldsNames.DarkColorFieldName,
-            Constants.FieldsNames.LightColorFieldName,
-            Constants.FieldsNames.DrawQuietZoneFieldName,
-            Constants.FieldsNames.IconBorderWidthFieldName,
-            Constants.FieldsNames.IconFieldName,
-            Constants.FieldsNames.IconSizePercentFieldName,
-            Constants.FieldsNames.ECCLevelFieldName
+            Constants.SettingProperties.Size,
+            Constants.SettingProperties.DarkColor,
+            Constants.SettingProperties.LightColor,
+            Constants.SettingProperties.DrawQuietZone,
+            Constants.SettingProperties.IconBorderWidth,
+            Constants.SettingProperties.Icon,
+            Constants.SettingProperties.IconSizePercent,
+            Constants.SettingProperties.ECCLevel
         };
 
         public override IQRCodeFormat Create(IQRCodeType codeType, QRCodeSettings settings)

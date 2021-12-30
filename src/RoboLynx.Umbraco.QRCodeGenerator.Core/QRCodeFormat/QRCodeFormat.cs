@@ -61,7 +61,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             return null;
         }
 
-        UmbracoHelper GetUmbracoHelper()
+        private UmbracoHelper GetUmbracoHelper()
         {
             if (UmbracoHelperAccessor.TryGetUmbracoHelper(out var umbracoHelper))
             {
