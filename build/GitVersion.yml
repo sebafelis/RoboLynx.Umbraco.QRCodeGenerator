@@ -10,6 +10,7 @@ branches:
     regex: ^main-u8[/-]?
   release:
     regex: ^releases?-u8[/-]?
+    mode: ContinuousDeployment
   feature:
     regex: ^features?(-u8)?[/-]?
   pull-request:  
