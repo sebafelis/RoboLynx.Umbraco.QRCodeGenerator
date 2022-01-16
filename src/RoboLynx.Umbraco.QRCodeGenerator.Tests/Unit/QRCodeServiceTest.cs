@@ -3,15 +3,8 @@ using NUnit.Framework;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 {

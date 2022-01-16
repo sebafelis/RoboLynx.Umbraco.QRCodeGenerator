@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
@@ -71,6 +71,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         public DateTimeOffset? Expired(string hashId, string cacheName)
         {
             return GetCache(cacheName)?.Expired(hashId);
+        }
+
+        public DateTimeOffset? LastModified(string hashId, string cacheName)
+        {
+            return GetCache(cacheName)?.LastModified(hashId);
         }
     }
 }

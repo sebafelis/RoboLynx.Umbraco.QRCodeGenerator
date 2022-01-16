@@ -1,13 +1,12 @@
 ﻿using DotNetColorParser;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
-using Umbraco.Core.IO;
-using Umbraco.Core.Services;
-using ILogger = Umbraco.Core.Logging.ILogger;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Web.Common;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 {
@@ -26,7 +25,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                 Mock.Of<IUmbracoHelperAccessor>(a => a.TryGetUmbracoHelper(out this.UmbracoHelper)),
                 Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),
                 Mock.Of<IColorParser>(),
-                Mock.Of<ILogger>(),
+                Mock.Of<ILogger<BmpFormat>>(),
                 Mock.Of<IQRCodeType>(s => s.GetCodeContent() == "testCode"),
                 DefaultQRCodeSettings
                 );
@@ -51,7 +50,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                 Mock.Of<IUmbracoHelperAccessor>(a => a.TryGetUmbracoHelper(out this.UmbracoHelper)),
                 Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),              
                 Mock.Of<IColorParser>(), 
-                Mock.Of<ILogger>(),
+                Mock.Of<ILogger<SvgFormat>>(),
                 Mock.Of<IQRCodeType>(s => s.GetCodeContent() == "testCode"),
                 DefaultQRCodeSettings
                 );
@@ -77,7 +76,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                 Mock.Of<IUmbracoHelperAccessor>(a => a.TryGetUmbracoHelper(out this.UmbracoHelper)),
                 Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),                
                 Mock.Of<IColorParser>(),
-                Mock.Of<ILogger>(),
+                Mock.Of<ILogger<JpegFormat>>(),
                 Mock.Of<IQRCodeType>(s => s.GetCodeContent() == "testCode"),
                 DefaultQRCodeSettings
                 );
@@ -102,7 +101,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                 Mock.Of<IMediaService>(),
                 Mock.Of<IUmbracoHelperAccessor>(a=>a.TryGetUmbracoHelper(out this.UmbracoHelper)),
                 Mock.Of<IQRCodeHashIdFactory>(h => h.ComputeHash(It.IsAny<string>(), It.IsAny<QRCodeSettings>()) == hashId),
-                Mock.Of<ILogger>(),
+                Mock.Of<ILogger<PngFormat>>(),
                 Mock.Of<IColorParser>(),
                 Mock.Of<IQRCodeType>(s=>s.GetCodeContent() == "testCode"),
                 DefaultQRCodeSettings

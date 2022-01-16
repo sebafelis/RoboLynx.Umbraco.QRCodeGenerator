@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Umbraco.Core;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Web;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Extensions;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
@@ -20,7 +16,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         {
             if (baseUrl is null)
             {
-                throw new ArgumentNullException($"'{nameof(baseUrl)}' cannot be null or empty.", nameof(baseUrl));
+                throw new ArgumentNullException(nameof(baseUrl), $"'{nameof(baseUrl)}' cannot be null or empty.");
             }
             _httpContextAccessor = httpContextAccessor;
             _baseUrl = baseUrl;
@@ -29,11 +25,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         public string Url(string path, UrlMode urlMode)
         {
-            Uri url = new Uri(_baseUrl.ToString().EnsureEndsWith("/") + path.TrimStart("/"), UriKind.RelativeOrAbsolute);
+            Uri url = new(_baseUrl.ToString().EnsureEndsWith("/") + path.TrimStart("/"), UriKind.RelativeOrAbsolute);
             
             if (!url.IsAbsoluteUri)
             {
-                var requestUrl = _httpContextAccessor.HttpContext.Request.Url;
+                var requestUrl = new Uri(_httpContextAccessor.HttpContext.Request.GetEncodedUrl());
 
                 if (requestUrl is not null && requestUrl.IsAbsoluteUri)
                 {

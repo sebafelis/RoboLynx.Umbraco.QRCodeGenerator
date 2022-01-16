@@ -1,11 +1,4 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
+﻿namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
 {
     public class LenghtValidation : IQRCodeTypeValidator
     {
@@ -62,7 +55,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
             return true;
         }
 
-        private int GetMaxLenght(QRCodeInputType inputType)
+        private static int GetMaxLenght(QRCodeInputType inputType)
         {
             return inputType switch
             {
@@ -73,7 +66,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
             };
         }
 
-        private QRCodeInputType? GetInputType(object value)
+        private static QRCodeInputType? GetInputType(object value)
         {
             return value switch
             {

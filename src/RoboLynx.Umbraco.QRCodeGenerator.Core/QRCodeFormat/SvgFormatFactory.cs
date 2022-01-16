@@ -1,15 +1,10 @@
 ﻿using DotNetColorParser;
-using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
+using Microsoft.Extensions.Logging;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Net.Http;
-using Umbraco.Core.IO;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Services;
-using Umbraco.Web;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Web.Common;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
@@ -18,10 +13,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         private readonly IUmbracoHelperAccessor _umbracoHelperAccessor;
         private readonly IQRCodeHashIdFactory _hashIdFactory;
         private readonly IColorParser _colorParser;
-        private readonly ILogger _logger;
+        private readonly ILogger<SvgFormat> _logger;
 
         public SvgFormatFactory(ILocalizedTextService localizedTextService, IUmbracoHelperAccessor umbracoHelperAccessor, 
-            IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, ILogger logger) : base(localizedTextService)
+            IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, ILogger<SvgFormat> logger) : base(localizedTextService)
         {
             _umbracoHelperAccessor = umbracoHelperAccessor;
             _hashIdFactory = hashIdFactory;

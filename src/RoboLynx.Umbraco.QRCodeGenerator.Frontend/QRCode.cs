@@ -1,7 +1,7 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Web;
 using System.IO;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Extensions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 {

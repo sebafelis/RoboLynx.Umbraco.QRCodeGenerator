@@ -1,52 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Sync;
-using Umbraco.Web.Scheduling;
+using Umbraco.Cms.Core.Logging;
+using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Sync;
+using Umbraco.Cms.Infrastructure.HostedServices;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
-    public class CleanCacheTask<T> : RecurringTaskBase
+    public class CleanCacheHostedService : RecurringHostedServiceBase
     {
-        private readonly IRuntimeState _runtime;
-        private readonly IProfilingLogger _logger;
         private readonly IQRCodeCache _cache;
+        private readonly string _cacheName;
+        private readonly IServerRoleAccessor _serverRoleAccessor;
+        private readonly ILogger<CleanCacheHostedService> _logger;
 
-        public CleanCacheTask(IBackgroundTaskRunner<RecurringTaskBase> runner, int delayBeforeWeStart, int howOftenWeRepeat, 
-            IRuntimeState runtime, IProfilingLogger logger, IQRCodeCache cache)
-            : base(runner, delayBeforeWeStart, howOftenWeRepeat)
+        public CleanCacheHostedService(string cacheName, IOptionsSnapshot<QRCodeCacheOptions> cacheOptions,
+            IServerRoleAccessor serverRoleAccessor, IQRCodeCache cache, ILogger<CleanCacheHostedService> logger)
+                : base(cacheOptions.Get(cacheName).PeriodCleanCache, cacheOptions.Get(cacheName).DelayCleanCache)
         {
-            _runtime = runtime;
-            _logger = logger;
+            _cacheName = cacheName;
+            _serverRoleAccessor = serverRoleAccessor;
             _cache = cache;
+            _logger = logger;
         }
 
-        public override bool PerformRun()
+
+        public override Task PerformExecuteAsync(object state)
         {
-            // Do not run the code on replicas nor unknown role servers
-            // ONLY run for Master server or Single
-            switch (_runtime.ServerRole)
+            _logger.LogInformation($"Cleaning {_cacheName} QR code cache.");
+
+            // Do not run the code on subscribers or unknown role servers
+            // ONLY run for SchedulingPublisher server or Single server roles
+            switch (_serverRoleAccessor.CurrentServerRole)
             {
-                case ServerRole.Replica:
-                    _logger.Debug<CleanCacheTask<T>>("Does not run on replica servers.");
-                    return true; // We return true to try again as the server role may change!
+                case ServerRole.Subscriber:
+                    _logger.LogDebug("Does not run on subscriber servers.");
+                    return Task.CompletedTask; // We return Task.CompletedTask to try again as the server role may change!
                 case ServerRole.Unknown:
-                    _logger.Debug<CleanCacheTask<T>>("Does not run on servers with unknown role.");
-                    return true; // We return true to try again as the server role may change!
+                    _logger.LogDebug("Does not run on servers with unknown role.");
+                    return Task.CompletedTask; // We return Task.CompletedTask to try again as the server role may change! 
             }
 
-            _cache.CleanupCache();
+           _cache.CleanupCache();
 
-            // If we want to keep repeating - we need to return true
-            // But if we run into a problem/error & want to stop repeating - return false
-            return true;
-        }
-
-        public override bool IsAsync => false;
+           return Task.CompletedTask;
+        }       
     }
 }

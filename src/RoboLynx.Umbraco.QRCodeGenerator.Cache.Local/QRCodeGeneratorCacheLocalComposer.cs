@@ -1,55 +1,28 @@
-﻿using Chronos.Abstractions;
-using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
-using System;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Composing;
-using Umbraco.Core.Exceptions;
-using Umbraco.Core.IO;
-using Umbraco.Core.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Core.Hosting;
+using Umbraco.Cms.Core.IO;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache.Local
 {
     [ComposeBefore(typeof(QRCodeGeneratorCoreComposer))]
-    public class QRCodeGeneratorCacheLocalComposer : IUserComposer
+    public class QRCodeGeneratorCacheLocalComposer : IComposer
     {
-        public string CacheName => BackofficeQRCodeCache.Name;
-
-
-        public void Compose(Composition composition)
+        public void Compose(IUmbracoBuilder builder)
         {
-            var config = CreateConfiguration();
+            //builder.Services.Configure<QRCodeCacheOptions>(Constants.BackofficeCacheName, builder.Config.GetSection($"{QRCodeGenerator.Constants.OptionsSectionName}:Cache:{Constants.BackofficeCacheName}")
+            //builder.Services.AddOptions<QRCodeCacheOptions>(Constants.BackofficeCacheName).Bind(builder.Config.GetSection($"{QRCodeGenerator.Constants.OptionsSectionName}:Cache:{Constants.BackofficeCacheName}"));
 
-            if (!config.Disable)
+            var options = new QRCodeCacheOptions();
+            builder.Config.GetSection($"{Constants.Core.OptionsSectionName}:Cache:{Constants.Backoffice.BackofficeCacheName}").Bind(Constants.Backoffice.BackofficeCacheName, options);
+
+            if (!options.Disable)
             {
-                composition.RegisterFor<IQRCodeCache, BackofficeQRCodeCache>(f=> f.GetInstance<IQRCodeCacheFactory>().CreateCache<BackofficeQRCodeCache>(
-                    CacheName,
-                    f.GetInstance<IQRCodeCacheFileSystemFactory>().CreateFileSystem(new PhysicalFileSystem(config.CacheLocation), TimeSpan.FromDays(config.MaxDays)), 
-                    null)
-                , Lifetime.Singleton);
+                builder.AddQRCodeCache<BackofficeQRCodeCache>(f => new PhysicalFileSystem(f.GetService<IIOHelper>(), f.GetService<IHostingEnvironment>(), f.GetService<ILogger<PhysicalFileSystem>>(), options.CacheLocation, string.Empty), null);
             }
-        }
-
-        private QRCodeCacheConfig CreateConfiguration()
-        {
-            var cacheLoaction = ConfigurationHelper.GetAppSetting(Constants.Configuration.LocationKey, CacheName) ?? Constants.DefaultLocalCacheLocation;
-
-            var disable = ConfigurationHelper.GetAppSetting(Constants.Configuration.DisableKey, CacheName) != null
-                            && ConfigurationHelper.GetAppSetting(Constants.Configuration.DisableKey, CacheName)
-                            .Equals("true", StringComparison.InvariantCultureIgnoreCase);
-
-            var maxDays = double.Parse(ConfigurationHelper.GetAppSetting(Constants.Configuration.MaxDaysKey, CacheName) ?? "0");
-
-            //Check we have all values set - otherwise make sure Umbraco does NOT boot so it can be configured correctly
-            if (string.IsNullOrEmpty(cacheLoaction))
-                throw new ArgumentNullOrEmptyException(Constants.Configuration.LocationKey, $"The QR Code Generator is missing the value '{Constants.Configuration.LocationKey}:{CacheName}' from AppSettings");
-
-            return new QRCodeCacheConfig
-            {
-                Disable = disable,
-                CacheLocation = cacheLoaction,
-                MaxDays = maxDays
-            };
         }
     }
 }

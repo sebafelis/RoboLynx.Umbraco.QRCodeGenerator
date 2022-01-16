@@ -5,10 +5,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Umbraco.Core;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Services;
-using Umbraco.Web;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Extensions;
 using static RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources.SimplePropertySource.SilmplePropertySourceSettings;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
@@ -52,10 +50,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
         }
 
         private readonly SilmplePropertySourceSettings _settings;
+        private readonly IPublishedValueFallback _publishedValueFallback;
         private readonly IPublishedContent _content;
         private readonly string _culture;
 
-        public SimplePropertySource(IPublishedContent content, string sourceSettings, string culture) : base()
+        public SimplePropertySource(IPublishedValueFallback publishedValueFallback, IPublishedContent content, string sourceSettings, string culture) : base()
         {
             if (content is null)
             {
@@ -75,6 +74,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             {
                 throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure.");
             }
+            _publishedValueFallback = publishedValueFallback;
             _content = content;
             _culture = culture;
         }
@@ -104,7 +104,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
                 throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure correctly.");
             }
 
-            var propertyValue = property.Value(_culture);
+            var propertyValue = property.Value(_publishedValueFallback, _culture);
 
             if (!string.IsNullOrEmpty(regexPattern) && propertyValue is string spropertyValue)
             {

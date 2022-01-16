@@ -1,43 +1,27 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
+﻿using Microsoft.AspNetCore.Mvc;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using System.Linq;
-using System.Web.Http;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Configuration;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Services;
-using Umbraco.Web;
-using Umbraco.Web.Editors;
-using Umbraco.Web.Mvc;
-using Umbraco.Web.WebApi;
+using Umbraco.Cms.Web.BackOffice.Controllers;
+using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Cms.Web.Common.Filters;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 {
-    [PluginController(Constants.PluginAlias)]
+    [PluginController(Constants.Core.PluginAlias)]
     [AngularJsonOnlyConfiguration]
     public class QRCodeSourcePickerController : UmbracoAuthorizedJsonController
     {
-        private readonly QRCodeSourceFactoryCollection sources;
+        private readonly QRCodeSourceFactoryCollection _sources;
 
-        public QRCodeSourcePickerController(QRCodeSourceFactoryCollection sources, IGlobalSettings globalSettings, IUmbracoContextAccessor umbracoContextAccessor,
-                                ISqlContext sqlContext, ServiceContext services, AppCaches appCaches,
-                                IProfilingLogger logger, IRuntimeState runtimeState, UmbracoHelper umbracoHelper) : base(globalSettings,
-                                                                                                                         umbracoContextAccessor,
-                                                                                                                         sqlContext,
-                                                                                                                         services,
-                                                                                                                         appCaches,
-                                                                                                                         logger,
-                                                                                                                         runtimeState,
-                                                                                                                         umbracoHelper)
+        public QRCodeSourcePickerController(QRCodeSourceFactoryCollection sources)
         {
-            this.sources = sources;
+            this._sources = sources;
         }
 
         [HttpGet]
-        public IHttpActionResult Get()
+        public IActionResult Get()
         {
-            var result = sources.Select(ct => new { id = ct.Id, name = ct.Name, description = ct.Description });
+            var result = _sources.Select(ct => new { id = ct.Id, name = ct.Name, description = ct.Description });
 
             return Ok(result);
         }

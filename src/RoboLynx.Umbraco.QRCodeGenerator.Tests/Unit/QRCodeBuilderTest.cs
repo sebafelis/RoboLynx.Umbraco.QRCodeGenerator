@@ -11,16 +11,18 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 {
     [TestFixture]
     public class QRCodeBuilderTest : QRCodeGeneratorBaseTest
     {
-        const string editorAlias = "qrCodeGenerator";
+        const string _editorAlias = "qrCodeGenerator";
+
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE1006 // Naming Styles
 
         // Format1
         private const string Format1Id = "Format1";
@@ -59,6 +61,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         private static IQRCodeType Type3 = Mock.Of<IQRCodeType>();
         private static IQRCodeTypeFactory Type3Factory = Mock.Of<IQRCodeTypeFactory>(f => f.Id == Type3Id && f.Create(It.IsAny<IQRCodeSource>()) == Type3);
 
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE0044 // Add readonly modifier
+
 
         private readonly IEnumerable<KeyValuePair<string, object>> _defaultConfiguration = new List<KeyValuePair<string, object>>()
         {
@@ -78,7 +83,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 
 #pragma warning disable IDE0051 // Remove unused private members
         private static IEnumerable<TestCaseData> CreateQRCodeAsResponse_CorrentConfiguration_Data
-#pragma warning restore IDE0051 // Remove unused private members
         {
             get
             {
@@ -294,6 +298,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             }
         }
 
+#pragma warning restore IDE0051 // Remove unused private members
+
         public override void SetUp()
         {
             base.SetUp();
@@ -319,7 +325,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                 ECCLevel = ECCLevel.M
             };
 
-            var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
+            var publishedDataType = new PublishedDataType(1234, _editorAlias, new Lazy<object>(() => _defaultConfiguration));
 
             var publishedPropertyType = new Mock<IPublishedPropertyType>();
             publishedPropertyType.Setup(s => s.DataType).Returns(publishedDataType);
@@ -329,9 +335,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContentMock.Object);
 
             var builder = new QRCodeBuilder(
-                   new QRCodeFormat.QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { Mock.Of<IQRCodeFormatFactory>() }),
-                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { Mock.Of<IQRCodeSourceFactory>() }),
-                   new QRCodeTypes.QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { Mock.Of<IQRCodeTypeFactory>() }),
+                   new QRCodeFormat.QRCodeFormatFactoryCollection(() => new IQRCodeFormatFactory[] { Mock.Of<IQRCodeFormatFactory>() }),
+                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(() =>  new IQRCodeSourceFactory[] { Mock.Of<IQRCodeSourceFactory>() }),
+                   new QRCodeTypes.QRCodeTypeFactoryCollection(() => new IQRCodeTypeFactory[] { Mock.Of<IQRCodeTypeFactory>() }),
                     Mock.Of<IQRCodeCacheManager>()
                );
 
@@ -362,9 +368,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContentMock.Object);
 
             var builder = new QRCodeBuilder(
-                   new QRCodeFormat.QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { Mock.Of<IQRCodeFormatFactory>() }),
-                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { Mock.Of<IQRCodeSourceFactory>() }),
-                   new QRCodeTypes.QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { Mock.Of<IQRCodeTypeFactory>() }),
+                   new QRCodeFormat.QRCodeFormatFactoryCollection(() => new IQRCodeFormatFactory[] { Mock.Of<IQRCodeFormatFactory>() }),
+                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(() => new IQRCodeSourceFactory[] { Mock.Of<IQRCodeSourceFactory>() }),
+                   new QRCodeTypes.QRCodeTypeFactoryCollection(() => new IQRCodeTypeFactory[] { Mock.Of<IQRCodeTypeFactory>() }),
                     Mock.Of<IQRCodeCacheManager>()
                );
 
@@ -392,9 +398,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContentMock.Object);
 
             var builder = new QRCodeBuilder(
-                   new QRCodeFormat.QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { Mock.Of<IQRCodeFormatFactory>() }),
-                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { Mock.Of<IQRCodeSourceFactory>() }),
-                   new QRCodeTypes.QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { Mock.Of<IQRCodeTypeFactory>() }),
+                   new QRCodeFormat.QRCodeFormatFactoryCollection(() => new IQRCodeFormatFactory[] { Mock.Of<IQRCodeFormatFactory>() }),
+                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(() => new IQRCodeSourceFactory[] { Mock.Of<IQRCodeSourceFactory>() }),
+                   new QRCodeTypes.QRCodeTypeFactoryCollection(() => new IQRCodeTypeFactory[] { Mock.Of<IQRCodeTypeFactory>() }),
                     Mock.Of<IQRCodeCacheManager>()
                );
 
@@ -416,7 +422,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var propertyAlias = "qrCodePropertyAlias";
             var culture = "en-GB";
 
-            var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => defaultPrevalues));
+            var publishedDataType = new PublishedDataType(1234, _editorAlias, new Lazy<object>(() => defaultPrevalues));
 
             var publishedPropertyType = new Mock<IPublishedPropertyType>();
             publishedPropertyType.Setup(s => s.DataType).Returns(publishedDataType);
@@ -426,17 +432,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContentMock.Object);
 
             var builder = new QRCodeBuilder(
-                   new QRCodeFormat.QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] {
+                   new QRCodeFormat.QRCodeFormatFactoryCollection(() => new IQRCodeFormatFactory[] {
                        Format1Factory,
                        Format2Factory,
                        Format3Factory
                    }),
-                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] {
+                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(() => new IQRCodeSourceFactory[] {
                        Source1Factory,
                        Source2Factory,
                        Source3Factory
                    }),
-                   new QRCodeTypes.QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] {
+                   new QRCodeTypes.QRCodeTypeFactoryCollection(() => new IQRCodeTypeFactory[] {
                        Type1Factory,
                        Type2Factory,
                        Type3Factory
@@ -474,7 +480,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var mime = "format/mime";
             string cacheName = null;
 
-            var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
+            var publishedDataType = new PublishedDataType(1234, _editorAlias, new Lazy<object>(() => _defaultConfiguration));
 
             var publishedPropertyType = new Mock<IPublishedPropertyType>();
             publishedPropertyType.Setup(s => s.DataType).Returns(publishedDataType);
@@ -490,9 +496,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var qrCodeConfig = new QRCodeConfig() { Format = format, Settings = new QRCodeSettings() };
 
             var builder = new QRCodeBuilder(
-                   new QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { }),
-                   new QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { }),
-                   new QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { }),
+                   new QRCodeFormatFactoryCollection(() => Array.Empty<IQRCodeFormatFactory>()),
+                   new QRCodeSourceFactoryCollection(() => Array.Empty<IQRCodeSourceFactory>()),
+                   new QRCodeTypeFactoryCollection(() => Array.Empty<IQRCodeTypeFactory>()),
                    Mock.Of<IQRCodeCacheManager>(m => m.UrlSupport(It.IsAny<string>()) == false)
                );
 
@@ -502,322 +508,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             //Assert
             Assert.NotNull(createdStream);
             Assert.AreEqual(stream, createdStream);
-
-            stream.Dispose();
-        }
-
-        [Test]
-        public async Task CreateResponse_WithAttachmentFalse_WhenPropertyExist_ShouldReturnHttpContent()
-        {
-            //Assign
-            var contentId = 123;
-            var propertyAlias = "qrCodePropertyAlias";
-            var stream = CreateMockStream();
-            var mime = "format/mime";
-
-            var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
-
-            var publishedPropertyType = new Mock<IPublishedPropertyType>();
-            publishedPropertyType.Setup(s => s.DataType).Returns(publishedDataType);
-
-            var publishedContentMock = new Mock<IPublishedContent>();
-            SetupPropertyValue(publishedContentMock, publishedPropertyType.Object, propertyAlias, null);
-
-            var publishedContent = publishedContentMock.Object;
-
-            PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContent);
-
-            var source = Mock.Of<IQRCodeSource>();
-            var type = Mock.Of<IQRCodeType>();
-            var format = Mock.Of<IQRCodeFormat>(f => f.Stream() == stream && f.Mime == mime);
-            var qrCodeConfig = new QRCodeConfig() { Format = format, Source = source, Type = type, Settings = new QRCodeSettings() };
-
-            var builder = new QRCodeBuilder(
-                   new QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { }),
-                   new QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { }),
-                   new QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { }),
-                   Mock.Of<IQRCodeCacheManager>(m => m.UrlSupport(It.IsAny<string>()) == false)
-               );
-            var httpRequest = new HttpRequestMessage();
-
-            //Act
-            var httpRespones = builder.CreateResponse(httpRequest, qrCodeConfig, attachment: false);
-
-            var byteContent = await httpRespones.Content.ReadAsByteArrayAsync();
-
-            //Assert
-            Assert.NotNull(httpRespones);
-            Assert.IsInstanceOf<StreamContent>(httpRespones.Content);
-            Assert.AreEqual(StreamToByteArray(format.Stream()), byteContent);
-            Assert.AreEqual(mime, httpRespones.Content.Headers.ContentType.MediaType);
-            Assert.AreEqual(new ContentDispositionHeaderValue("inline"), httpRespones.Content.Headers.ContentDisposition);
-
-            stream.Dispose();
-        }
-
-        [Test]
-        public async Task CreateResponse_WithAttachmentTrue_WhenPropertyExist_ShouldReturnHttpContent()
-        {
-            //Assign
-            var contentId = 123;
-            var propertyAlias = "qrCodePropertyAlias";
-            var stream = CreateMockStream();
-            var mime = "format/mime";
-
-            var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
-
-            var publishedPropertyType = new Mock<IPublishedPropertyType>();
-            publishedPropertyType.Setup(s => s.DataType).Returns(publishedDataType);
-
-            var publishedContentMock = new Mock<IPublishedContent>();
-            SetupPropertyValue(publishedContentMock, publishedPropertyType.Object, propertyAlias, null);
-
-            var publishedContent = publishedContentMock.Object;
-
-            PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContent);
-
-            var source = Mock.Of<IQRCodeSource>();
-            var type = Mock.Of<IQRCodeType>();
-            var format = Mock.Of<IQRCodeFormat>(f => f.Stream() == stream && f.Mime == mime);
-            var qrCodeConfig = new QRCodeConfig() { Format = format, Source = source, Type = type, Settings = new QRCodeSettings() };
-
-            var builder = new QRCodeBuilder(
-                   new QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { }),
-                   new QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { }),
-                   new QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { }),
-                   Mock.Of<IQRCodeCacheManager>(m => m.UrlSupport(It.IsAny<string>()) == false)
-               );
-            var httpRequest = new HttpRequestMessage();
-
-            //Act
-            var httpRespones = builder.CreateResponse(httpRequest, qrCodeConfig, attachment: true);
-
-            var byteContent = await httpRespones.Content.ReadAsByteArrayAsync();
-
-            //Assert
-            Assert.NotNull(httpRespones);
-            Assert.IsInstanceOf<StreamContent>(httpRespones.Content);
-            Assert.AreEqual(StreamToByteArray(format.Stream()), byteContent);
-            Assert.AreEqual(mime, httpRespones.Content.Headers.ContentType.MediaType);
-            Assert.AreEqual(new ContentDispositionHeaderValue("attachment"), httpRespones.Content.Headers.ContentDisposition);
-
-            stream.Dispose();
-        }
-
-        [Test]
-        public async Task CreateResponse_WithAttachmentTrueAndCache_WhenPropertyExistAndStreamCached_ShouldReturnHttpContentByCache()
-        {
-            //Assign
-            var contentId = 123;
-            var propertyAlias = "qrCodePropertyAlias";
-            var stream = CreateMockStream();
-            var mime = "format/mime";
-            var cacheName = "TestCache";
-            var hashId = "TestHashId";
-
-            var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
-
-            var publishedPropertyType = new Mock<IPublishedPropertyType>();
-            publishedPropertyType.Setup(s => s.DataType).Returns(publishedDataType);
-
-            var publishedContentMock = new Mock<IPublishedContent>();
-            SetupPropertyValue(publishedContentMock, publishedPropertyType.Object, propertyAlias, null);
-
-            var publishedContent = publishedContentMock.Object;
-
-            PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContent);
-
-            var source = Mock.Of<IQRCodeSource>();
-            var type = Mock.Of<IQRCodeType>();
-            var format = Mock.Of<IQRCodeFormat>(f => f.Mime == mime && f.HashId == hashId);
-            var qrCodeConfig = new QRCodeConfig() { Format = format, Source = source, Type = type, Settings = new QRCodeSettings() };
-            var cacheManager = Mock.Of<IQRCodeCacheManager>(m => m.UrlSupport(cacheName) == false && m.IsCached(hashId, cacheName) == true
-                                                                && m.GetStream(hashId, cacheName) == stream);
-
-            var builder = new QRCodeBuilder(
-                   new QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { }),
-                   new QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { }),
-                   new QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { }),
-                   cacheManager
-               );
-            var httpRequest = new HttpRequestMessage();
-
-            //Act
-            var httpRespones = builder.CreateResponse(httpRequest, qrCodeConfig, attachment: true, cacheName: cacheName);
-
-            var byteContent = await httpRespones.Content.ReadAsByteArrayAsync();
-
-            //Assert
-            Assert.NotNull(httpRespones);
-            Assert.IsInstanceOf<StreamContent>(httpRespones.Content);
-            Assert.AreEqual(StreamToByteArray(stream), byteContent);
-            Assert.AreEqual(mime, httpRespones.Content.Headers.ContentType.MediaType);
-            Assert.AreEqual(new ContentDispositionHeaderValue("attachment"), httpRespones.Content.Headers.ContentDisposition);
-            Mock.Get(cacheManager).Verify(x => x.Add(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>(), It.IsAny<string>()), Times.Exactly(0), "Add method from CacheManager should not be invoke.");
-
-            stream.Dispose();
-        }
-
-        [Test]
-        public async Task CreateResponse_WithAttachmentTrueAndCache_WhenPropertyExistAndNoStreamCached_ShouldReturnHttpContentByCache()
-        {
-            //Assign
-            var contentId = 123;
-            var propertyAlias = "qrCodePropertyAlias";
-            var stream = CreateMockStream();
-            var mime = "format/mime";
-            var cacheName = "TestCache";
-            var hashId = "TestHashId";
-            var fileExtension = "ext";
-            var fileName = $"{hashId}.{fileExtension}";
-
-            var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
-
-            var publishedPropertyType = new Mock<IPublishedPropertyType>();
-            publishedPropertyType.Setup(s => s.DataType).Returns(publishedDataType);
-
-            var publishedContentMock = new Mock<IPublishedContent>();
-            SetupPropertyValue(publishedContentMock, publishedPropertyType.Object, propertyAlias, null);
-
-            var publishedContent = publishedContentMock.Object;
-
-            PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContent);
-
-            var source = Mock.Of<IQRCodeSource>();
-            var type = Mock.Of<IQRCodeType>();
-            var format = Mock.Of<IQRCodeFormat>(f => f.Mime == mime && f.HashId == hashId && f.Stream() == stream 
-                                                    && f.FileName == fileName && f.FileExtension == fileExtension);
-            var qrCodeConfig = new QRCodeConfig() { Format = format, Source = source, Type = type, Settings = new QRCodeSettings() };
-            var cacheManager = Mock.Of<IQRCodeCacheManager>(m => m.UrlSupport(cacheName) == false && m.IsCached(hashId, cacheName) == false
-                                                                && m.GetStream(hashId, cacheName) == stream);
-
-            var builder = new QRCodeBuilder(
-                   new QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { }),
-                   new QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { }),
-                   new QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { }),
-                   cacheManager
-               );
-            var httpRequest = new HttpRequestMessage();
-
-            //Act
-            var httpRespones = builder.CreateResponse(httpRequest, qrCodeConfig, attachment: true);
-
-            var byteContent = await httpRespones.Content.ReadAsByteArrayAsync();
-
-            //Assert
-            Assert.NotNull(httpRespones);
-            Assert.IsInstanceOf<StreamContent>(httpRespones.Content);
-            Assert.AreEqual(StreamToByteArray(format.Stream()), byteContent);
-            Assert.AreEqual(mime, httpRespones.Content.Headers.ContentType.MediaType);
-            Assert.AreEqual("attachment", httpRespones.Content.Headers.ContentDisposition.DispositionType);
-            Assert.AreEqual(fileName, httpRespones.Content.Headers.ContentDisposition.FileName);
-            Mock.Get(cacheManager).Verify(x => x.Add(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>(), It.IsAny<string>()), Times.Once, "Add method from CacheManager should be invoke.");
-
-            stream.Dispose();
-        }
-
-        [Test]
-        public void CreateResponse_WithAttachmentTrueAndCacheWithDirectUrlAccess_WhenPropertyExistAndNoStreamCached_ShouldReturnRedirectToCache()
-        {
-            //Assign
-            var contentId = 123;
-            var propertyAlias = "qrCodePropertyAlias";
-            var stream = CreateMockStream();
-            var mime = "format/mime";
-            var cacheName = "TestCache";
-            var hashId = "TestHashId";
-            var requestUrl = new Uri("http://test.com");
-            var cacheUrl = $"{requestUrl}/cache/item.ext";
-
-            var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
-
-            var publishedPropertyType = new Mock<IPublishedPropertyType>();
-            publishedPropertyType.Setup(s => s.DataType).Returns(publishedDataType);
-
-            var publishedContentMock = new Mock<IPublishedContent>();
-            SetupPropertyValue(publishedContentMock, publishedPropertyType.Object, propertyAlias, null);
-
-            var publishedContent = publishedContentMock.Object;
-
-            PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContent);
-
-            var source = Mock.Of<IQRCodeSource>();
-            var type = Mock.Of<IQRCodeType>();
-            var format = Mock.Of<IQRCodeFormat>(f => f.Mime == mime && f.HashId == hashId && f.Stream() == stream);
-            var qrCodeConfig = new QRCodeConfig() { Format = format, Source = source, Type = type, Settings = new QRCodeSettings() };
-            var cacheManager = Mock.Of<IQRCodeCacheManager>(m => m.UrlSupport(cacheName) == true && m.IsCached(hashId, cacheName) == false
-                                                                && m.GetUrl(hashId, UrlMode.Default, cacheName) == cacheUrl);
-
-            var builder = new QRCodeBuilder(
-                   new QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { }),
-                   new QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { }),
-                   new QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { }),
-                   cacheManager
-               );
-            var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUrl);
-
-            //Act
-            var httpRespones = builder.CreateResponse(httpRequest, qrCodeConfig, attachment: true, cacheName: cacheName);
-
-            //Assert
-            Assert.NotNull(httpRespones);
-            Assert.AreEqual(HttpStatusCode.Redirect, httpRespones.StatusCode);
-            Assert.AreEqual(new Uri(cacheUrl), httpRespones.Headers.Location);
-            Assert.AreEqual(true, httpRespones.Headers.CacheControl.NoStore);
-            Mock.Get(cacheManager).Verify(x => x.Add(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>(), It.IsAny<string>()), Times.Once, "Add method from CacheManager should be invoke.");
-
-            stream.Dispose();
-        }
-
-        [Test]
-        public void CreateResponse_WithAttachmentTrueAndCacheWithDirectUrlAccess_WhenPropertyExistAndStreamCached_ShouldReturnRedirectToCache()
-        {
-            //Assign
-            var contentId = 123;
-            var propertyAlias = "qrCodePropertyAlias";
-            var stream = CreateMockStream();
-            var mime = "format/mime";
-            var cacheName = "TestCache";
-            var hashId = "TestHashId";
-            var requestUrl = new Uri("http://test.com");
-            var cacheUrl = $"{requestUrl}/cache/item.ext";
-
-            var publishedDataType = new PublishedDataType(1234, editorAlias, new Lazy<object>(() => _defaultConfiguration));
-
-            var publishedPropertyType = new Mock<IPublishedPropertyType>();
-            publishedPropertyType.Setup(s => s.DataType).Returns(publishedDataType);
-
-            var publishedContentMock = new Mock<IPublishedContent>();
-            SetupPropertyValue(publishedContentMock, publishedPropertyType.Object, propertyAlias, null);
-
-            var publishedContent = publishedContentMock.Object;
-
-            PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContent);
-
-            var source = Mock.Of<IQRCodeSource>();
-            var type = Mock.Of<IQRCodeType>();
-            var format = Mock.Of<IQRCodeFormat>(f => f.Mime == mime && f.HashId == hashId);
-            var qrCodeConfig = new QRCodeConfig() { Format = format, Source = source, Type = type, Settings = new QRCodeSettings() };
-            var cacheManager = Mock.Of<IQRCodeCacheManager>(m => m.UrlSupport(cacheName) == true && m.IsCached(hashId, cacheName) == true
-                                                                && m.GetUrl(hashId, UrlMode.Default, cacheName) == cacheUrl);
-
-            var builder = new QRCodeBuilder(
-                   new QRCodeFormatFactoryCollection(new IQRCodeFormatFactory[] { }),
-                   new QRCodeSourceFactoryCollection(new IQRCodeSourceFactory[] { }),
-                   new QRCodeTypeFactoryCollection(new IQRCodeTypeFactory[] { }),
-                   cacheManager
-               );
-            var httpRequest = new HttpRequestMessage(HttpMethod.Get, requestUrl);
-
-            //Act
-            var httpRespones = builder.CreateResponse(httpRequest, qrCodeConfig, attachment: true, cacheName: cacheName);
-
-            //Assert
-            Assert.NotNull(httpRespones);
-            Assert.AreEqual(HttpStatusCode.Redirect, httpRespones.StatusCode);
-            Assert.AreEqual(new Uri(cacheUrl), httpRespones.Headers.Location);
-            Assert.AreEqual(true, httpRespones.Headers.CacheControl.NoStore);
-            Mock.Get(cacheManager).Verify(x => x.Add(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Stream>(), It.IsAny<string>()), Times.Exactly(0), "Add method from CacheManager should not be invoke.");
 
             stream.Dispose();
         }

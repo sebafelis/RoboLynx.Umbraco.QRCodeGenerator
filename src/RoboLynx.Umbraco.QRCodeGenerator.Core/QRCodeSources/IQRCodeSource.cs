@@ -1,6 +1,5 @@
 ﻿using System;
-using Umbraco.Core.Composing;
-using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Composing;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 {

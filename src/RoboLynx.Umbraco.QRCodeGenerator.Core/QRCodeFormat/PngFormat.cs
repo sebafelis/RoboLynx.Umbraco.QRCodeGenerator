@@ -1,14 +1,11 @@
 ﻿using DotNetColorParser;
-using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
+using Microsoft.Extensions.Logging;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Net.Http;
-using Umbraco.Core.IO;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Services;
-using Umbraco.Web;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Web.Common;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
@@ -17,7 +14,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         readonly ImageFormat _imageFormat = ImageFormat.Png;
 
         public PngFormat(IMediaService mediaService, IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory,
-            ILogger logger, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings settings) 
+            ILogger<PngFormat> logger, IColorParser colorParser, IQRCodeType codeType, QRCodeSettings settings) 
                 : base(mediaService, umbracoHelperAccessor, hashIdFactory, logger, colorParser, codeType, settings)
         {
 

@@ -1,14 +1,9 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Http;
+using Moq;
 using NUnit.Framework;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Web;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 {
@@ -32,12 +27,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         public void UrlMethod_WhenParametersAreCorrect_ThenReturnUrl(string baseUrl, UrlMode defaultUrlMode, string requestUrl, string path, UrlMode urlMode, string expectedResult)
         {
             // Assign
-            var httpContext = new HttpContext(new HttpRequest(null, requestUrl, null), new HttpResponse(null));
+            var requestUri = new Uri(requestUrl, UriKind.Absolute);
+            var httpContext = Mock.Of<HttpContext>(c=>c.Request == Mock.Of<HttpRequest>(r=>r.Scheme == requestUri.Scheme 
+                                                                                        && r.Host == new HostString(requestUri.Host, requestUri.Port) 
+                                                                                        && r.Path == r.Path 
+                                                                                        && r.Query == r.Query));
             var httpContextAccessor = Mock.Of<IHttpContextAccessor>(c=>c.HttpContext == httpContext);
 
             var urlProvider = new LocalCacheUrlProvider(httpContextAccessor, new Uri(baseUrl, UriKind.RelativeOrAbsolute), defaultUrlMode == UrlMode.Absolute);
-            var requestUri = !string.IsNullOrEmpty(requestUrl) ? new Uri(requestUrl, UriKind.RelativeOrAbsolute) : null;
-            
+
             // Act
             var result = urlProvider.Url(path, urlMode);
             

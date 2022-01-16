@@ -1,22 +1,23 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
-using Umbraco.Core;
-using Umbraco.Core.Composing;
-using Umbraco.Web;
+﻿using Microsoft.Extensions.DependencyInjection;
+using RoboLynx.Umbraco.QRCodeGenerator.Controllers;
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
     [ComposeAfter(typeof(QRCodeGeneratorCoreComposer))]
-    public class QRCodeGeneratorComposer : IUserComposer
+    public class QRCodeGeneratorComposer : IComposer
     {
-        public void Compose(Composition composition)
+        public void Compose(IUmbracoBuilder builder)
         {
-            composition.Register<QRCodeController>(Lifetime.Request);
-            composition.Register<QRCodeFormatPickerController>(Lifetime.Request);
-            composition.Register<QRCodeLevelPickerController>(Lifetime.Request);
-            composition.Register<QRCodeSourcePickerController>(Lifetime.Request);
-            composition.Register<QRCodeTypePickerController>(Lifetime.Request);
+            builder.Services.AddTransient<IQRCodeResponesFactory, QRCodeResponesFactory>();
+            builder.Services.AddTransient<QRCodeController>();
+            builder.Services.AddTransient<QRCodeFormatPickerController>();
+            builder.Services.AddTransient<QRCodeLevelPickerController>();
+            builder.Services.AddTransient<QRCodeSourcePickerController>();
+            builder.Services.AddTransient<QRCodeTypePickerController>();
 
-            composition.ContentApps().Append<QRCodeGeneratorApp>();
+            builder.ContentApps().Append<QRCodeGeneratorApp>();
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System;
+﻿using System;
 using System.IO;
-using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
@@ -11,8 +10,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// Add stream with QR Code to cache.
         /// </summary>
         /// <param name="codeId">Unique code ID base on hash code.</param>
-        /// <param name="extension">Extension of file where stream is be save.</param>
-        /// <param name="stream">Stream containing code.</param>
+        /// <param name="extension">Extension of file where stream is be save</param>
+        /// <param name="stream">Stream containing code</param>
         /// <param name="cacheName">Cache name</param>
         void Add(string hashId, string extension, Stream stream, string cacheName);
 
@@ -25,7 +24,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <summary>
         /// Clear cache from specify item.
         /// </summary>
-        /// <param name="codeId">Unique code ID base on hash code.</param>
+        /// <param name="codeId">Unique code ID base on hash code</param>
         /// <param name="cacheName">Cache name<</param>
         void Clear(string hashId, string cacheName);
 
@@ -38,7 +37,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <summary>
         /// Get a stream with specific stored in cache QR code.
         /// </summary>
-        /// <param name="codeId">Unique code ID base on hash code.</param>
+        /// <param name="codeId">Unique code ID base on hash code</param>
         /// <param name="cacheName">Cache name<</param>
         /// <returns></returns>
         Stream GetStream(string hashId, string cacheName);
@@ -46,7 +45,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <summary>
         /// Get URL address direct to cache file.
         /// </summary>
-        /// <param name="hashId">Unique code ID base on hash code.</param>
+        /// <param name="hashId">Unique code ID base on hash code</param>
         /// <param name="uriKind">URL mode</param>
         /// <param name="cacheName">Cache name</param>
         /// <returns>URL</returns>
@@ -61,7 +60,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <summary>
         /// Check is specify QR code in cache.
         /// </summary>
-        /// <param name="codeId">Unique code ID base on hash code.</param>
+        /// <param name="codeId">Unique code ID base on hash code</param>
         /// <param name="cacheName">Cache name<</param>
         /// <returns></returns>
         bool IsCached(string hashId, string cacheName);
@@ -69,9 +68,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <summary>
         /// Get cache item expiring date/time
         /// </summary>
-        /// <param name="hashId">Unique code ID base on hash code.</param>
+        /// <param name="hashId">Unique code ID base on hash code</param>
         /// <param name="cacheName">Cache name</param>
-        /// <returns></returns>
+        /// <returns>Value or NULL if cache not exist</returns>
         DateTimeOffset? Expired(string hashId, string cacheName);
+
+        /// <summary>
+        /// Get cache item last modification date/time
+        /// </summary>
+        /// <param name="hashId">Unique code ID base on hash code</param>
+        /// <param name="cacheName">Cache name</param>
+        /// <returns>Value or NULL if cache not exist</returns>
+        DateTimeOffset? LastModified(string hashId, string cacheName);
     }
 }

@@ -3,8 +3,7 @@ using NUnit.Framework;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.Tests.TestExtensions;
 using System;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Services;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
 {
@@ -46,7 +45,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
             var mockedPublishedContent = new Mock<IPublishedContent>();
             SetupPropertyValue(mockedPublishedContent, propertyName, propertyValue);
 
-            var source = new SimplePropertySource(mockedPublishedContent.Object, sourceSettings, culture);
+            var source = new SimplePropertySource(Mock.Of<IPublishedValueFallback>(), mockedPublishedContent.Object, sourceSettings, culture);
 
             //Act
             var value = source.GetValue<TReturn>(index, null);
@@ -73,7 +72,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
             var mockedPublishedContent = new Mock<IPublishedContent>();
             SetupPropertyValue(mockedPublishedContent, propertyName, propertyValue);
 
-            var source = new SimplePropertySource(mockedPublishedContent.Object, sourceSettings, culture);
+            var source = new SimplePropertySource(Mock.Of<IPublishedValueFallback>(), mockedPublishedContent.Object, sourceSettings, culture);
 
             //Act
             var value = source.GetValue<TReturn>(-1, key);
@@ -83,15 +82,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
             Assert.AreEqual(value, expectedResult);
         }
 
-        public void GetValue_WhenIndexIsPassAndPropertyExist_ShouldReturnValueByIndex()
-        {
+        //public void GetValue_WhenIndexIsPassAndPropertyExist_ShouldReturnValueByIndex()
+        //{
 
-        }
+        //}
 
-        public void GetValue_WhenIndexAndKeyIsPassAndPropertyExist_ShouldReturnValueByKey()
-        {
+        //public void GetValue_WhenIndexAndKeyIsPassAndPropertyExist_ShouldReturnValueByKey()
+        //{
 
-        }
+        //}
 
 
     }

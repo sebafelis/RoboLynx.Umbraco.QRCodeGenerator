@@ -1,31 +1,36 @@
 ﻿using Chronos.Abstractions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Umbraco.Core;
-using Umbraco.Core.IO;
-using Umbraco.Core.Logging;
+using Umbraco.Cms.Core.Hosting;
+using Umbraco.Cms.Core.IO;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
-    public class QRCodeCacheFileSystem : FileSystemWrapper, IQRCodeCacheFileSystem
+    public class QRCodeCacheFileSystem : IQRCodeCacheFileSystem
     {
         const string _defaultPath = "";
-
+        private readonly IFileSystem _innerFileSystem;
+        private readonly IOptionsMonitor<QRCodeCacheOptions> _options;
         private readonly ILogger _logger;
         private readonly IDateTimeOffsetProvider _dateTimeProvider;
 
-        public QRCodeCacheFileSystem(IFileSystem innerFileSystem, TimeSpan expirationTimeSpan, ILogger logger, IDateTimeOffsetProvider dateTimeProvider) : base(innerFileSystem)
+        public QRCodeCacheFileSystem(IFileSystem innerFileSystem, IOptionsMonitor<QRCodeCacheOptions> options,
+            IDateTimeOffsetProvider dateTimeProvider, ILogger<QRCodeCacheFileSystem> logger)
         {
-            ExpirationTimeSpan = expirationTimeSpan;
-            this._logger = logger;
-            this._dateTimeProvider = dateTimeProvider;
+            _innerFileSystem = innerFileSystem;
+            _options = options;
+            _logger = logger;
+            _dateTimeProvider = dateTimeProvider;
         }
 
-        public TimeSpan ExpirationTimeSpan { get; }
+        public TimeSpan ExpirationTimeSpan => TimeSpan.FromDays(_options.CurrentValue.MaxDays);
+
+        public bool CanAddPhysical => _innerFileSystem.CanAddPhysical;
 
         public IEnumerable<FileCacheData> GetExpiredCacheFiles(string path = null)
         {
@@ -43,7 +48,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
                     {
                         HashId = Path.GetFileNameWithoutExtension(file),
                         Path = path,
-                        ExpiryDate = expiryDate
+                        ExpiryDate = expiryDate,
+                        LastModifiedDate = GetLastModified(file)
                     };
                 }
             }
@@ -60,18 +66,18 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             {
                 try
                 {
-                    if (file.IsNullOrWhiteSpace()) return;
+                    if (string.IsNullOrWhiteSpace(file)) return;
                     if (FileExists(file) == false) return;
                     DeleteFile(file);
                 }
                 catch (Exception e)
                 {
-                    _logger.Error<QRCodeCacheFileSystem>(e, "Failed to delete cache file '{File}'.", file);
+                    _logger.LogError(e, "Failed to delete cache file '{File}'.", file);
                 }
             });
         }
 
-        protected string GetCachePath(string hash, string extension)
+        protected static string GetCachePath(string hash, string extension)
         {
             var path = $"{_defaultPath}{hash}";
             if (!string.IsNullOrEmpty(extension))
@@ -96,19 +102,20 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             var filePath = GetCachePath(hashId, extension);
             if (FileExists(filePath))
             {
-                _logger.Warn<QRCodeCacheFileSystem>("Cache file existed but it's was override. Hash: {hash}", hashId);
+                _logger.LogWarning("Cache file existed but it's was override. Hash: {hash}", hashId);
             }
 
             AddFile(filePath, stream, true);
             var expiryDate = GetExpiryDate(filePath);
 
-            _logger.Info<QRCodeCacheFileSystem>("New cache file was add. Hash: {hashId}", hashId);
+            _logger.LogInformation("New cache file was add. Hash: {hashId}", hashId);
 
             return new FileCacheData()
             {
                 HashId = hashId,
                 Path = filePath,
-                ExpiryDate = expiryDate
+                ExpiryDate = expiryDate,
+                LastModifiedDate = GetLastModified(filePath)
             };
         }
 
@@ -141,9 +148,100 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
                 {
                     HashId = Path.GetFileNameWithoutExtension(file),
                     Path = file,
-                    ExpiryDate = expiryDate
+                    ExpiryDate = expiryDate,
+                    LastModifiedDate = GetLastModified(file)
                 };
             }
+        }
+
+        public IEnumerable<string> GetDirectories(string path)
+        {
+            return _innerFileSystem.GetDirectories(path);
+        }
+
+        public void DeleteDirectory(string path)
+        {
+            _innerFileSystem.DeleteDirectory(path);
+        }
+
+        public void DeleteDirectory(string path, bool recursive)
+        {
+            _innerFileSystem.DeleteDirectory(path, recursive);
+        }
+
+        public bool DirectoryExists(string path)
+        {
+            return _innerFileSystem.DirectoryExists(path);
+        }
+
+        public void AddFile(string path, Stream stream)
+        {
+            _innerFileSystem.AddFile(path, stream);
+        }
+
+        public void AddFile(string path, Stream stream, bool overrideIfExists)
+        {
+            _innerFileSystem.AddFile(path, stream, overrideIfExists);
+        }
+
+        public IEnumerable<string> GetFiles(string path)
+        {
+            return _innerFileSystem.GetFiles(path);
+        }
+
+        public IEnumerable<string> GetFiles(string path, string filter)
+        {
+            return _innerFileSystem.GetFiles(path, filter);
+        }
+
+        public Stream OpenFile(string path)
+        {
+            return _innerFileSystem.OpenFile(path);
+        }
+
+        public void DeleteFile(string path)
+        {
+            _innerFileSystem.DeleteFile(path);
+        }
+
+        public bool FileExists(string path)
+        {
+            return _innerFileSystem.FileExists(path);
+        }
+
+        public string GetRelativePath(string fullPathOrUrl)
+        {
+            return _innerFileSystem.GetRelativePath(fullPathOrUrl);
+        }
+
+        public string GetFullPath(string path)
+        {
+            return _innerFileSystem.GetFullPath(path);
+        }
+
+        public string GetUrl(string path)
+        {
+            return _innerFileSystem.GetUrl(path);
+        }
+
+        public DateTimeOffset GetLastModified(string path)
+        {
+            return _innerFileSystem.GetLastModified(path);
+        }
+
+        public DateTimeOffset GetCreated(string path)
+        {
+            return _innerFileSystem.GetCreated(path);
+        }
+
+        public long GetSize(string path)
+        {
+            return _innerFileSystem.GetSize(path);
+        }
+
+        public void AddFile(string path, string physicalPath, bool overrideIfExists = true, bool copy = false)
+        {
+            _innerFileSystem.AddFile(path, physicalPath, overrideIfExists, copy);
         }
     }
 }

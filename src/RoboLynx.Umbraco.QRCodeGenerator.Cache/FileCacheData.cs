@@ -13,5 +13,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         public string Path { get; set; }
 
         public DateTimeOffset ExpiryDate { get; set; }
+
+        public DateTimeOffset LastModifiedDate { get; set; }
     }
 }

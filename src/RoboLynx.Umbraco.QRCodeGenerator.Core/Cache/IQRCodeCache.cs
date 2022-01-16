@@ -1,7 +1,7 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System;
+﻿using System;
 using System.IO;
-using Umbraco.Core.Models.PublishedContent;
+using System.Threading.Tasks;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
@@ -25,6 +25,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <param name="hashId">Unique code ID base on hash code.</param>
         /// <returns></returns>
         DateTimeOffset? Expired(string hashId);
+
+        /// <summary>
+        /// Get cache item last modified date/time
+        /// </summary>
+        /// <param name="hashId">Unique code ID base on hash code.</param>
+        /// <returns></returns>
+        DateTimeOffset? LastModified(string hashId);
 
         /// <summary>
         /// Get stream containing QR code file.

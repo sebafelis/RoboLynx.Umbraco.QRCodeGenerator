@@ -1,73 +1,51 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using System;
-using System.Web.Http;
 using System.Linq;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Configuration;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Services;
-using Umbraco.Web;
-using Umbraco.Web.Editors;
-using Umbraco.Web.Mvc;
-using Umbraco.Web.WebApi;
+using System.Threading.Tasks;
+using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Security;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Web.BackOffice.Controllers;
+using Umbraco.Cms.Web.BackOffice.Filters;
+using Umbraco.Cms.Web.Common;
+using Umbraco.Cms.Web.Common.Attributes;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 {
-    [PluginController(Constants.PluginAlias)]
+    [PluginController(Constants.Core.PluginAlias)]
     [JsonCamelCaseFormatter]
     public class QRCodeController : UmbracoAuthorizedJsonController
     {
-        private readonly IQRCodeBuilder _qrCodeBuilder;
+        private readonly IQRCodeResponesFactory _responesFactory;
         private readonly QRCodeFormatFactoryCollection _formats;
+        private readonly UmbracoHelper _umbracoHelper;
+        private readonly IMemberManager _memberManager;
+        private readonly IEntityService _entityService;
 
-        public QRCodeController(IQRCodeBuilder qrCodeBuilder, QRCodeFormatFactoryCollection formats,
-                                IGlobalSettings globalSettings, IUmbracoContextAccessor umbracoContextAccessor,
-                                ISqlContext sqlContext, ServiceContext services, AppCaches appCaches,
-                                IProfilingLogger logger, IRuntimeState runtimeState, UmbracoHelper umbracoHelper) : base(globalSettings,
-                                    umbracoContextAccessor, sqlContext, services, appCaches, logger, runtimeState,
-                                    umbracoHelper)
+        public QRCodeController(IQRCodeResponesFactory responesFactory, QRCodeFormatFactoryCollection formats, UmbracoHelper umbracoHelper, 
+            IMemberManager memberManager, IEntityService entityService)
         {
-            _qrCodeBuilder = qrCodeBuilder;
+            _responesFactory = responesFactory;
             _formats = formats ?? throw new ArgumentNullException(nameof(formats));
+            _umbracoHelper = umbracoHelper;
+            _memberManager = memberManager;
+            _entityService = entityService;
         }
 
         [HttpGet]
-        public IHttpActionResult DefaultSettings(Udi nodeUdi, string propertyAlias)
+        public async Task<IActionResult> DefaultSettings(Udi nodeUdi, string propertyAlias)
         {
-            var publishedContent = Umbraco.PublishedContent(nodeUdi);
+            IPublishedContent publishedContent = await GetPublishedContent(nodeUdi);
 
-            if (publishedContent != null)
-            {
-                try
-                {
-                    var defaultSettings = _qrCodeBuilder.GetDefaultSettings(publishedContent, propertyAlias);
-
-                    if (defaultSettings is null)
-                    {
-                        return BadRequest("Content has not configuration.");
-                    }
-
-                    return Ok(defaultSettings);
-                }
-                catch (QRCodeGeneratorException qrex)
-                {
-                    return BadRequest(qrex.Message);
-                }
-                catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
-                {
-                    return BadRequest();
-                }
-            }
-
-            return NotFound();
+            return _responesFactory.CreateResponseWithDefaultSettings(publishedContent, propertyAlias);
         }
 
         [HttpGet]
-        public IHttpActionResult RequiredSettingsForFormats()
+        public IActionResult RequiredSettingsForFormats()
         {
             var requierdSettingsForFormats = _formats.ToDictionary(k => k.Id, v => v.RequiredSettings);
 
@@ -77,36 +55,36 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 
         [HttpGet]
         //[CompressContent]
-        public IHttpActionResult Image(Udi nodeUdi, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
+        public async Task<IActionResult> Image(Udi nodeUdi, string propertyAlias, [FromQuery] QRCodeSettings settings, string culture = null)
         {
-            var publishedContent = Umbraco.PublishedContent(nodeUdi);
+            IPublishedContent publishedContent = await GetPublishedContent(nodeUdi);
 
-            if (publishedContent != null)
+            return _responesFactory.CreateResponesWithQRCode(publishedContent, propertyAlias, culture, settings, Constants.Backoffice.BackofficeCacheName);
+        }
+
+        private async Task<IPublishedContent> GetPublishedContent(Udi nodeUdi)
+        {
+            var umbracoType = ObjectTypes.GetUmbracoObjectType(nodeUdi.EntityType);
+
+            switch (umbracoType)
             {
-                try
-                {
-                    var config = _qrCodeBuilder.CreateConfiguration(publishedContent, propertyAlias, culture, settings);
-
-                    if (config is null)
+                case UmbracoObjectTypes.Document:
+                    return _umbracoHelper.Content(nodeUdi);
+                case UmbracoObjectTypes.Media:
+                    return _umbracoHelper.Media(nodeUdi);
+                case UmbracoObjectTypes.Member:
+                    var nodeGuid = (nodeUdi as GuidUdi).Guid;
+                    var member = _entityService.Get(nodeGuid, UmbracoObjectTypes.Member);
+                    var name = member.Name;
+                    var user = await _memberManager.FindByIdAsync(name);
+                    if (user != null)
                     {
-                        return BadRequest();
+                        return _memberManager.AsPublishedMember(user);
                     }
-
-                    var response = _qrCodeBuilder.CreateResponse(Request, config, true, Constants.BackofficeCacheName);
-
-                    return ResponseMessage(response);
-                }
-                catch (QRCodeGeneratorException qrex)
-                {
-                    return BadRequest(qrex.Message);
-                }
-                catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
-                {
-                    return BadRequest();
-                }
+                    break;
             }
 
-            return NotFound();
+            return null;
         }
     }
 }

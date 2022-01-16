@@ -3,9 +3,6 @@ using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Services;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {

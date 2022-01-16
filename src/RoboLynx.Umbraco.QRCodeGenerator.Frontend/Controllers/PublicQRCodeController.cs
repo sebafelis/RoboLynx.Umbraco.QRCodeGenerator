@@ -1,50 +1,75 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System;
-using System.Web.Http;
-using Umbraco.Core;
-using Umbraco.Core.Logging;
-using Umbraco.Web.Mvc;
-using Umbraco.Web.WebApi;
+using System.Threading.Tasks;
+using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Security;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Web.Common;
+using Umbraco.Cms.Web.Common.Controllers;
+using Umbraco.Cms.Web.Common.Attributes;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
 {
-    [PluginController(RoboLynx.Umbraco.QRCodeGenerator.Constants.PluginAlias)]
+    [PluginController(Constants.Core.PluginAlias)]
     public class PublicQRCodeController : UmbracoApiController
     {
-        private readonly IQRCodeBuilder _qrCodeBuilder;
-        private readonly ILogger _logger;
+        private readonly IQRCodeResponesFactory _responesFactory;
+        private readonly ILogger<PublicQRCodeController> _logger;
+        private readonly UmbracoHelper _umbracoHelper;
+        private readonly IMemberManager _memberManager;
+        private readonly IEntityService _entityService;
 
-        public PublicQRCodeController(IQRCodeBuilder qrCodeBuilder, ILogger logger)
+        public PublicQRCodeController(IQRCodeResponesFactory responesFactory, ILogger<PublicQRCodeController> logger, UmbracoHelper umbracoHelper, IMemberManager memberManager, IEntityService entityService)
         {
-            _qrCodeBuilder = qrCodeBuilder;
+            _responesFactory = responesFactory;
             _logger = logger;
+            _umbracoHelper = umbracoHelper;
+            _memberManager = memberManager;
+            _entityService = entityService;
         }
 
         [HttpGet]
         //[CompressContent]
-        public IHttpActionResult Get(Udi nodeUdi, string propertyAlias, [FromUri] QRCodeSettings settings, string culture = null)
+        public async Task<IActionResult> Get(Udi nodeUdi, string propertyAlias, [FromQuery] QRCodeSettings settings, string culture = null)
         {
-            var publishedContent = Umbraco.PublishedContent(nodeUdi);
-
-            if (publishedContent != null)
+            if (nodeUdi is null || propertyAlias is null)
             {
-                try
-                {
-                    var config = _qrCodeBuilder.CreateConfiguration(publishedContent, propertyAlias, culture, settings);
+                return BadRequest();
+            }
+                
+            IPublishedContent publishedContent = await GetPublishedContent(nodeUdi);
 
-                    var response = _qrCodeBuilder.CreateResponse(Request, config, true, Constants.FrontendCacheName);
+            return _responesFactory.CreateResponesWithQRCode(publishedContent, propertyAlias, culture, settings, Constants.Frontend.FrontendCacheName);
+        }
 
-                    return ResponseMessage(response);
-                }
-                catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException || ex is QRCodeGeneratorException)
-                {
-                    _logger.Error<PublicQRCodeController>("Occur an exception during QR code generation.", ex);
-                    return BadRequest();
-                }
+        private async Task<IPublishedContent> GetPublishedContent(Udi nodeUdi)
+        {
+            var umbracoType = ObjectTypes.GetUmbracoObjectType(nodeUdi.EntityType);
+
+            switch (umbracoType)
+            {
+                case UmbracoObjectTypes.Document:
+                    return _umbracoHelper.Content(nodeUdi);
+                case UmbracoObjectTypes.Media:
+                    return _umbracoHelper.Media(nodeUdi);
+                case UmbracoObjectTypes.Member:
+                    var nodeGuid = (nodeUdi as GuidUdi).Guid;
+                    var member = _entityService.Get(nodeGuid, UmbracoObjectTypes.Member);
+                    var name = member.Name;
+                    var user = await _memberManager.FindByIdAsync(name);
+                    if (user != null)
+                    {
+                        return _memberManager.AsPublishedMember(user);
+                    }
+                    break;
             }
 
-            return NotFound();
+            return null;
         }
     }
 }

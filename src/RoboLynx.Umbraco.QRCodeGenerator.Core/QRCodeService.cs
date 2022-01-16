@@ -1,27 +1,13 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Cache;
-using RoboLynx.Umbraco.QRCodeGenerator.Models;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System.IO;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Services;
-using Umbraco.Web;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
-using System.Net.Http;
-using System;
-using Umbraco.Core;
-using Composing = Umbraco.Core.Composing;
+using Composing = Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
     public class QRCodeService : IQRCodeService
     {
-        #region Static 
-
-        /// <summary>
-        /// Gets the current instance of QR Code Service
-        /// </summary>
-        public static IQRCodeService Current => Composing.Current.Factory?.GetInstance<IQRCodeService>();
-
-        #endregion
 
         protected IQRCodeBuilder CodeBuilder { get; }
 

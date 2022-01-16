@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net472</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Description>Property editor for Umbraco to generating QR codes. It generate QR codes for the specify data source (e.g. published document property value, URL, any custom source). It's accessible for backoffice user, but it's can be also use at frontend page after RoboLynx.Umbraco.QRCodeGenerator.Frontend package installation.</Description>
-		<Copyright>Sebastian Felis @ 2021</Copyright>
+		<Copyright>Sebastian Felis @ 2022</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
 		<PackageTags>umbraco, propety editor, qr code, generator</PackageTags>
-		<PackageReleaseNotes>Release for Umbraco 8</PackageReleaseNotes>
+		<PackageReleaseNotes>Release for Umbraco 9</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
 		<Company>RoboLynx</Company>
 		<Authors>Sebastian Felis</Authors>
@@ -60,16 +60,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="UmbracoCms.Web" Version="[8.1,9)" />
-		<PackageReference Include="Our.Umbraco.ColorPickr" Version="1.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[9,10)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[9,10)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\CustomWelcomeDashboard\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Core\RoboLynx.Umbraco.QRCodeGenerator.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="System.ComponentModel.DataAnnotations" />
 	</ItemGroup>
 
 </Project>

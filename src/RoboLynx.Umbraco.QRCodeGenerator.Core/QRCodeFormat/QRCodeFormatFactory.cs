@@ -1,8 +1,8 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Collections.Generic;
-using Umbraco.Core;
-using Umbraco.Core.Services;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Extensions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
@@ -29,7 +29,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         public abstract string Id { get; }
 
-        public virtual string Name => LocalizedTextService.Localize($"qrCodeFormats/{GetType().Name.Replace("Factory", "").ToFirstLower()}Name");
+        public virtual string Name => LocalizedTextService.Localize("qrCodeFormats", $"{GetType().Name.Replace("Factory", "").ToFirstLower()}Name");
 
         public abstract IEnumerable<string> RequiredSettings { get; }
 

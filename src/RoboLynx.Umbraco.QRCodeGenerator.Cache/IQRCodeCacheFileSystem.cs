@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Umbraco.Core.IO;
+using Umbraco.Cms.Core.IO;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {

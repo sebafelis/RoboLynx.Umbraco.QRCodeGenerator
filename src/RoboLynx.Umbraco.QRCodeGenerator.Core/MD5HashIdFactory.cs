@@ -1,11 +1,10 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
@@ -28,13 +27,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         {
             var configContainer = new QRCodeConfigContainer(codeContent, settings);
 
-            BinaryFormatter binaryFormatter = new();
-            using MemoryStream memoryStream = new();
-            binaryFormatter.Serialize(memoryStream, configContainer);
-            memoryStream.Seek(0, SeekOrigin.Begin);
+            var binaryObject = ObjectToByteArray(configContainer);
 
             var hashAlgoritm = System.Security.Cryptography.HashAlgorithm.Create(System.Security.Cryptography.HashAlgorithmName.MD5.Name);
-            var hashData = hashAlgoritm.ComputeHash(memoryStream);
+            var hashData = hashAlgoritm.ComputeHash(binaryObject);
 
             // Create a new Stringbuilder to collect the bytes
             // and create a string.
@@ -49,6 +45,25 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
             // Return the hexadecimal string.
             return sBuilder.ToString();
+        }
+
+        public static byte[] ObjectToByteArray(object objData)
+        {
+            if (objData == null)
+                return default;
+
+            return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(objData, GetJsonSerializerOptions()));
+        }
+
+        private static JsonSerializerOptions GetJsonSerializerOptions()
+        {
+            return new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = null,
+                WriteIndented = true,
+                AllowTrailingCommas = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            };
         }
     }
 }

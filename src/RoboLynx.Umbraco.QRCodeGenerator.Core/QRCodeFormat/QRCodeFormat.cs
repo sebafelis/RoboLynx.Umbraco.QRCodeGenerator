@@ -1,25 +1,22 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
+﻿using Microsoft.Extensions.Logging;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
-using Serilog.Core;
 using System.IO;
-using Umbraco.Core;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Web;
-using Umbraco.Web.PublishedCache;
+using Umbraco.Cms.Core;
+using Umbraco.Cms.Web.Common;
+using Umbraco.Extensions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public abstract class QRCodeFormat : IQRCodeFormat
     {
-        protected ILogger Logger { get; }
+        protected ILogger<QRCodeFormat> Logger { get; }
         protected IUmbracoHelperAccessor UmbracoHelperAccessor { get; }
         protected IQRCodeHashIdFactory HashIdFactory { get; }
         protected IQRCodeType CodeType { get; }
         protected QRCodeSettings Settings { get; }
 
-        public QRCodeFormat(IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, ILogger logger, IQRCodeType codeType, 
+        public QRCodeFormat(IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, ILogger<QRCodeFormat> logger, IQRCodeType codeType, 
             QRCodeSettings settings)
         {
             UmbracoHelperAccessor = umbracoHelperAccessor;
@@ -52,7 +49,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
                 {
                     return GetUmbracoHelper()?.Media(mediaId)?.Url();
                 }
-                if (Udi.TryParse(icon, out Udi mediaUdi))
+                if (UdiParser.TryParse(icon, out Udi mediaUdi))
                 {
                     return GetUmbracoHelper()?.Media(mediaUdi)?.Url();
                 }
@@ -67,7 +64,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             {
                 return umbracoHelper;
             }
-            Logger.Warn<QRCodeFormat>("Umbraco Helper not found.");
+            Logger.LogWarning("Umbraco Helper not found.");
             return null;
         }
 }

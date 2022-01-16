@@ -1,7 +1,11 @@
-﻿namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Cache;
+
+namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache
 {
-    public class FrontendQRCodeCache
+    public class FrontendQRCodeCache : IQRCodeCacheRole
     {
-        public static string Name => Frontend.Constants.FrontendCacheName;
+        public static string CacheName => Constants.Frontend.FrontendCacheName;
+
+        public string Name => CacheName;
     }
 }

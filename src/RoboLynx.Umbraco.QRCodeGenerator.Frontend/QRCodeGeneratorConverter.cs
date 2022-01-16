@@ -1,27 +1,23 @@
 ﻿using System;
-using Umbraco.Core;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.PropertyEditors;
-using Umbraco.Core.Composing;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PropertyEditors;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 {
     public class QRCodeGeneratorConverter : PropertyValueConverterBase
     {
-        private readonly IFactory _factory;
+        private readonly IQRCodeService _qRCodeService;
 
-        public QRCodeGeneratorConverter(IFactory factory)
+        public QRCodeGeneratorConverter(IQRCodeService qRCodeService)
         {
-            _factory = factory;
+            _qRCodeService = qRCodeService;
         }
 
         public override object ConvertSourceToIntermediate(IPublishedElement owner, IPublishedPropertyType propertyType, object source, bool preview)
         {
             if (owner is IPublishedContent content)
             {
-                var qrCodeService = _factory.GetInstance<IQRCodeService>();
-
-                return new QRCode(qrCodeService, content, propertyType.Alias, Constants.FrontendCacheName);
+                return new QRCode(_qRCodeService, content, propertyType.Alias, Constants.Frontend.FrontendCacheName);
             }
             return null;
         }
@@ -38,7 +34,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 
         public override bool IsConverter(IPublishedPropertyType propertyType)
         {
-            return propertyType.EditorAlias.Equals(RoboLynx.Umbraco.QRCodeGenerator.Constants.PropertyEditorAlias);
+            return propertyType.EditorAlias.Equals(Constants.Backoffice.PropertyEditorAlias);
         }
     }
 }

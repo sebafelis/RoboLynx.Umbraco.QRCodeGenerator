@@ -43,7 +43,7 @@
                 label: "@qrCode_darkColor",
                 description: "@qrCode_darkColorDescription",
                 show: true,
-                view: "/App_Plugins/ColorPickr/editor.html",
+                view: "eyedropper",
                 alias: "darkColor",
                 config: {
                     enableTransparency: "0",
@@ -59,7 +59,7 @@
                 label: "@qrCode_lightColor",
                 description: "@qrCode_lightColorDescription",
                 show: true,
-                view: "/App_Plugins/ColorPickr/editor.html",
+                view: "eyedropper",
                 alias: "lightColor",
                 config: {
                     enableTransparency: "0",

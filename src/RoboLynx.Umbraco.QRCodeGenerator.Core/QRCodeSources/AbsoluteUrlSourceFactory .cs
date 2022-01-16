@@ -1,30 +1,23 @@
-﻿using Newtonsoft.Json;
-using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Umbraco.Core;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Services;
-using Umbraco.Web;
-using static RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources.SimplePropertySource.SilmplePropertySourceSettings;
+﻿using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Core.Services;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 {
     public class AbsoluteUrlSourceFactory : QRCodeSourceFactory
     {
-        public AbsoluteUrlSourceFactory(ILocalizedTextService localizedTextService) : base(localizedTextService)
-        {
+        private readonly IPublishedUrlProvider _publishedUrlProvider;
 
+        public AbsoluteUrlSourceFactory(ILocalizedTextService localizedTextService, IPublishedUrlProvider publishedUrlProvider) : base(localizedTextService)
+        {
+            _publishedUrlProvider = publishedUrlProvider;
         }
 
         public override string Id => "AbsoluteUrl";
 
         public override IQRCodeSource Create(IPublishedContent publishedContent, string sourceSettings, string culture)
         {
-            return new AbsoluteUrlSource(publishedContent, culture);
+            return new AbsoluteUrlSource(_publishedUrlProvider, publishedContent, culture);
         }
     }
 }

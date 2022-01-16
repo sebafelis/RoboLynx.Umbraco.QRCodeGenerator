@@ -1,36 +1,24 @@
-﻿using RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers;
-using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
-using System;
-using Umbraco.Core;
-using Umbraco.Core.Composing;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers;
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 {
     [ComposeAfter(typeof(QRCodeGeneratorComposer))]
-    public class QRCodeGeneratorFrontendComposer : IUserComposer
+    public class QRCodeGeneratorFrontendComposer : IComposer
     {
-        public void Compose(Composition composition)
+        public void Compose(IUmbracoBuilder builder)
         {
-            var config = CreateConfiguration();
+            var options = new QRCodeFrontendOptions();
+            builder.Config.GetSection($"{Constants.Core.OptionsSectionName}:{Constants.Frontend.FrontendApiOptionSectionName}").Bind(options);
 
-            if (!config.Disable)
+            
+            if (!options.Disable)
             {
-                composition.Register<PublicQRCodeController>(Lifetime.Request);
+                builder.Services.AddTransient<PublicQRCodeController>();
             }
-        }
-
-        private QRCodeFrontendConfig CreateConfiguration()
-        {
-
-            var disable = ConfigurationHelper.GetAppSetting(Constants.Configuration.DisableKey) != null
-                            && ConfigurationHelper.GetAppSetting(Constants.Configuration.DisableKey)
-                            .Equals("true", StringComparison.InvariantCultureIgnoreCase);
-
-
-            return new QRCodeFrontendConfig
-            {
-                Disable = disable
-            };
         }
     }
 }

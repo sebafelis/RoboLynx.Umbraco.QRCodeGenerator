@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 {
-    public class QRCodeFrontendConfig
+    public class QRCodeFrontendOptions
     {
         public bool Disable { get; set; }
     }

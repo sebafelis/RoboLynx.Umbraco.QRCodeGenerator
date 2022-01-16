@@ -1,5 +1,4 @@
-﻿using LightInject;
-using RoboLynx.Umbraco.QRCodeGenerator.Cache;
+﻿using RoboLynx.Umbraco.QRCodeGenerator.Cache;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
@@ -10,14 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Web;
-using Umbraco.Core;
-using Umbraco.Core.Composing;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Scoping;
-using Umbraco.Core.Services;
-using Umbraco.Web;
-using Constants = RoboLynx.Umbraco.QRCodeGenerator.Constants;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Extensions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
@@ -102,7 +95,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             };
         }
 
-        private void CompleteSettings(ref QRCodeSettings userSettings)
+        private static void CompleteSettings(ref QRCodeSettings userSettings)
         {
             if (string.IsNullOrEmpty(userSettings.DarkColor))
                 userSettings.DarkColor = Constants.DefaultFieldsValues.DefaultDarkColorFieldValue;
@@ -129,54 +122,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
                 userSettings.Format = Constants.DefaultFieldsValues.DefaultFormatFieldValue;
         }
 
-        public HttpResponseMessage CreateResponse(HttpRequestMessage request, QRCodeConfig config, bool attachment = false, string cacheName = null)
-        {
-            HttpResponseMessage response;
-            var hashId = config.Format.HashId;
-
-            if (!CacheManager.UrlSupport(cacheName))
-            {
-                response = request.CreateResponse(System.Net.HttpStatusCode.OK);
-
-                var stream = CreateStream(config, cacheName);
-
-                var httpContent = new StreamContent(stream);
-                httpContent.Headers.ContentType = new MediaTypeHeaderValue(config.Format.Mime);
-                httpContent.Headers.Expires = CacheManager.Expired(hashId, cacheName);
-
-                if (attachment)
-                {
-                    httpContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-                    var fileName = config.Format.FileName;
-                    if (!string.IsNullOrEmpty(fileName))
-                    {
-                        httpContent.Headers.ContentDisposition.FileName = fileName;
-                    };
-                }
-                else
-                {
-                    httpContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline");
-                }
-
-                response.Content = httpContent;
-            }
-            else
-            {
-                response = request.CreateResponse(System.Net.HttpStatusCode.Redirect);                
-
-                if (!CacheManager.IsCached(hashId, cacheName))
-                {
-                    _ = CreateStream(config, cacheName);
-                }
-                var cacheUrl = CacheManager.GetUrl(hashId, UrlMode.Default, cacheName);
-                
-                response.Headers.Location = new Uri(cacheUrl);
-                response.Headers.CacheControl = new CacheControlHeaderValue() { NoStore = true };
-            }
-
-            return response;
-        }
-
         public Stream CreateStream(QRCodeConfig config, string cacheName)
         {
             var hashId = config.Format.HashId;
@@ -200,22 +145,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             }
         }
 
-        public string GetUrl(QRCodeConfig config, string cacheName)
-        {
-            var hashId = config.Format.HashId;
-
-            if (CacheManager.UrlSupport(cacheName))
-            {
-                if (!CacheManager.IsCached(hashId, cacheName))
-                {
-                    _ = CreateStream(config, cacheName);
-                }
-                return CacheManager.GetUrl(hashId, UrlMode.Default, cacheName);
-            }
-            throw new NotSupportedException("Configuration not allow URL direct to cache.");
-        }
-
-        private QRCodeSettings CreateDefaultSettings(IDictionary<string, string> dataTypePrevalue)
+        private static QRCodeSettings CreateDefaultSettings(IDictionary<string, string> dataTypePrevalue)
         {
             if (dataTypePrevalue is null)
             {
@@ -240,10 +170,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             return settings;
         }
 
-        private IDictionary<string, string> GetDataTypePrevalues(IPublishedContent publishedContent, string propertyAlias)
+        private static IDictionary<string, string> GetDataTypePrevalues(IPublishedContent publishedContent, string propertyAlias)
         {
             var dataType = publishedContent.GetProperty(propertyAlias)?.PropertyType.DataType;
-            if (dataType?.EditorAlias == Constants.PropertyEditorAlias && dataType.Configuration != null)
+            if (dataType?.EditorAlias == Constants.Backoffice.PropertyEditorAlias && dataType.Configuration != null)
             {
                 var configuration = ((IEnumerable<KeyValuePair<string, object>>)dataType.Configuration)?.ToDictionary(k => k.Key, v => v.Value?.ToString());
 
@@ -252,7 +182,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             return null;
         }
 
-        private QRCodeSettings MargeSettings(QRCodeSettings defaultSettings, QRCodeSettings userSettings)
+        private static QRCodeSettings MargeSettings(QRCodeSettings defaultSettings, QRCodeSettings userSettings)
         {
             if (defaultSettings is null)
             {

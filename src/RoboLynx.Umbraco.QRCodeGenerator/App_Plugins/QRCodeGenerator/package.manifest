@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json.schemastore.org/package.manifest-8.0.0",
+  "$schema": "https://json.schemastore.org/package.manifest",
   "other properties": "",
 
   "propertyEditors": [
@@ -79,7 +79,12 @@
             "label": "Default dark color",
             "description": "The color of dark squares.",
             "key": "defaultDarkColor",
-            "view": "~/App_Plugins/ColorPickr/editor.html",
+            "view": "~/umbraco/views/propertyeditors/eyedropper/eyedropper.html",
+            "config": {
+              "showAlpha": true,
+              "showPalette": true,
+              "allowEmpty": false
+            },
             "validation": [
               {
                 "type": "Required"
@@ -90,7 +95,12 @@
             "label": "Default light color",
             "description": "The color of background.",
             "key": "defaultLightColor",
-            "view": "~/App_Plugins/ColorPickr/editor.html",
+            "view": "~/umbraco/views/propertyeditors/eyedropper/eyedropper.html",
+            "config": {
+              "showAlpha": true,
+              "showPalette": true,
+              "allowEmpty": false
+            },
             "validation": [
               {
                 "type": "Required"

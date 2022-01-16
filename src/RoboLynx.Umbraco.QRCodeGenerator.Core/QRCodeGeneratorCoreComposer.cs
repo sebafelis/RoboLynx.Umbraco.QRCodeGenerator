@@ -2,35 +2,34 @@
 using Chronos.Abstractions;
 using DotNetColorParser;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
-using RoboLynx.Umbraco.QRCodeGenerator.Helpers;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
-using Umbraco.Core;
-using Umbraco.Core.Composing;
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
-    public class QRCodeGeneratorCoreComposer : IUserComposer
+    public class QRCodeGeneratorCoreComposer : IComposer
     {
-        public void Compose(Composition composition)
+
+        public void Compose(IUmbracoBuilder builder)
         {
-            composition.RegisterUnique<IUmbracoHelperAccessor, UmbracoHelperAccessor>();
+            builder.Services.AddDateTimeOffsetProvider();
 
-            composition.Register<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
+            builder.QRCodeTypes().Add(() => builder.TypeLoader.GetTypes<IQRCodeTypeFactory>());
 
-            composition.QRCodeTypes().Add(() => composition.TypeLoader.GetTypes<IQRCodeTypeFactory>());
+            builder.QRCodeSources().Add(() => builder.TypeLoader.GetTypes<IQRCodeSourceFactory>());
 
-            composition.QRCodeSources().Add(() => composition.TypeLoader.GetTypes<IQRCodeSourceFactory>());
+            builder.QRCodeFormats().Add(() => builder.TypeLoader.GetTypes<IQRCodeFormatFactory>());
 
-            composition.QRCodeFormats().Add(() => composition.TypeLoader.GetTypes<IQRCodeFormatFactory>());
-
-            composition.RegisterUnique<IQRCodeHashIdFactory, MD5HashIdFactory>();
-            composition.Register<IQRCodeCacheManager, QRCodeCacheManager>(Lifetime.Singleton);
-            composition.Register<IColorNotationProvider>(f => new ColorNotationProvider(true), Lifetime.Singleton);
-            composition.Register<IColorParser, ColorParser>(Lifetime.Singleton);
-            composition.Register<IQRCodeBuilder, QRCodeBuilder>(Lifetime.Singleton);
-            composition.Register<IQRCodeService, QRCodeService>(Lifetime.Singleton);
+            builder.Services.AddSingleton<IQRCodeHashIdFactory, MD5HashIdFactory>();
+            builder.Services.AddSingleton<IQRCodeCacheManager, QRCodeCacheManager>();
+            builder.Services.AddSingleton<IColorNotationProvider>(f => new ColorNotationProvider(true));
+            builder.Services.AddSingleton<IColorParser, ColorParser>();
+            builder.Services.AddSingleton<IQRCodeBuilder, QRCodeBuilder>();
+            builder.Services.AddSingleton<IQRCodeService, QRCodeService>();
         }
     }
 }

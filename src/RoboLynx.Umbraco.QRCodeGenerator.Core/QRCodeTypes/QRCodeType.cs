@@ -1,10 +1,7 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {

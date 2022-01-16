@@ -1,45 +1,49 @@
 ﻿using Chronos.Abstractions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
-using Umbraco.Core;
-using Umbraco.Core.Cache;
-using Umbraco.Core.Logging;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Sync;
-using Umbraco.Web;
-using Umbraco.Web.Scheduling;
+using System.Threading.Tasks;
+using Umbraco.Cms.Core.Cache;
+using Umbraco.Cms.Core.Logging;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Sync;
+using Umbraco.Extensions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
-    public class QRCodeCache<T> : IQRCodeCache, IDisposable
+    public class QRCodeCache<T> : IQRCodeCache
     {
-        private readonly IProfilingLogger _logger;
+        private readonly IProfilingLogger _profilingLogger;
         private readonly IDateTimeOffsetProvider _dateTimeProvider;
-        private readonly IRuntimeState _runtime;
-        private readonly BackgroundTaskRunner<IBackgroundTask> _cleanCacheRunner;
+        private readonly IServerRoleAccessor _serverRoleAccessor;
+        private readonly ILogger<QRCodeCache<T>> _logger;
         private readonly IAppPolicyCache _isolatedCache;
         private readonly IQRCodeCacheFileSystem _fileSystem;
         private readonly IQRCodeCacheUrlProvider _urlProvider;
 
-        public QRCodeCache(string name, AppCaches appCaches, IQRCodeCacheFileSystem fileSystem, IQRCodeCacheUrlProvider urlProvider,
-            IRuntimeState runtime, IProfilingLogger logger, IDateTimeOffsetProvider dateTimeProvider)
+        public QRCodeCache(AppCaches appCaches, IQRCodeCacheFileSystem fileSystem, IQRCodeCacheUrlProvider urlProvider,
+            IProfilingLogger profilingLogger, ILogger<QRCodeCache<T>> logger, IDateTimeOffsetProvider dateTimeProvider,
+            IServerRoleAccessor serverRoleAccessor)
         {
-            _isolatedCache = appCaches.IsolatedCaches.GetOrCreate<T>();
-            _cleanCacheRunner = new BackgroundTaskRunner<IBackgroundTask>("CleanQRCodeCache-" + name, logger);
-            Name = name;
-            _logger = logger;
+            var cacheInsance = (IQRCodeCacheRole)Activator.CreateInstance<T>();
+            Name = cacheInsance.Name;
+
+            _isolatedCache = appCaches.IsolatedCaches.GetOrCreate<T>();           
+            _profilingLogger = profilingLogger;
             _dateTimeProvider = dateTimeProvider;
-            _runtime = runtime;
+            _serverRoleAccessor = serverRoleAccessor;
+            _logger = logger;
             _fileSystem = fileSystem;
             _urlProvider = urlProvider;
 
             Initialize();
         }
 
-        public int DelayBeforeWeStart { get; set; } = 60000; // 60000ms = 1min
-        public int HowOftenWeRepeat { get; set; } = 3600000; // 3600000 = 1hour
         public string Name { get; }
+
         public TimeSpan Timeout { get; }
 
         /// <inheritdoc/>
@@ -64,7 +68,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             {
                 HashId = hashId,
                 Path = cachedFile.Path,
-                ExpiryDate = cachedFile.ExpiryDate
+                ExpiryDate = cachedFile.ExpiryDate,
+                LastModifiedDate = cachedFile.LastModifiedDate
             },
             timeout);
         }
@@ -75,7 +80,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             var cacheItem = GetCacheItem(hashId);
 
             _fileSystem.DeleteCacheFiles(cacheItem.Path.AsEnumerableOfOne());
-
+            
             _isolatedCache.Clear(hashId);
         }
 
@@ -124,18 +129,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <inheritdoc/>
         public void CleanupCache()
         {
-            //var expiredFiles = fileSystem.GetExpiredCacheFiles();
-            //var expiredFilesCount = expiredFiles.Count();
-
-            //logger.Info<CleanCacheTask<T>>("QR Code file cache cleaner - {ServerRole}", runtime.ServerRole);
-            //logger.Info<CleanCacheTask<T>>("{expiredFilesCount} files is expired.", expiredFilesCount);
-            _logger.Info<CleanCacheTask<T>>("QRCode cache cleanup is running. Server role: {ServerRole}", _runtime.ServerRole);
+            using var profiler = _profilingLogger.TraceDuration<QRCodeCache<T>>("Cache cleaning started", "Cache cleaned");
 
             var expiredItems = _isolatedCache.GetCacheItemsByKeySearch<FileCacheData>("").Where(item => item.ExpiryDate < _dateTimeProvider.UtcNow);
 
             if (expiredItems.Any())
             {
-                using (_logger.TraceDuration<CleanCacheTask<T>>("Deleting expired cache files.", "Expired cache files are deleted."))
+                using (_profilingLogger.TraceDuration<QRCodeCache<T>>("Deleting expired cache files.", "Expired cache files are deleted."))
                 {
                     _fileSystem.DeleteCacheFiles(expiredItems.Select(s => s.Path));
                 }
@@ -145,8 +145,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
                     _isolatedCache.Clear(item.HashId);
                 }
             }
-
-            _logger.Info<CleanCacheTask<T>>("QRCode cache cleanup finished.");
         }
 
         private FileCacheData GetCacheItem(string hashId)
@@ -165,17 +163,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         protected void Initialize()
         {
             UpdateRuntimeCache();
-            InitializeTaskRunner();
-        }
-
-        /// <summary>
-        /// Initialize task runner to periodically clean the cache.
-        /// </summary>
-        private void InitializeTaskRunner()
-        {
-            var task = new CleanCacheTask<T>(_cleanCacheRunner, DelayBeforeWeStart, HowOftenWeRepeat, _runtime, _logger, this);
-
-            _cleanCacheRunner.TryAdd(task);
         }
 
         /// <summary>
@@ -183,16 +170,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// </summary>
         private void UpdateRuntimeCache()
         {
-            switch (_runtime.ServerRole)
+            switch (_serverRoleAccessor.CurrentServerRole)
             {
-                case ServerRole.Replica:
-                    _logger.Debug<QRCodeCache<T>>("UpdateRuntimeCache does not run on replica servers.");
+                case ServerRole.Subscriber:
+                    _logger.LogDebug("UpdateRuntimeCache does not run on replica servers.");
                     return;
                 case ServerRole.Unknown:
-                    _logger.Debug<QRCodeCache<T>>("UpdateRuntimeCache does not run on servers with unknown role.");
+                    _logger.LogDebug("UpdateRuntimeCache does not run on servers with unknown role.");
                     return;
                 default:
-                    using (_logger.TraceDuration<CleanCacheTask<T>>("Updating runtime cache.", "Cache was update."))
+                    using (_profilingLogger.TraceDuration<QRCodeCache<T>>("Updating runtime cache.", "Cache was update."))
                     {
                         foreach (var file in _fileSystem.GetAllCacheFiles())
                         {
@@ -215,9 +202,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             return GetCacheItem(hashId)?.ExpiryDate;
         }
 
-        public void Dispose()
+        public DateTimeOffset? LastModified(string hashId)
         {
-            _cleanCacheRunner.Dispose();
+            return GetCacheItem(hashId)?.LastModifiedDate;
         }
     }
 }

@@ -1,12 +1,6 @@
 ﻿using Newtonsoft.Json;
-using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-using Umbraco.Core.Models.PublishedContent;
-using Composing = Umbraco.Core.Composing;
-using Umbraco.Core;
-using System.Linq;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Models
 {

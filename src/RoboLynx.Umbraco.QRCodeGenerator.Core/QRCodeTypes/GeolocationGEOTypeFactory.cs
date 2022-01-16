@@ -1,5 +1,5 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
-using Umbraco.Core.Services;
+using Umbraco.Cms.Core.Services;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {

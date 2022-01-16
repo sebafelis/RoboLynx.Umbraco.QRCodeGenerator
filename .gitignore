@@ -244,3 +244,5 @@ package-lock.json
 *.zip
 /src/RoboLynx.Umbraco.QRCodeGenerator.Core/vpproject/RoboLynx.Umbraco.QRCodeGenerator.Core.vpp
 /Class schema.vsdx
+/src/RoboLynx.Umbraco.QRCodeGenerator/wwwroot/umbraco
+/src/RoboLynx.Umbraco.QRCodeGenerator/umbraco
