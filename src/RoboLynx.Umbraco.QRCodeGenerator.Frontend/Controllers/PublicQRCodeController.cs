@@ -50,13 +50,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
         private async Task<IPublishedContent> GetPublishedContent(Udi nodeUdi)
         {
             var umbracoType = ObjectTypes.GetUmbracoObjectType(nodeUdi.EntityType);
+            IPublishedContent publishedContent = null;
 
             switch (umbracoType)
             {
                 case UmbracoObjectTypes.Document:
-                    return _umbracoHelper.Content(nodeUdi);
+                    publishedContent = _umbracoHelper.Content(nodeUdi);
+                    break;
                 case UmbracoObjectTypes.Media:
-                    return _umbracoHelper.Media(nodeUdi);
+                    publishedContent = _umbracoHelper.Media(nodeUdi);
+                    break;
                 case UmbracoObjectTypes.Member:
                     var nodeGuid = (nodeUdi as GuidUdi).Guid;
                     var member = _entityService.Get(nodeGuid, UmbracoObjectTypes.Member);
@@ -64,12 +67,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
                     var user = await _memberManager.FindByIdAsync(name);
                     if (user != null)
                     {
-                        return _memberManager.AsPublishedMember(user);
+                        publishedContent = _memberManager.AsPublishedMember(user);
                     }
                     break;
             }
 
-            return null;
+            if (publishedContent == null)
+            {
+                _logger.LogWarning("Published content not found.");
+            }
+
+            return publishedContent;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using System;
@@ -25,15 +26,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         private readonly UmbracoHelper _umbracoHelper;
         private readonly IMemberManager _memberManager;
         private readonly IEntityService _entityService;
+        private readonly ILogger<QRCodeController> _logger;
 
         public QRCodeController(IQRCodeResponesFactory responesFactory, QRCodeFormatFactoryCollection formats, UmbracoHelper umbracoHelper, 
-            IMemberManager memberManager, IEntityService entityService)
+            IMemberManager memberManager, IEntityService entityService, ILogger<QRCodeController> logger)
         {
             _responesFactory = responesFactory;
             _formats = formats ?? throw new ArgumentNullException(nameof(formats));
             _umbracoHelper = umbracoHelper;
             _memberManager = memberManager;
             _entityService = entityService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -65,13 +68,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         private async Task<IPublishedContent> GetPublishedContent(Udi nodeUdi)
         {
             var umbracoType = ObjectTypes.GetUmbracoObjectType(nodeUdi.EntityType);
+            IPublishedContent publishedContent = null;
 
             switch (umbracoType)
             {
                 case UmbracoObjectTypes.Document:
-                    return _umbracoHelper.Content(nodeUdi);
+                    publishedContent = _umbracoHelper.Content(nodeUdi);
+                    break;
                 case UmbracoObjectTypes.Media:
-                    return _umbracoHelper.Media(nodeUdi);
+                    publishedContent = _umbracoHelper.Media(nodeUdi);
+                    break;
                 case UmbracoObjectTypes.Member:
                     var nodeGuid = (nodeUdi as GuidUdi).Guid;
                     var member = _entityService.Get(nodeGuid, UmbracoObjectTypes.Member);
@@ -79,12 +85,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
                     var user = await _memberManager.FindByIdAsync(name);
                     if (user != null)
                     {
-                        return _memberManager.AsPublishedMember(user);
+                        publishedContent = _memberManager.AsPublishedMember(user);
                     }
                     break;
             }
 
-            return null;
+            if (publishedContent == null)
+            {
+                _logger.LogWarning("Published content not found.");
+            }
+
+            return publishedContent;
         }
     }
 }
