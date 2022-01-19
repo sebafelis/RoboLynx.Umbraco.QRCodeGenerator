@@ -38,7 +38,9 @@ Create by you classes implementing `IQRCodeFormatFactory` and `IQRCodeFormat` do
         private readonly IQRCodeHashIdFactory _hashIdFactory;
         private readonly ILogger _logger;
 
-        public CustomFormatFactory(ISomeDependency someDependency, IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, ILogger logger)
+        public CustomFormatFactory(ISomeDependency someDependency, IUmbracoHelperAccessor umbracoHelperAccessor,
+            IQRCodeHashIdFactory hashIdFactory, ILogger<CustomFormat> logger, 
+            ILocalizedTextService localizedTextService) : base(localizedTextService)
         {
             _someDependency = someDependency;
             _umbracoHelperAccessor = umbracoHelperAccessor;

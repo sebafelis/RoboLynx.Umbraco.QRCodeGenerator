@@ -2,13 +2,14 @@
 # QR Code Generator
 
 [![Our Umbraco project page](https://img.shields.io/badge/our-umbraco-orange.svg)](https://our.umbraco.com/packages/backoffice-extensions/qr-code-generator/) 
-[![Build Status](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_apis/build/status/sebafelis.RoboLynx.Umbraco.QRCodeGenerator?branchName=main-u8)](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_build/latest?definitionId=7&branchName=main-u8)
+[![Build Status](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_apis/build/status/sebafelis.RoboLynx.Umbraco.QRCodeGenerator?branchName=main-u9)](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_build/latest?definitionId=7&branchName=main-u9)
 ![Licence](https://img.shields.io/github/license/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)
 
 ## Description
 
-_Property editor_ and _Content app_ for **Umbraco 8** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
+_Property editor_ and _Content app_ for **Umbraco 9** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
 
+>Version for Umbraco 8 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
 >Version for Umbraco 7 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
  
 User can customize generated code by color, size, output format, error correction level, adding quiet zone and also by adding icon (not for all formats). Code is available to generated from specify document type, base on specify data source like current document property or URL. The source from where the code content is get, the code type and the document type from which code can be generated are specify by developer. At this moment data source it can be property of current document (or part of it selected by regular expression), document URL or custom ([see **Source providers**](#source-providers)).
@@ -41,16 +42,14 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 
 > **Attention!**
 > 
-> * Versions starts with 7.* are intended for Umbraco 7.
-> * Versions starts with 8.* are intended for Umbraco 8.
+> Packages with version starts from:
+> * 7.* are intended for Umbraco 7.
+> * 8.* are intended for Umbraco 8.
+> * 9.* are intended for Umbraco 9.
 
-Choose one of the ways:
+Install RoboLynx.Umbraco.QRCodeGenerator by NuGet calling the following command in your main project:
 
-### 1. NuGet packages _(recommended)_
-
-Use NuGet to install RoboLynx.Umbraco.QRCodeGenerator:
-
-```Install-Package RoboLynx.Umbraco.QRCodeGenerator -Version 8.1.0```
+```Install-Package RoboLynx.Umbraco.QRCodeGenerator -Version 9.0.0```
 
 and choose what other packages you need to from bellow table.
 
@@ -59,17 +58,9 @@ Package name | Description | NuGet link
 RoboLynx.Umbraco.QRCodeGenerator.Core | Project core  | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
 RoboLynx.Umbraco.QRCodeGenerator | Property editor for Umbraco backoffice [[more](#using-in-umbraco-backoffice)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/) 
 RoboLynx.Umbraco.QRCodeGenerator.Cache | Cache implementation [[more](#cache)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Cache](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Cache?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Cache/)
-RoboLynx.Umbraco.QRCodeGenerator.Cache.Local | Cache configuration for property editor [[more](#cache)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Cache.Local](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local/)
+RoboLynx.Umbraco.QRCodeGenerator.Cache.Local | Default cache configuration for property editor [[more](#cache)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Cache.Local](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local/)
 RoboLynx.Umbraco.QRCodeGenerator.Frontend | Controller for frontend page and property editor converter [[more](#using-on-frontend-page)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Frontend](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Frontend?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Frontend/)
-RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local | Cache configuration for frontend page [[more](#frontend-cache)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local/)
-
-### 2. Umbraco package
-
-You can also download the Umbraco Package from https://our.umbraco.com/packages/backoffice-extensions/qr-code-generator/ and install them in Umbraco Backoffice.
-
-> **Information**
->
->**Umbraco package** contains content from all above NuGet Packages
+RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local | Default cache configuration for frontend page [[more](#frontend-cache)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local/)
 
 ## Configuration
 
@@ -98,9 +89,9 @@ You can also download the Umbraco Package from https://our.umbraco.com/packages/
 To caching generated QR codes you need to install `RoboLynx.Umbraco.QRCodeGenerator.Cache` package.
 This package contains all base classes needed to setup cache. You can use it to create your own cache configuration.
 
-If you wont to cache all generated QR codes in local file system, install `RoboLynx.Umbraco.QRCodeGenerator.Cache.Local` package. It's ready-to-use cache configuration.
+If you wont to cache all generated QR codes in local file system just install `RoboLynx.Umbraco.QRCodeGenerator.Cache.Local` package. It's ready-to-use cache configuration.
 
-This package configure automatically cache for all requests from Umbraco Backoffice (making by __QR Code Generator__ property editor) and store them on the local file system.
+This package configure automatically cache for all requests from Umbraco Backoffice (making by __QR Code Generator__ property editor) and store all in the local file system.
 
 > **Attention!**
 >
@@ -122,11 +113,6 @@ Insert the above code to your razor template in place where you wont to see QR c
 > **Remember!**
 > 
 > `GetQRCodeUrl()` return URL to the file with generated code. If you specify custom format that it isn't image format supported by browsers you must customize this code.
-
-
-> **Information**
->
->`GetQRCodeUrl()` method is also accessible from UrlHelper for WebApi.
 
 ### Frontend cache 
 
@@ -166,15 +152,6 @@ public class MyClass
 }
 ```
 
-### Static accessor
-
-If you can't use Dependency Injection, you can also reference the static Current class directly:
-
-```c#
-IQRCodeService qrCodeService = RoboLynx.Umbraco.QRCodeGenerator.QRCodeService.Current;
-```
-
-
 ## Source providers
 
 Source provider gets data from specify source and pass it to attributes containing by **Code type**. Now we have available only two build-in source providers. But you can write your own.
@@ -213,8 +190,6 @@ It's always passing absolute document URL for each attribute of **Code type**. T
 You can write your own **Code type** writing a two classes. First needs Implementing IQRCodeSourceFactory and second implementing IQRCodeSource. 
 
 For example you can wrote source provider getting data from external web service.
-
-More 
 
 ## Code Types
 
