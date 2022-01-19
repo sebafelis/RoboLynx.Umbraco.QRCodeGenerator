@@ -10,8 +10,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Constants
     {                            
         public const string FrontendApiOptionSectionName = "FrontendApi";
 
-        private const string FrontendCacheNameValue = "Frontend";
+        private const string _frontendCacheNameValue = "Frontend";
 
-        public static string FrontendCacheName { get; set; } = FrontendCacheNameValue;                 
+        public static string FrontendCacheName { get; set; } = _frontendCacheNameValue;                 
     }                         
 }

@@ -14,21 +14,23 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
     public class QRCodeCacheFileSystem : IQRCodeCacheFileSystem
     {
         const string _defaultPath = "";
+        private readonly string _cacheName;
         private readonly IFileSystem _innerFileSystem;
         private readonly IOptionsMonitor<QRCodeCacheOptions> _options;
         private readonly ILogger _logger;
         private readonly IDateTimeOffsetProvider _dateTimeProvider;
 
-        public QRCodeCacheFileSystem(IFileSystem innerFileSystem, IOptionsMonitor<QRCodeCacheOptions> options,
+        public QRCodeCacheFileSystem(string cacheName, IFileSystem innerFileSystem, IOptionsMonitor<QRCodeCacheOptions> options,
             IDateTimeOffsetProvider dateTimeProvider, ILogger<QRCodeCacheFileSystem> logger)
         {
+            _cacheName = cacheName;
             _innerFileSystem = innerFileSystem;
             _options = options;
             _logger = logger;
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public TimeSpan ExpirationTimeSpan => TimeSpan.FromDays(_options.CurrentValue.MaxDays);
+        public TimeSpan ExpirationTimeSpan => TimeSpan.FromDays(_options.Get(_cacheName).MaxDays);
 
         public bool CanAddPhysical => _innerFileSystem.CanAddPhysical;
 

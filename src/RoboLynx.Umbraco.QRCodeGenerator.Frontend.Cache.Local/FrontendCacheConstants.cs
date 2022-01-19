@@ -2,6 +2,6 @@
 {
     internal static class FrontendCache
     {
-        public static string DefaultFrontendCacheLocation => $"~/App_Data/TEMP/QRCodeGeneratorCache/{Frontend.FrontendCacheName}";
+        public static string DefaultFrontendCacheLocation => $"QRCodeGeneratorCache\\{Frontend.FrontendCacheName}";
     }
 }

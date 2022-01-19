@@ -24,6 +24,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         private readonly IQRCodeCacheFileSystem _fileSystem;
         private readonly IQRCodeCacheUrlProvider _urlProvider;
 
+        private bool _isInitialized = false;
+
         public QRCodeCache(AppCaches appCaches, IQRCodeCacheFileSystem fileSystem, IQRCodeCacheUrlProvider urlProvider,
             IProfilingLogger profilingLogger, ILogger<QRCodeCache<T>> logger, IDateTimeOffsetProvider dateTimeProvider,
             IServerRoleAccessor serverRoleAccessor)
@@ -31,7 +33,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             var cacheInsance = (IQRCodeCacheRole)Activator.CreateInstance<T>();
             Name = cacheInsance.Name;
 
-            _isolatedCache = appCaches.IsolatedCaches.GetOrCreate<T>();           
+            _isolatedCache = appCaches.IsolatedCaches.GetOrCreate<T>();
             _profilingLogger = profilingLogger;
             _dateTimeProvider = dateTimeProvider;
             _serverRoleAccessor = serverRoleAccessor;
@@ -80,7 +82,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             var cacheItem = GetCacheItem(hashId);
 
             _fileSystem.DeleteCacheFiles(cacheItem.Path.AsEnumerableOfOne());
-            
+
             _isolatedCache.Clear(hashId);
         }
 
@@ -129,21 +131,28 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <inheritdoc/>
         public void CleanupCache()
         {
-            using var profiler = _profilingLogger.TraceDuration<QRCodeCache<T>>("Cache cleaning started", "Cache cleaned");
-
-            var expiredItems = _isolatedCache.GetCacheItemsByKeySearch<FileCacheData>("").Where(item => item.ExpiryDate < _dateTimeProvider.UtcNow);
-
-            if (expiredItems.Any())
+            if (_isInitialized)
             {
-                using (_profilingLogger.TraceDuration<QRCodeCache<T>>("Deleting expired cache files.", "Expired cache files are deleted."))
-                {
-                    _fileSystem.DeleteCacheFiles(expiredItems.Select(s => s.Path));
-                }
+                using var profiler = _profilingLogger.TraceDuration<QRCodeCache<T>>("Cache cleaning started", "Cache cleaned");
 
-                foreach (var item in expiredItems)
+                var expiredItems = _isolatedCache.GetCacheItemsByKeySearch<FileCacheData>("").Where(item => item.ExpiryDate < _dateTimeProvider.UtcNow);
+
+                if (expiredItems.Any())
                 {
-                    _isolatedCache.Clear(item.HashId);
+                    using (_profilingLogger.TraceDuration<QRCodeCache<T>>("Deleting expired cache files.", "Expired cache files are deleted."))
+                    {
+                        _fileSystem.DeleteCacheFiles(expiredItems.Select(s => s.Path));
+                    }
+
+                    foreach (var item in expiredItems)
+                    {
+                        _isolatedCache.Clear(item.HashId);
+                    }
                 }
+            }
+            else
+            {
+                _logger.LogWarning("CleanupCache method could not run because cache is not initialized yet.");
             }
         }
 
@@ -157,18 +166,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             return _isolatedCache.GetCacheItem<FileCacheData>(hashId);
         }
 
-        /// <summary>
-        /// Initialize cache.
-        /// </summary>
-        protected void Initialize()
+        /// <inheritdoc/>
+        public void Initialize()
         {
-            UpdateRuntimeCache();
+            UpdateAppCacheFromFileSystem();
         }
 
         /// <summary>
-        /// Update runtime cache by existing file cache.
+        /// Update memory cache by existing file cache.
         /// </summary>
-        private void UpdateRuntimeCache()
+        private void UpdateAppCacheFromFileSystem()
         {
             switch (_serverRoleAccessor.CurrentServerRole)
             {
@@ -188,6 +195,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
                     }
                     break;
             }
+
+            _isInitialized = true;
         }
 
         /// <inheritdoc/>

@@ -14,7 +14,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
             var options = new QRCodeFrontendOptions();
             builder.Config.GetSection($"{Constants.Core.OptionsSectionName}:{Constants.Frontend.FrontendApiOptionSectionName}").Bind(options);
 
-            
             if (!options.Disable)
             {
                 builder.Services.AddTransient<PublicQRCodeController>();

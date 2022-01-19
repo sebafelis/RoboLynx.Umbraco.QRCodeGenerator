@@ -9,20 +9,20 @@ using Umbraco.Cms.Infrastructure.HostedServices;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
-    public class CleanCacheHostedService : RecurringHostedServiceBase
+    public class RecurringCleanupCache : RecurringHostedServiceBase
     {
-        private readonly IQRCodeCache _cache;
+        private readonly IQRCodeCacheManager _cacheManager;
         private readonly string _cacheName;
         private readonly IServerRoleAccessor _serverRoleAccessor;
-        private readonly ILogger<CleanCacheHostedService> _logger;
+        private readonly ILogger<RecurringCleanupCache> _logger;
 
-        public CleanCacheHostedService(string cacheName, IOptionsSnapshot<QRCodeCacheOptions> cacheOptions,
-            IServerRoleAccessor serverRoleAccessor, IQRCodeCache cache, ILogger<CleanCacheHostedService> logger)
+        public RecurringCleanupCache(string cacheName, IOptionsMonitor<QRCodeCacheOptions> cacheOptions,
+            IServerRoleAccessor serverRoleAccessor, IQRCodeCacheManager cacheManager, ILogger<RecurringCleanupCache> logger)
                 : base(cacheOptions.Get(cacheName).PeriodCleanCache, cacheOptions.Get(cacheName).DelayCleanCache)
         {
             _cacheName = cacheName;
             _serverRoleAccessor = serverRoleAccessor;
-            _cache = cache;
+            _cacheManager = cacheManager;
             _logger = logger;
         }
 
@@ -43,7 +43,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
                     return Task.CompletedTask; // We return Task.CompletedTask to try again as the server role may change! 
             }
 
-           _cache.CleanupCache();
+           _cacheManager.CleanupCache(_cacheName);
 
            return Task.CompletedTask;
         }       

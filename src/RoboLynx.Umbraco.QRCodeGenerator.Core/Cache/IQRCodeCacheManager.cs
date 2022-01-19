@@ -80,5 +80,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <param name="cacheName">Cache name</param>
         /// <returns>Value or NULL if cache not exist</returns>
         DateTimeOffset? LastModified(string hashId, string cacheName);
+
+        /// <summary>
+        /// Initialize cache. Execute only when server has SchedulingPublisher or Singles state set (<seealso cref="T:Umbraco.Cms.Core.Sync.ServerRoll"/>).
+        /// </summary>
+        /// <param name="cacheName">Cache name</param>
+        void Initialize(string cacheName);
     }
 }

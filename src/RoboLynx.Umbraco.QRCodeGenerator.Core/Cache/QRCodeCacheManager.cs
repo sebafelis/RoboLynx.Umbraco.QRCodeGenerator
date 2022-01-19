@@ -77,5 +77,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         {
             return GetCache(cacheName)?.LastModified(hashId);
         }
+
+        public void Initialize(string cacheName)
+        {
+            GetCache(cacheName)?.Initialize();
+        }
     }
 }

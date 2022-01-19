@@ -77,5 +77,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// Cleanup cache from expired items.
         /// </summary>
         void CleanupCache();
+
+        /// <summary>
+        /// Initialize cache. Execute only when server has SchedulingPublisher or Singles state set (<seealso cref="T:Umbraco.Cms.Core.Sync.ServerRoll"/>).
+        /// </summary>
+        void Initialize();
     }
 }
