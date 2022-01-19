@@ -1,9 +1,27 @@
 
 # Change Log
 All notable changes to this project will be documented in this file.
- 
 
-## [] - 2021-12-30
+ 
+## [Unreleased]
+
+### Added
+
+- AddQRCodeCache extension method for IUmbracoBuilder
+
+### Changed
+
+- Migration to .NET 5
+- Create IQRCodeResponseFactory to not duplicate code in controllers
+- Constants moved to `RoboLynx.Umbraco.QRCodeGenerator.Constants` name space
+
+### Removed
+
+- ColorPickr property editor (using build-in EyeDropper)
+- IQRCodeCacheFactory and IQRCodeCacheFileSystemFactory
+- CreateResponse method from IQRCodeBuilder
+
+## [8.1.0] - 2021-12-30
 
 ### Updating
   
