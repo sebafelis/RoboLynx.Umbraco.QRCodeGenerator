@@ -1,14 +1,12 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System.IO;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
-using Composing = Umbraco.Cms.Core.Composing;
+using System.IO;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
 {
     public class QRCodeService : IQRCodeService
     {
-
         protected IQRCodeBuilder CodeBuilder { get; }
 
         public QRCodeService(IQRCodeBuilder codeBuilder)

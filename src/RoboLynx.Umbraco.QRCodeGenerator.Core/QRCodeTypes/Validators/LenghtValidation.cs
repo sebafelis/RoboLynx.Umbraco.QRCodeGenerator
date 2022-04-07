@@ -4,11 +4,11 @@
     {
         public QRCodeInputType? InputType { get; private set; }
 
-        public enum QRCodeInputType { Numeric, Alphanumeric, Binary, Kanji }
+        public enum QRCodeInputType
+        { Numeric, Alphanumeric, Binary, Kanji }
 
         public LenghtValidation()
         {
-
         }
 
         public LenghtValidation(QRCodeInputType inputType)
@@ -40,6 +40,7 @@
                 case QRCodeInputType.Kanji:
                     lenght = value.ToString().Length;
                     break;
+
                 case QRCodeInputType.Binary:
                     lenght = (value as byte[]).Length;
                     break;

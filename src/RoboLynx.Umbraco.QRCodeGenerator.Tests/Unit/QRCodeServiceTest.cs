@@ -82,7 +82,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var publishedContent = Mock.Of<IPublishedContent>();
 
             var builderMock = new Mock<IQRCodeBuilder>();
-                builderMock.Setup(b => b.GetDefaultSettings(publishedContent, propertyAlias)).Returns(settings);
+            builderMock.Setup(b => b.GetDefaultSettings(publishedContent, propertyAlias)).Returns(settings);
             var service = new QRCodeService(builderMock.Object);
 
             //Act
@@ -98,16 +98,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         {
             //Assign
             var userSettings = Mock.Of<QRCodeSettings>();
-            var configuraton = Mock.Of<QRCodeConfig>(c=>c.Format == Mock.Of<IQRCodeFormat>());
+            var configuraton = Mock.Of<QRCodeConfig>(c => c.Format == Mock.Of<IQRCodeFormat>());
             var cacheName = "testCache";
 
             var cacheManagerMock = new Mock<IQRCodeCacheManager>();
             var codeType = Mock.Of<IQRCodeType>();
-            
+
             var builderMock = new Mock<IQRCodeBuilder>();
             builderMock.Setup(b => b.CreateConfiguration(codeType, userSettings)).Returns(configuraton);
             builderMock.Setup(b => b.CacheManager).Returns(cacheManagerMock.Object);
-            
+
             var service = new QRCodeService(builderMock.Object);
 
             //Act
@@ -149,7 +149,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var publishedContent = Mock.Of<IPublishedContent>();
             var propertyAlias = "qrCodePropertyAlias";
             var culture = "co";
-
 
             var builderMock = new Mock<IQRCodeBuilder>();
             builderMock.Setup(b => b.CreateConfiguration(publishedContent, propertyAlias, culture, userSettings)).Returns(configuraton);

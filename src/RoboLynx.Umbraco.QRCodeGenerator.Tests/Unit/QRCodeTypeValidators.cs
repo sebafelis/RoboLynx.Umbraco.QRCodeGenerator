@@ -9,7 +9,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
     [TestFixture]
     public class QRCodeTypeValidators
     {
-
         public static IEnumerable<TestCaseData> UrlValidator_ShouldBeValid_TestCases
         {
             get
@@ -156,7 +155,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             Assert.IsFalse(result, "Passed value should not be valid URL.");
             Assert.IsNotEmpty(message);
         }
-
 
         [TestCaseSource("LatitudeValidator_Valid_TestCases")]
         public void LatitudeValidator_ShouldBeValid(object value)

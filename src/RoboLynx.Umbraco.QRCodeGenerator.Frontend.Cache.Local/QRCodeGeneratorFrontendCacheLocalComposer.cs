@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
 using System.IO;
@@ -16,10 +15,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache
         public void Compose(IUmbracoBuilder builder)
         {
             var cacheLocation = Constants.FrontendCache.DefaultFrontendCacheLocation;
-            builder.AddQRCodeCache<FrontendQRCodeCache>(f => {
+            builder.AddQRCodeCache<FrontendQRCodeCache>(f =>
+            {
                 var hostingEnvironment = f.GetService<IHostingEnvironment>();
                 return new PhysicalFileSystem(f.GetService<IIOHelper>(), hostingEnvironment, f.GetService<ILogger<PhysicalFileSystem>>(),
-                    Path.Join(hostingEnvironment.LocalTempPath, cacheLocation), "/"); 
+                    Path.Join(hostingEnvironment.LocalTempPath, cacheLocation), "/");
             }, null);
         }
     }

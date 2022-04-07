@@ -3,7 +3,6 @@ using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System;
 using System.Linq;
-using System.Net.Http;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator
@@ -104,6 +103,5 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             var offsetBytes = BitConverter.GetBytes((Int16)dateTimeOffset.Offset.TotalHours);
             return Convert.ToBase64String(dateBytes.Concat(offsetBytes).ToArray());
         }
-
     }
 }

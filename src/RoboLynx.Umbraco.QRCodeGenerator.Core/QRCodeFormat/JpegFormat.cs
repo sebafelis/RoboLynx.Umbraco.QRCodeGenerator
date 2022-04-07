@@ -11,14 +11,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public class JpegFormat : RasterFormat
     {
-        readonly ImageFormat _imageFormat = ImageFormat.Jpeg;
+        private readonly ImageFormat _imageFormat = ImageFormat.Jpeg;
 
-        public JpegFormat(IMediaService mediaService, IUmbracoHelperAccessor umbracoHelperAccessor, 
-            IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, ILogger<JpegFormat> logger, 
-            IQRCodeType codeType, QRCodeSettings settings) 
+        public JpegFormat(IMediaService mediaService, IUmbracoHelperAccessor umbracoHelperAccessor,
+            IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, ILogger<JpegFormat> logger,
+            IQRCodeType codeType, QRCodeSettings settings)
                 : base(mediaService, umbracoHelperAccessor, hashIdFactory, logger, colorParser, codeType, settings)
         {
-
         }
 
         public override string Mime => "image/jpeg";

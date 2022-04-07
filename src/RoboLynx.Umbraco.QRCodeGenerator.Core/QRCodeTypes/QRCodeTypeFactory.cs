@@ -16,7 +16,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 
         public abstract string Id { get; }
 
-        public virtual string Name => localizedTextService == null ? throw new NotSupportedException("LocalizedTextService was not passed in constructor.") : (localizedTextService.Localize("qrCodeTypes", $"{GetType().Name.Replace("Factory","").ToFirstLower()}Name") ?? GetType().Name);
+        public virtual string Name => localizedTextService == null ? throw new NotSupportedException("LocalizedTextService was not passed in constructor.") : (localizedTextService.Localize("qrCodeTypes", $"{GetType().Name.Replace("Factory", "").ToFirstLower()}Name") ?? GetType().Name);
 
         public virtual string Description => localizedTextService == null ? throw new NotSupportedException("LocalizedTextService was not passed in constructor.") : (localizedTextService.Localize("qrCodeTypes", $"{GetType().Name.Replace("Factory", "").ToFirstLower()}Description") ?? string.Empty);
 

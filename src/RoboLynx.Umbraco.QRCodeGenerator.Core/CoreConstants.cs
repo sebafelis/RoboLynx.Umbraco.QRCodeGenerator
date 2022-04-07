@@ -1,7 +1,7 @@
-﻿
-namespace RoboLynx.Umbraco.QRCodeGenerator.Constants
+﻿namespace RoboLynx.Umbraco.QRCodeGenerator.Constants
 {
 #pragma warning disable IDE1006 // Add readonly modifier
+
     internal class Core
     {
         internal const string PluginAlias = "QRCodeGenerator";
@@ -70,5 +70,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Constants
         public const string DrawQuietZone = FieldsNames.DrawQuietZoneFieldName;
         public const string ECCLevel = FieldsNames.ECCLevelFieldName;
     }
+
 #pragma warning restore IDE1006 // Add readonly modifier
 }

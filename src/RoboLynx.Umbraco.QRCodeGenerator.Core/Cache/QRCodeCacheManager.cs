@@ -12,7 +12,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         public QRCodeCacheManager(IEnumerable<IQRCodeCache> caches)
         {
-            _caches = caches?.ToDictionary(k=>k.Name, v=>v) ?? new Dictionary<string, IQRCodeCache>();
+            _caches = caches?.ToDictionary(k => k.Name, v => v) ?? new Dictionary<string, IQRCodeCache>();
         }
 
         private IQRCodeCache GetCache(string cacheName)

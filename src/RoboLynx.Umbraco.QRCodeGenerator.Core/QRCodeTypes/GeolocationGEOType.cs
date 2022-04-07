@@ -8,8 +8,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class GeolocationGEOType : QRCodeType
     {
-        const string LatitudeArgumentName = "latitude";
-        const string LongitudeArgumentName = "longitude";
+        private const string LatitudeArgumentName = "latitude";
+        private const string LongitudeArgumentName = "longitude";
 
         private readonly IQRCodeSource _source;
         private string _latitude;
@@ -52,7 +52,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
                 _latitude = _source.GetValue<string>(0, LatitudeArgumentName);
                 _longitude = _source.GetValue<string>(1, LongitudeArgumentName);
             }
-
 
             if (_validate)
             {

@@ -6,8 +6,10 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Security;
 using Umbraco.Extensions;
 using static RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources.SimplePropertySource.SilmplePropertySourceSettings;
+using UmbracoConstants = Umbraco.Cms.Core.Constants;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 {
@@ -50,17 +52,18 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
         }
 
         private readonly SilmplePropertySourceSettings _settings;
+        private readonly IBackOfficeSecurityAccessor _backOfficeSecurityAccessor;
         private readonly IPublishedValueFallback _publishedValueFallback;
         private readonly IPublishedContent _content;
         private readonly string _culture;
 
-        public SimplePropertySource(IPublishedValueFallback publishedValueFallback, IPublishedContent content, string sourceSettings, string culture) : base()
+        public SimplePropertySource(IBackOfficeSecurityAccessor backOfficeSecurityAccessor, IPublishedValueFallback publishedValueFallback, IPublishedContent content, string sourceSettings, string culture) : base()
         {
             if (content is null)
             {
                 throw new ArgumentNullException(nameof(content));
             }
-            
+
             if (sourceSettings.DetectIsJson())
             {
                 _settings = JsonConvert.DeserializeObject<SilmplePropertySourceSettings>(sourceSettings);
@@ -74,6 +77,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             {
                 throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure.");
             }
+            _backOfficeSecurityAccessor = backOfficeSecurityAccessor;
             _publishedValueFallback = publishedValueFallback;
             _content = content;
             _culture = culture;
@@ -81,30 +85,35 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 
         public override T GetValue<T>(int index, string key)
         {
-            IPublishedProperty property = null;
+            object propertyValue = null;
             string regexPattern = null;
-            if (!string.IsNullOrEmpty(key) && (_settings.Properties?.ContainsKey(key) ?? false) && _settings.Properties[key] != null)
-            {
-                setProperty(key);
-            }
-            else if (_settings.Properties.Count > index && _settings.Properties[index] != null)
-            {
-                setProperty(index);
-            }
 
-            void setProperty(object key)
+            var settingItem = GetSettingItem(index, key);
+            IPublishedProperty property = _content.GetProperty(settingItem.Name);
+            if (property != null)
             {
-                var settingItem = _settings.Properties[key];
-                property = _content.GetProperty(settingItem.Name);
+                if (!property.PropertyType.IsUserProperty
+                    && !(property.PropertyType.ContentType.ItemType == PublishedItemType.Member
+                    && _backOfficeSecurityAccessor.BackOfficeSecurity.IsAuthenticated()
+                    && _backOfficeSecurityAccessor.BackOfficeSecurity.CurrentUser.HasSectionAccess(UmbracoConstants.Applications.Members)))
+                {
+                    property = null;
+                }
+
                 regexPattern = settingItem.Regex;
+
+                if (property is null)
+                {
+                    throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure correctly.");
+                }
+
+                propertyValue = property.Value(_publishedValueFallback, _culture);
             }
 
-            if (property is null)
+            if (propertyValue == null && settingItem.Name.Equals(nameof(_content.Name), StringComparison.OrdinalIgnoreCase))
             {
-                throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure correctly.");
+                propertyValue = _content.Name;
             }
-
-            var propertyValue = property.Value(_publishedValueFallback, _culture);
 
             if (!string.IsNullOrEmpty(regexPattern) && propertyValue is string spropertyValue)
             {
@@ -126,6 +135,19 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             }
         }
 
+        private SettingsItem GetSettingItem(int index, string key)
+        {
+            object settingPropertyIndex = null;
+            if (!string.IsNullOrEmpty(key) && (_settings.Properties?.ContainsKey(key) ?? false) && _settings.Properties[key] != null)
+            {
+                settingPropertyIndex = key;
+            }
+            else if (_settings.Properties.Count > index && _settings.Properties[index] != null)
+            {
+                settingPropertyIndex = index;
+            }
+
+            return _settings.Properties[settingPropertyIndex];
+        }
     }
 }
-

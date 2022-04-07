@@ -28,17 +28,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         {
             // Assign
             var requestUri = new Uri(requestUrl, UriKind.Absolute);
-            var httpContext = Mock.Of<HttpContext>(c=>c.Request == Mock.Of<HttpRequest>(r=>r.Scheme == requestUri.Scheme 
-                                                                                        && r.Host == new HostString(requestUri.Host, requestUri.Port) 
-                                                                                        && r.Path == r.Path 
-                                                                                        && r.Query == r.Query));
-            var httpContextAccessor = Mock.Of<IHttpContextAccessor>(c=>c.HttpContext == httpContext);
+            var httpContext = Mock.Of<HttpContext>(c => c.Request == Mock.Of<HttpRequest>(r => r.Scheme == requestUri.Scheme
+                                                                                          && r.Host == new HostString(requestUri.Host, requestUri.Port)
+                                                                                          && r.Path == r.Path
+                                                                                          && r.Query == r.Query));
+            var httpContextAccessor = Mock.Of<IHttpContextAccessor>(c => c.HttpContext == httpContext);
 
             var urlProvider = new LocalCacheUrlProvider(httpContextAccessor, new Uri(baseUrl, UriKind.RelativeOrAbsolute), defaultUrlMode == UrlMode.Absolute);
 
             // Act
             var result = urlProvider.Url(path, urlMode);
-            
+
             //Assert
             Assert.AreEqual(expectedResult, result);
         }

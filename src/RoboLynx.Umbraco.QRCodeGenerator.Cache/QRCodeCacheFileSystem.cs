@@ -6,14 +6,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Core.IO;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
     public class QRCodeCacheFileSystem : IQRCodeCacheFileSystem
     {
-        const string _defaultPath = "";
+        private const string _defaultPath = "";
         private readonly string _cacheName;
         private readonly IFileSystem _innerFileSystem;
         private readonly IOptionsMonitor<QRCodeCacheOptions> _options;

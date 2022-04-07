@@ -29,7 +29,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
                 }
                 catch (InvalidCastException)
                 {
-
                 }
             }
 

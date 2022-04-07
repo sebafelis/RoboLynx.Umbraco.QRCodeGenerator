@@ -2,7 +2,6 @@
 using System;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
-using Umbraco.Extensions;
 using UmbracoCoreConstants = Umbraco.Cms.Core.Constants;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
@@ -15,8 +14,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 
         public AbsoluteUrlSource(IPublishedUrlProvider publishedUrlProvider, IPublishedContent content, string culture) : base()
         {
-            if (content.ContentType.ItemType == PublishedItemType.Member || 
-                content.ContentType.ItemType == PublishedItemType.Element || 
+            if (content.ContentType.ItemType == PublishedItemType.Member ||
+                content.ContentType.ItemType == PublishedItemType.Element ||
                 content.ContentType.ItemType == PublishedItemType.Unknown)
             {
                 throw new InvalidSettingQRCodeGeneratorException("codeSource", $"Absolute URL source does not support {content.ItemType}");

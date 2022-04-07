@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using System;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
-using Microsoft.AspNetCore.Http.Extensions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
@@ -26,7 +26,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         public string Url(string path, UrlMode urlMode)
         {
             Uri url = new(_baseUrl.ToString().EnsureEndsWith("/") + path.TrimStart("/"), UriKind.RelativeOrAbsolute);
-            
+
             if (!url.IsAbsoluteUri)
             {
                 var requestUrl = new Uri(_httpContextAccessor.HttpContext.Request.GetEncodedUrl());

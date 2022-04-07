@@ -7,8 +7,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class SmsType : QRCodeType
     {
-        const string numberArgumentName = "number";
-        const string subjectArgumentName = "subject";
+        private const string numberArgumentName = "number";
+        private const string subjectArgumentName = "subject";
 
         private readonly IQRCodeSource _source;
         private string _number;

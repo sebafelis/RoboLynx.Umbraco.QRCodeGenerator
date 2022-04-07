@@ -7,7 +7,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
     {
         public GeolocationGEOTypeFactory(ILocalizedTextService localizedTextService) : base(localizedTextService)
         {
-
         }
 
         public override string Id => "GeolocationGEO";

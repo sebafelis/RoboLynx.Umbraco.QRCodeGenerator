@@ -8,6 +8,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
         string Id { get; }
         string Name { get; }
         string Description { get; }
+
         IQRCodeSource Create(IPublishedContent publishedContent, string sourceSettings, string culture);
     }
 }

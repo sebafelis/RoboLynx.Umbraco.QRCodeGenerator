@@ -129,9 +129,8 @@ angular.module("umbraco")
                             else {
                                 deferred.reject("Unknown error");
                             }
-                            
-                            return deferred.promise;
 
+                            return deferred.promise;
                         }
                     );
             },

@@ -71,6 +71,5 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Types
             //Assert
             Assert.IsInstanceOf<T>(type);
         }
-
     }
 }

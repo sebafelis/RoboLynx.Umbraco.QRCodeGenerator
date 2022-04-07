@@ -11,7 +11,7 @@
         // Usage:
         //     <hideUmbProperty></hideUmbProperty>
         // Creates:
-        // 
+        //
         var directive = {
             link: link,
             restrict: 'E',
@@ -30,5 +30,4 @@
             }
         }
     }
-
 })();

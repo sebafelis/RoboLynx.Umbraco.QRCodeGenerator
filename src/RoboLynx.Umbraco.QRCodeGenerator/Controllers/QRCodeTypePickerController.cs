@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System.Linq;
-using Umbraco.Cms.Core.Cache;
-using Umbraco.Cms.Core.Logging;
-using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Core.Web;
-using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Cms.Web.BackOffice.Controllers;
-using Umbraco.Cms.Web.Common;
 using Umbraco.Cms.Web.Common.Attributes;
 using Umbraco.Cms.Web.Common.Filters;
 
@@ -31,7 +25,5 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 
             return Ok(result);
         }
-
-
     }
 }

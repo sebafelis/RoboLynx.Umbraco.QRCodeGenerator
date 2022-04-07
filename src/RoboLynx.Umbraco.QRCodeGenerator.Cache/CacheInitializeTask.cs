@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Infrastructure.HostedServices;
@@ -11,15 +8,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
     public class CacheInitializeTask : RecurringHostedServiceBase
     {
-        static readonly TimeSpan _period = TimeSpan.FromSeconds(30);
-        static readonly TimeSpan _delay = TimeSpan.FromMinutes(1);
+        private static readonly TimeSpan _period = TimeSpan.FromSeconds(30);
+        private static readonly TimeSpan _delay = TimeSpan.FromMinutes(1);
 
         private readonly string _cacheName;
         private readonly IServerRoleAccessor _serverRoleAccessor;
         private readonly IQRCodeCacheManager _qrCodeCacheManager;
         private readonly ILogger<CacheInitializeTask> _logger;
 
-        public CacheInitializeTask(string cacheName, IServerRoleAccessor serverRoleAccessor, IQRCodeCacheManager qrCodeCacheManager, 
+        public CacheInitializeTask(string cacheName, IServerRoleAccessor serverRoleAccessor, IQRCodeCacheManager qrCodeCacheManager,
             ILogger<CacheInitializeTask> logger) : base(_period, _delay)
         {
             _cacheName = cacheName;

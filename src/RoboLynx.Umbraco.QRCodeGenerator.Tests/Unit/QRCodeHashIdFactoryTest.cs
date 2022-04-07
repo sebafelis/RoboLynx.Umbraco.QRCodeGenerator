@@ -1,10 +1,7 @@
 ﻿using NUnit.Framework;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 {
@@ -58,7 +55,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 
                 var hashFactory = new MD5HashIdFactory();
 
-                hashes.Add(hashFactory.ComputeHash(codeContent, settings));            
+                hashes.Add(hashFactory.ComputeHash(codeContent, settings));
             }
             Assert.That(hashes.Distinct().Count(), Is.EqualTo(1), "Not all computed hashes are the same.");
         }
@@ -141,7 +138,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 
             //Act
             foreach (var item in items)
-            {     
+            {
                 hashes.Add(hashFactory.ComputeHash(item.codeContent, item.settings));
             }
 

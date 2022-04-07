@@ -53,7 +53,6 @@
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeTypePicker\qrCodeTypePicker.html" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeLevelPicker\qrCodeLevelPicker.Controller.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeLevelPicker\qrCodeLevelPicker.html" />
-		<Content Include="App_Plugins\QRCodeGenerator\propertyEditors\qrCodeGenerator\qrCodeGenerator.Controller.js" />
 		<Content Include="App_Plugins\QRCodeGenerator\propertyEditors\qrCodeGenerator\qrCodeGenerator.html" />
 		<Content Include="App_Plugins\QRCodeGenerator\qrCodeGeneratorStyle.min.css" />
 		<Content Include="App_Plugins\QRCodeGenerator\services\qrCodeGenerator.Resources.js" />

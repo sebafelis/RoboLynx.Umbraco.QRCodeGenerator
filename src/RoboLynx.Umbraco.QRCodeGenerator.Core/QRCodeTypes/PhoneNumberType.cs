@@ -8,7 +8,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class PhoneNumberType : QRCodeType
     {
-        const string NumberArgumentName = "number";
+        private const string NumberArgumentName = "number";
 
         private readonly IQRCodeSource _source;
         private string _number;

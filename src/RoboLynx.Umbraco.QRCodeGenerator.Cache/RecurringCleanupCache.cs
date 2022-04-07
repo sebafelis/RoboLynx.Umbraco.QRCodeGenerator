@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using Umbraco.Cms.Core.Logging;
-using Umbraco.Cms.Core.Scoping;
-using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Infrastructure.HostedServices;
 
@@ -26,7 +23,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             _logger = logger;
         }
 
-
         public override Task PerformExecuteAsync(object state)
         {
             _logger.LogInformation($"Cleaning {_cacheName} QR code cache.");
@@ -40,12 +36,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
                     return Task.CompletedTask; // We return Task.CompletedTask to try again as the server role may change!
                 case ServerRole.Unknown:
                     _logger.LogDebug("Does not run on servers with unknown role.");
-                    return Task.CompletedTask; // We return Task.CompletedTask to try again as the server role may change! 
+                    return Task.CompletedTask; // We return Task.CompletedTask to try again as the server role may change!
             }
 
-           _cacheManager.CleanupCache(_cacheName);
+            _cacheManager.CleanupCache(_cacheName);
 
-           return Task.CompletedTask;
-        }       
+            return Task.CompletedTask;
+        }
     }
 }

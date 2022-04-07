@@ -13,11 +13,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
     {
         private readonly IColorParser _colorParser;
 
-        public SvgFormat(IUmbracoHelperAccessor _umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, ILogger<SvgFormat> logger,  IQRCodeType codeType, QRCodeSettings settings) : base(_umbracoHelperAccessor, hashIdFactory, logger, codeType, settings)
+        public SvgFormat(IUmbracoHelperAccessor _umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, ILogger<SvgFormat> logger, IQRCodeType codeType, QRCodeSettings settings) : base(_umbracoHelperAccessor, hashIdFactory, logger, codeType, settings)
         {
             _colorParser = colorParser;
         }
-        
 
         public override string Mime => "image/svg+xml";
 
@@ -44,7 +43,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             var qrGenerator = new QRCoder.QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(codeContent, (QRCoder.QRCodeGenerator.ECCLevel)(int)settings.ECCLevel, true);
 
-            SvgQRCode svgQrCode = new (qrCodeData);
+            SvgQRCode svgQrCode = new(qrCodeData);
 
             var svgString = svgQrCode.GetGraphic(settings.Size, darkColor, lightColor, settings.DrawQuiteZone.Value, SvgQRCode.SizingMode.WidthHeightAttribute);
 
@@ -52,7 +51,5 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
             return svgString;
         }
-
-
     }
 }

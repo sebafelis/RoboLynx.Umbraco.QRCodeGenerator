@@ -1,14 +1,11 @@
 ﻿using Chronos.Abstractions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Extensions;
 
@@ -182,9 +179,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
                 case ServerRole.Subscriber:
                     _logger.LogDebug("UpdateRuntimeCache does not run on replica servers.");
                     return;
+
                 case ServerRole.Unknown:
                     _logger.LogDebug("UpdateRuntimeCache does not run on servers with unknown role.");
                     return;
+
                 default:
                     using (_profilingLogger.TraceDuration<QRCodeCache<T>>("Updating runtime cache.", "Cache was update."))
                     {

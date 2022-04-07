@@ -28,7 +28,5 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 
             return Ok(result);
         }
-
-
     }
 }

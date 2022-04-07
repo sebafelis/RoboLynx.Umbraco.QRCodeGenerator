@@ -1,7 +1,5 @@
 ﻿using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -15,7 +13,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         {
             public string CodeContent { get; }
             public QRCodeSettings Settings { get; }
-            
+
             public QRCodeConfigContainer(string codeContent, QRCodeSettings settings) : this()
             {
                 CodeContent = codeContent;

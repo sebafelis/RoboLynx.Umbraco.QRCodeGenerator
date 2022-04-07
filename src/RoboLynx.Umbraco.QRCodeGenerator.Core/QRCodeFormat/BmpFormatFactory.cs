@@ -16,7 +16,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         private readonly IColorParser _colorParser;
         private readonly ILogger<BmpFormat> _logger;
 
-        public BmpFormatFactory(ILocalizedTextService localizedTextService, IMediaService mediaService, 
+        public BmpFormatFactory(ILocalizedTextService localizedTextService, IMediaService mediaService,
             IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser,
             ILogger<BmpFormat> logger) : base(localizedTextService)
         {

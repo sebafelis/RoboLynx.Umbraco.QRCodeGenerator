@@ -20,7 +20,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
         /// </summary>
         string Description { get; }
 
-
         IQRCodeType Create(IQRCodeSource qrCodeSource);
     }
 }

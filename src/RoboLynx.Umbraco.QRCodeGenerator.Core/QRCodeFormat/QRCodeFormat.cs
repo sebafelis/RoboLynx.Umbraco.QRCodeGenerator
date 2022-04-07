@@ -16,7 +16,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         protected IQRCodeType CodeType { get; }
         protected QRCodeSettings Settings { get; }
 
-        public QRCodeFormat(IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, ILogger<QRCodeFormat> logger, IQRCodeType codeType, 
+        public QRCodeFormat(IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, ILogger<QRCodeFormat> logger, IQRCodeType codeType,
             QRCodeSettings settings)
         {
             UmbracoHelperAccessor = umbracoHelperAccessor;
@@ -67,5 +67,5 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             Logger.LogWarning("Umbraco Helper not found.");
             return null;
         }
-}
+    }
 }

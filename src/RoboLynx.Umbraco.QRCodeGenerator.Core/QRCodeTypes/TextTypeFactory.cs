@@ -7,7 +7,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
     {
         public TextTypeFactory(ILocalizedTextService localizedTextService) : base(localizedTextService)
         {
-
         }
 
         public override string Id => "Text";

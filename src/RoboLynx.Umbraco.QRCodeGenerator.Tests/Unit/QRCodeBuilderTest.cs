@@ -7,11 +7,6 @@ using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
@@ -19,51 +14,67 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
     [TestFixture]
     public class QRCodeBuilderTest : QRCodeGeneratorBaseTest
     {
-        const string _editorAlias = "qrCodeGenerator";
+        private const string _editorAlias = "qrCodeGenerator";
 
 #pragma warning disable IDE0044 // Add readonly modifier
 #pragma warning disable IDE1006 // Naming Styles
 
         // Format1
         private const string Format1Id = "Format1";
+
         private static IQRCodeFormat Format1 = Mock.Of<IQRCodeFormat>();
         private static IQRCodeFormatFactory Format1Factory = Mock.Of<IQRCodeFormatFactory>(f => f.Id == Format1Id && f.Create(It.IsAny<IQRCodeType>(), It.IsAny<QRCodeSettings>()) == Format1);
+
         // Format2
         private const string Format2Id = "Format2";
+
         private static IQRCodeFormat Format2 = Mock.Of<IQRCodeFormat>();
         private static IQRCodeFormatFactory Format2Factory = Mock.Of<IQRCodeFormatFactory>(f => f.Id == Format2Id && f.Create(It.IsAny<IQRCodeType>(), It.IsAny<QRCodeSettings>()) == Format2);
+
         // Format3
         private const string Format3Id = "Format3";
+
         private static IQRCodeFormat Format3 = Mock.Of<IQRCodeFormat>();
         private static IQRCodeFormatFactory Format3Factory = Mock.Of<IQRCodeFormatFactory>(f => f.Id == Format3Id && f.Create(It.IsAny<IQRCodeType>(), It.IsAny<QRCodeSettings>()) == Format3);
+
         // Source1
         private const string Source1Id = "Source1";
+
         private static IQRCodeSource Source1 = Mock.Of<IQRCodeSource>();
         private static IQRCodeSourceFactory Source1Factory = Mock.Of<IQRCodeSourceFactory>(f => f.Id == Source1Id && f.Create(It.IsAny<IPublishedContent>(), It.IsAny<string>(), It.IsAny<string>()) == Source1);
+
         // Source2
         private const string Source2Id = "Source2";
+
         private static IQRCodeSource Source2 = Mock.Of<IQRCodeSource>();
         private static IQRCodeSourceFactory Source2Factory = Mock.Of<IQRCodeSourceFactory>(f => f.Id == Source2Id && f.Create(It.IsAny<IPublishedContent>(), It.IsAny<string>(), It.IsAny<string>()) == Source2);
+
         // Source3
         private const string Source3Id = "Source3";
+
         private static IQRCodeSource Source3 = Mock.Of<IQRCodeSource>();
         private static IQRCodeSourceFactory Source3Factory = Mock.Of<IQRCodeSourceFactory>(f => f.Id == Source3Id && f.Create(It.IsAny<IPublishedContent>(), It.IsAny<string>(), It.IsAny<string>()) == Source3);
+
         // Type1
         private const string Type1Id = "Type1";
+
         private static IQRCodeType Type1 = Mock.Of<IQRCodeType>();
         private static IQRCodeTypeFactory Type1Factory = Mock.Of<IQRCodeTypeFactory>(f => f.Id == Type1Id && f.Create(It.IsAny<IQRCodeSource>()) == Type1);
+
         // Type2
         private const string Type2Id = "Type2";
+
         private static IQRCodeType Type2 = Mock.Of<IQRCodeType>();
         private static IQRCodeTypeFactory Type2Factory = Mock.Of<IQRCodeTypeFactory>(f => f.Id == Type2Id && f.Create(It.IsAny<IQRCodeSource>()) == Type2);
+
         // Type3
         private const string Type3Id = "Type3";
+
         private static IQRCodeType Type3 = Mock.Of<IQRCodeType>();
         private static IQRCodeTypeFactory Type3Factory = Mock.Of<IQRCodeTypeFactory>(f => f.Id == Type3Id && f.Create(It.IsAny<IQRCodeSource>()) == Type3);
 
 #pragma warning restore IDE1006 // Naming Styles
 #pragma warning restore IDE0044 // Add readonly modifier
-
 
         private readonly IEnumerable<KeyValuePair<string, object>> _defaultConfiguration = new List<KeyValuePair<string, object>>()
         {
@@ -82,6 +93,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         };
 
 #pragma warning disable IDE0051 // Remove unused private members
+
         private static IEnumerable<TestCaseData> CreateQRCodeAsResponse_CorrentConfiguration_Data
         {
             get
@@ -336,7 +348,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 
             var builder = new QRCodeBuilder(
                    new QRCodeFormat.QRCodeFormatFactoryCollection(() => new IQRCodeFormatFactory[] { Mock.Of<IQRCodeFormatFactory>() }),
-                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(() =>  new IQRCodeSourceFactory[] { Mock.Of<IQRCodeSourceFactory>() }),
+                   new QRCodeGenerator.QRCodeSources.QRCodeSourceFactoryCollection(() => new IQRCodeSourceFactory[] { Mock.Of<IQRCodeSourceFactory>() }),
                    new QRCodeTypes.QRCodeTypeFactoryCollection(() => new IQRCodeTypeFactory[] { Mock.Of<IQRCodeTypeFactory>() }),
                     Mock.Of<IQRCodeCacheManager>()
                );
@@ -452,7 +464,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 
             //Act
             var configuration = builder.CreateConfiguration(publishedContentMock.Object, propertyAlias, culture, userSettings);
-
 
             //Assert
             Assert.AreEqual(expectedConfig.Format, configuration.Format);

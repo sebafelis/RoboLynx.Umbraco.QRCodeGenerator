@@ -16,8 +16,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         private readonly IColorParser _colorParser;
         private readonly ILogger<JpegFormat> _logger;
 
-        public JpegFormatFactory(ILocalizedTextService localizedTextService, IMediaService mediaService, 
-            IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory, 
+        public JpegFormatFactory(ILocalizedTextService localizedTextService, IMediaService mediaService,
+            IUmbracoHelperAccessor umbracoHelperAccessor, IQRCodeHashIdFactory hashIdFactory,
             IColorParser colorParser, ILogger<JpegFormat> logger) : base(localizedTextService)
         {
             _mediaService = mediaService;
@@ -42,7 +42,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 
         public override IQRCodeFormat Create(IQRCodeType codeType, QRCodeSettings settings)
         {
-            return new JpegFormat(_mediaService, _umbracoHelperAccessor, _hashIdFactory, _colorParser, _logger, codeType, settings );
+            return new JpegFormat(_mediaService, _umbracoHelperAccessor, _hashIdFactory, _colorParser, _logger, codeType, settings);
         }
     }
 }

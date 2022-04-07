@@ -7,7 +7,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
     {
         public SmsTypeFactory(ILocalizedTextService localizedTextService) : base(localizedTextService)
         {
-
         }
 
         public override string Id => "SMS";

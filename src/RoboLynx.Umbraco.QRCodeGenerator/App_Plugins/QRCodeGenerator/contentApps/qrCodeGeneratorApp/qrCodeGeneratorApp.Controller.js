@@ -7,14 +7,12 @@
     qrCodeContentApp.$inject = ['$scope', 'editorState', 'eventsService', 'contentResource', 'mediaResource', 'memberResource', 'udiParser', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService', 'assetsService'];
 
     function qrCodeContentApp($scope, editorState, eventsService, contentResource, mediaResource, memberResource, udiParser, qrCodeGeneratorResources, $q, notificationsService, assetsService) {
-
         var vm = this;
         const documentNodeType = "document",
             mediaNodeType = "media",
             memberNodeType = "member",
             unknownNodeType = "unknown",
             supportedNodeTypes = [documentNodeType, mediaNodeType, memberNodeType];
-
 
         var defaultSettings = {},
             requierdSettingsForFormats = {},
@@ -265,7 +263,6 @@
             });
         }
 
-
         function loadDownloadJs() {
             return assetsService.loadJs(
                 "~/App_Plugins/QRCodeGenerator/libs/downloadjs/download.min.js"
@@ -339,7 +336,6 @@
                     });
         }
 
-
         function findProperties() {
             var udi = udiParser.parse(vm.currentNodeUdi);
 
@@ -381,7 +377,6 @@
         }
 
         function oninit() {
-
             unwatchQRCodePropertyAlias = $scope.$watch("vm.selectedQRCodePropertyAlias", function (newValue, oldValue) {
                 if (newValue && oldValue != newValue) {
                     unwatchSettings();

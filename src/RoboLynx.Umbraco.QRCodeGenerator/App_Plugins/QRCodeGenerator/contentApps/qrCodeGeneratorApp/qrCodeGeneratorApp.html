@@ -32,8 +32,6 @@
             </p>
         </div>
 
-
-
         <div class="qrcode-container">
             <div class="qrcode-vertical-center">
                 <div ng-if="vm.qrCodeLoaded" class="qrcode-vertical-center">
@@ -64,7 +62,6 @@
                         <umb-control-group label="Select source" ng-show="vm.qrCodeProperties.length > 1">
                             <select ng-options="item.alias as item.label for item in vm.qrCodeProperties" ng-model="vm.selectedQRCodePropertyAlias"></select>
                         </umb-control-group>
-
 
                         <ng-form name="propertyForm" class="ng-pristine ng-valid" ng-model-options="{ debounce: 1000 }">
                             <div ng-repeat="property in vm.settingsModel | orderBy:'order'" ng-init="property.change(property)">

@@ -21,4 +21,3 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
         }
     }
 }
-

@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using RoboLynx.Umbraco.QRCodeGenerator;
 using RoboLynx.Umbraco.QRCodeGenerator.Frontend;
 using RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using System;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Extensions;
-using Microsoft.AspNetCore.Http.Extensions;
-using Umbraco.Cms.Core;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using Umbraco.Cms.Web.Common.Controllers;
+using Umbraco.Extensions;
 
 namespace Umbraco.Extensions
 {
@@ -62,7 +59,7 @@ namespace Umbraco.Extensions
             }
             return actionUrl;
         }
-         
+
         /// <summary>
         /// Gets URL to file containing QR code generated with specify settings.
         /// </summary>

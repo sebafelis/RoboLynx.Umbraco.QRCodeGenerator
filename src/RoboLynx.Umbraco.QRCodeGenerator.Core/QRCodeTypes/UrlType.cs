@@ -8,7 +8,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class UrlType : QRCodeType
     {
-        const string UrlArgumentName = "url";
+        private const string UrlArgumentName = "url";
 
         private readonly IQRCodeSource _source;
         private string _url;
@@ -26,7 +26,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
                 throw new System.ArgumentException($"'{nameof(url)}' cannot be null or empty.", nameof(url));
             }
 
-            _url = url; 
+            _url = url;
             _validate = validate;
         }
 

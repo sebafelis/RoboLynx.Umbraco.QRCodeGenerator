@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
@@ -29,6 +25,5 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// Running period hosted service clearing cache. Hosted service is running only on master server.
         /// </summary>
         public TimeSpan PeriodCleanCache { get; set; } = TimeSpan.FromHours(3);
-
     }
 }

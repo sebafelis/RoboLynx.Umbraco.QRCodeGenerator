@@ -7,7 +7,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
 {
     public class TextType : QRCodeType
     {
-        const string TextArgumentName = "text";
+        private const string TextArgumentName = "text";
 
         private string _text;
         private readonly IQRCodeSource _source;
@@ -39,7 +39,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
         {
             if (_source is not null)
             {
-               _text = _source.GetValue<string>(0, TextArgumentName);
+                _text = _source.GetValue<string>(0, TextArgumentName);
             }
 
             if (_validate)
@@ -47,7 +47,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
                 Validate(TextArgumentName, _text);
                 Validate(AllFieldsValidator, _text);
             }
-            return _text; 
+            return _text;
         }
     }
 }

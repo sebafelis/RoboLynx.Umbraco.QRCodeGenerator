@@ -39,6 +39,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
         {
             return _qrCodeService.GetStream(PublishedContent, PropertyAlias, culture, DefaultSettings, CacheName);
         }
+
         public Stream Stream()
         {
             return _qrCodeService.GetStream(PublishedContent, PropertyAlias, PublishedContent.GetCultureFromDomains(), DefaultSettings, CacheName);

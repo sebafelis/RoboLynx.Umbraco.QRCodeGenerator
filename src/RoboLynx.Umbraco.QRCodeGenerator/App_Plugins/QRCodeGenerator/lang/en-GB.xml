@@ -71,7 +71,7 @@
 		<key alias="actionBtnCaption">Generate QR Code</key>
 		<key alias="eccLevel">Error correction level</key>
 		<key alias="eccLevelDescription">Level determine how much area of code can be unreadable but code is still readable.</key>
-		<key alias="imageSize">Image size</key>		
+		<key alias="imageSize">Image size</key>
 		<key alias="notPublishedAnyContentVersionHedline">Unpublished content at all</key>
 		<key alias="notPublishedAnyContentVersionMsg">This content has not published version. To generate QR Code content has to have published version.</key>
 		<key alias="openDirtyContentHedline">This content has unsaved changes</key>
