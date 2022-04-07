@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 
-- ColorPickr property editor (using build-in EyeDropper)
+- ColorPickr property editor (now is using build-in EyeDropper)
 - IQRCodeCacheFactory and IQRCodeCacheFileSystemFactory
 - CreateResponse method from IQRCodeBuilder
 
