@@ -21,8 +21,9 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 
 1. [Installation](#installation)
    1. [NuGet packages _(recommended)_](#nuget-packages-recommended)
-   2. [Umbraco Packge](#umbraco-package)
+   1. [Umbraco Packge](#umbraco-package)
 1. [Configuration](#configuration)
+1. [Configuration file](#configuration-file)
 1. [Using in Umbraco Backoffice](#using-in-umbraco-backoffice)
 1. [Cache](#cache)
 1. [Using on frontend page](#using-on-frontend-page)
@@ -32,8 +33,8 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
    1. [Static accessor](#static-accessor)
 1. [Source providers](#source-providers)
    1. [Content Property](#content-property)
-   2. [Absolute URL](#absolute-url)
-   3. [Custom](#custom)
+   1. [Absolute URL](#absolute-url)
+   1. [Custom](#custom)
 1. [Code Types](#code-types)
 1. [Formats](#formats)
 1. [Use examples](#use-examples)
@@ -75,6 +76,37 @@ RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local | Default cache configurat
 1. Save document type. 
 
    ![Configuration](assets/screenshots/screen3.png)
+
+## Configuration file 
+
+Some global settings can be configure from *appsetting.json* file. Default configuration looks like below.
+
+```json
+{
+    "QRCodeGenerator": {
+        "Cache": {
+          "Backoffice": { // Settings for cache storing requests from backoffice property editors.
+            "Disable": false, // Disable this cache.
+            "MaxDays": 365,  // How many days file in cache will be store
+            "DelayCleanCache": "0.0:1:0", // Delay before first running of cache clearing service. Is running only on master server. Default value: 1 minute.
+            "PeriodCleanCache": "0.1:0:0" // Period between running cache clearing service. Is running only on master server. Default value: 1 day.
+          },
+          "Frontend": { // Settings for cache storing requests from frontend page
+            "Disable": false, // Disable this cache.
+            "MaxDays": 365, // How many days file in cache will be store
+            "DelayCleanCache": "0.0:1:0", // Delay before first running of cache clearing service. Is running only on master server. Default value: 1 minute.
+            "PeriodCleanCache": "0.1:0:0" // Period between running cache clearing service. Is running only on master server. Default value: 1 day  .
+          }
+        },
+        "FrontendApi": { 
+          "Disable": false // Disable access to frontend API. Display generated QR codes on frontend page will not be possible. 
+        }
+    }
+}
+```
+
+>`DelayCleanCache` and `PeriodCleanCache` are write as TimeSpan. Read more on [https://docs.microsoft.com/en-us/dotnet/api/system.timespan.parse](https://docs.microsoft.com/en-us/dotnet/api/system.timespan.parse)
+ 
 
 ## Using in Umbraco Backoffice
 
