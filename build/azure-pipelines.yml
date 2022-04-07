@@ -4,9 +4,9 @@
 trigger:
   branches:
     include:
-    - main-u8
-    - release-u8
-    - develop-u8
+    - main-u9
+    - release-u9
+    - develop-u9
   tags:
     exclude:
     - v*
@@ -24,11 +24,11 @@ variables:
   umbracoPackageDefinitionPath: '$(System.DefaultWorkingDirectory)/build/package.xml'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  publishOnGithubRelease: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
-  publishUmbracoPackage: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
-  publishOnNugetOrg: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
-  addTagToRepository: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
-  updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u8')]
+  publishOnGithubRelease: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
+  publishUmbracoPackage: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
+  publishOnNugetOrg: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
+  addTagToRepository: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
+  updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
   gitEmail: 'devops@robolynx.pl'
   gitUserName: 'DevOps Pipeline' 
 
@@ -113,20 +113,6 @@ steps:
     versioningScheme: byEnvVar
     versionEnvVar: 'GitVersion.NuGetVersion'
     buildProperties: 'SymbolPackageFormat=snupkg'
-- task: DotNetCoreCLI@2
-  displayName: 'Restore UmbPack'
-  inputs:
-    command: custom
-    custom: 'tool'
-    arguments: 'restore'
-    workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
-- task: DotNetCoreCLI@2
-  displayName: 'Run UmbPack'
-  inputs:
-    command: custom
-    custom: 'tool'
-    arguments: 'run UmbPack pack $(umbracoPackageDefinitionPath) -v $(GitVersion.NuGetVersion) -o $(Build.ArtifactStagingDirectory) -p BuildConfiguration=$(buildConfiguration)'
-    workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
   inputs:
@@ -154,14 +140,6 @@ steps:
     publishFeedCredentials: sebafelisNuGetAccountForQRCodeGenerator
     versioningScheme: byEnvVar
     versionEnvVar: 'GitVersion.NuGetVersion'
-- task: DotNetCoreCLI@2
-  displayName: 'Publish Umbraco package on Our.Umbraco.com'
-  condition: and(succeeded(), eq(variables['publishUmbracoPackage'], true))
-  inputs:
-    command: custom
-    custom: 'tool'
-    arguments: 'run UmbPack push $(Build.ArtifactStagingDirectory)\RoboLynx.Umbraco.QRCodeGenerator_$(GitVersion.NuGetVersion).zip -k $(OurUmbracoApiKey) -a RoboLynx.Umbraco.QRCodeGenerator_8*  -w v8130,v8120,v8110,v8100,v890,v880,v870,v860,v850,v840,v830,v820,v810' 
-    workingDirectory: '$(System.DefaultWorkingDirectory)\src\'
 - powershell: | 
     $regex_current_version = $current_version -replace '\.','\.'
     $regex_pattern = "(?s)(?:\n##\s\[$regex_current_version\].*?\r\n(?:\s*\r\n)*)(?<content>.*?)(?:\r\n##\s\[\d+\.\d+\.\d+].*?\r\n|\s*\Z)"
