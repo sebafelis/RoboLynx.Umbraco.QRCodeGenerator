@@ -15,6 +15,7 @@
 		<Authors>Sebastian Felis</Authors>
 		<LangVersion>latest</LangVersion>
 		<PackageIcon>RoboLynx.Umbraco.QRCodeGenerator_128.png</PackageIcon>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -27,6 +28,10 @@
 		<None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\..\readme.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
 
