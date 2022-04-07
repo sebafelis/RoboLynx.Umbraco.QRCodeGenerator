@@ -25,17 +25,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         private readonly QRCodeFormatFactoryCollection _formats;
         private readonly UmbracoHelper _umbracoHelper;
         private readonly IMemberManager _memberManager;
-        private readonly IEntityService _entityService;
+        private readonly IIdKeyMap _idKeyMap;
         private readonly ILogger<QRCodeController> _logger;
 
-        public QRCodeController(IQRCodeResponesFactory responesFactory, QRCodeFormatFactoryCollection formats, UmbracoHelper umbracoHelper, 
-            IMemberManager memberManager, IEntityService entityService, ILogger<QRCodeController> logger)
+        public QRCodeController(IQRCodeResponesFactory responesFactory, QRCodeFormatFactoryCollection formats, UmbracoHelper umbracoHelper,
+            IMemberManager memberManager, IIdKeyMap idKeyMap, ILogger<QRCodeController> logger)
         {
             _responesFactory = responesFactory;
             _formats = formats ?? throw new ArgumentNullException(nameof(formats));
             _umbracoHelper = umbracoHelper;
             _memberManager = memberManager;
-            _entityService = entityService;
+            _idKeyMap = idKeyMap;
             _logger = logger;
         }
 
@@ -55,9 +55,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
             return Ok(requierdSettingsForFormats);
         }
 
-
         [HttpGet]
-        //[CompressContent]
         public async Task<IActionResult> Image(Udi nodeUdi, string propertyAlias, [FromQuery] QRCodeSettings settings, string culture = null)
         {
             IPublishedContent publishedContent = await GetPublishedContent(nodeUdi);
@@ -75,17 +73,21 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
                 case UmbracoObjectTypes.Document:
                     publishedContent = _umbracoHelper.Content(nodeUdi);
                     break;
+
                 case UmbracoObjectTypes.Media:
                     publishedContent = _umbracoHelper.Media(nodeUdi);
                     break;
+
                 case UmbracoObjectTypes.Member:
-                    var nodeGuid = (nodeUdi as GuidUdi).Guid;
-                    var member = _entityService.Get(nodeGuid, UmbracoObjectTypes.Member);
-                    var name = member.Name;
-                    var user = await _memberManager.FindByIdAsync(name);
-                    if (user != null)
+                    var memberAttempt = _idKeyMap.GetIdForUdi(nodeUdi);
+                    if (memberAttempt.Success)
                     {
-                        publishedContent = _memberManager.AsPublishedMember(user);
+                        var memberId = memberAttempt.Result;
+                        var member = await _memberManager.FindByIdAsync(memberId.ToString());
+                        if (member != null)
+                        {
+                            publishedContent = _memberManager.AsPublishedMember(member);
+                        }
                     }
                     break;
             }

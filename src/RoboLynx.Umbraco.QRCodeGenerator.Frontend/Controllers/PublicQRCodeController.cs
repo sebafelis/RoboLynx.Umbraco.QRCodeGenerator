@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
-using System;
 using System.Threading.Tasks;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
@@ -10,8 +8,8 @@ using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Web.Common;
-using Umbraco.Cms.Web.Common.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Cms.Web.Common.Controllers;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
 {
@@ -22,26 +20,26 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
         private readonly ILogger<PublicQRCodeController> _logger;
         private readonly UmbracoHelper _umbracoHelper;
         private readonly IMemberManager _memberManager;
-        private readonly IEntityService _entityService;
+        private readonly IIdKeyMap _idKeyMap;
 
-        public PublicQRCodeController(IQRCodeResponesFactory responesFactory, ILogger<PublicQRCodeController> logger, UmbracoHelper umbracoHelper, IMemberManager memberManager, IEntityService entityService)
+        public PublicQRCodeController(IQRCodeResponesFactory responesFactory, ILogger<PublicQRCodeController> logger,
+            UmbracoHelper umbracoHelper, IMemberManager memberManager, IIdKeyMap idKeyMap)
         {
             _responesFactory = responesFactory;
             _logger = logger;
             _umbracoHelper = umbracoHelper;
             _memberManager = memberManager;
-            _entityService = entityService;
+            _idKeyMap = idKeyMap;
         }
 
         [HttpGet]
-        //[CompressContent]
         public async Task<IActionResult> Get(Udi nodeUdi, string propertyAlias, [FromQuery] QRCodeSettings settings, string culture = null)
         {
             if (nodeUdi is null || propertyAlias is null)
             {
                 return BadRequest();
             }
-                
+
             IPublishedContent publishedContent = await GetPublishedContent(nodeUdi);
 
             return _responesFactory.CreateResponesWithQRCode(publishedContent, propertyAlias, culture, settings, Constants.Frontend.FrontendCacheName);
@@ -57,17 +55,21 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
                 case UmbracoObjectTypes.Document:
                     publishedContent = _umbracoHelper.Content(nodeUdi);
                     break;
+
                 case UmbracoObjectTypes.Media:
                     publishedContent = _umbracoHelper.Media(nodeUdi);
                     break;
+
                 case UmbracoObjectTypes.Member:
-                    var nodeGuid = (nodeUdi as GuidUdi).Guid;
-                    var member = _entityService.Get(nodeGuid, UmbracoObjectTypes.Member);
-                    var name = member.Name;
-                    var user = await _memberManager.FindByIdAsync(name);
-                    if (user != null)
+                    var memberAttempt = _idKeyMap.GetIdForUdi(nodeUdi);
+                    if (memberAttempt.Success)
                     {
-                        publishedContent = _memberManager.AsPublishedMember(user);
+                        var memberId = memberAttempt.Result;
+                        var member = await _memberManager.FindByIdAsync(memberId.ToString());
+                        if (member != null)
+                        {
+                            publishedContent = _memberManager.AsPublishedMember(member);
+                        }
                     }
                     break;
             }
