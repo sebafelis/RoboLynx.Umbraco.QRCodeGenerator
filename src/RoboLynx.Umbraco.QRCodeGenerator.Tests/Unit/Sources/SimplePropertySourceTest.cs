@@ -3,6 +3,8 @@ using NUnit.Framework;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.Tests.TestExtensions;
 using System;
+using System.Collections.Generic;
+using Umbraco.Cms.Core.Models.Membership;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Security;
 
@@ -42,9 +44,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
             string culture = null;
 
             var mockedPublishedContent = new Mock<IPublishedContent>();
-            SetupPropertyValue(mockedPublishedContent, propertyName, propertyValue);
-
-            var source = new SimplePropertySource(Mock.Of<IBackOfficeSecurityAccessor>(), Mock.Of<IPublishedValueFallback>(), mockedPublishedContent.Object, sourceSettings, culture);
+            SetupPropertyValue(mockedPublishedContent, Mock.Of<IPublishedPropertyType>(pt=>pt.IsUserProperty == true && pt.ContentType == Mock.Of<IPublishedContentType>(ct => ct.ItemType == PublishedItemType.Member)), propertyName, propertyValue);
+            
+            var backOfficeSecurityAccessor =  Mock.Of<IBackOfficeSecurityAccessor>(sa => sa.BackOfficeSecurity == Mock.Of<IBackOfficeSecurity>(s => s.IsAuthenticated() == false && s.CurrentUser == Mock.Of<IUser>(u => u.AllowedSections == new List<string>() { "member" })));
+            var source = new SimplePropertySource(backOfficeSecurityAccessor, Mock.Of<IPublishedValueFallback>(), mockedPublishedContent.Object, sourceSettings, culture);
 
             //Act
             var value = source.GetValue<TReturn>(index, null);
@@ -69,9 +72,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Sources
             string culture = null;
 
             var mockedPublishedContent = new Mock<IPublishedContent>();
-            SetupPropertyValue(mockedPublishedContent, propertyName, propertyValue);
+            SetupPropertyValue(mockedPublishedContent, Mock.Of<IPublishedPropertyType>(pt => pt.IsUserProperty == true && pt.ContentType == Mock.Of<IPublishedContentType>(ct => ct.ItemType == PublishedItemType.Member)), propertyName, propertyValue);
 
-            var source = new SimplePropertySource(Mock.Of<IBackOfficeSecurityAccessor>(), Mock.Of<IPublishedValueFallback>(), mockedPublishedContent.Object, sourceSettings, culture);
+            var backOfficeSecurityAccessor = Mock.Of<IBackOfficeSecurityAccessor>(sa => sa.BackOfficeSecurity == Mock.Of<IBackOfficeSecurity>(s => s.IsAuthenticated() == false && s.CurrentUser == Mock.Of<IUser>(u => u.AllowedSections == new List<string>() { "member" })));
+            var source = new SimplePropertySource(backOfficeSecurityAccessor, Mock.Of<IPublishedValueFallback>(), mockedPublishedContent.Object, sourceSettings, culture);
 
             //Act
             var value = source.GetValue<TReturn>(-1, key);

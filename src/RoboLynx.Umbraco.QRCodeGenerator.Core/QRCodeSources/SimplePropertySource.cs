@@ -92,10 +92,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             IPublishedProperty property = _content.GetProperty(settingItem.Name);
             if (property != null)
             {
-                if (!property.PropertyType.IsUserProperty
-                    && !(property.PropertyType.ContentType.ItemType == PublishedItemType.Member
-                    && _backOfficeSecurityAccessor.BackOfficeSecurity.IsAuthenticated()
-                    && _backOfficeSecurityAccessor.BackOfficeSecurity.CurrentUser.HasSectionAccess(UmbracoConstants.Applications.Members)))
+                if (property.PropertyType.ContentType.ItemType == PublishedItemType.Member && !property.PropertyType.IsUserProperty
+                    && !(_backOfficeSecurityAccessor.BackOfficeSecurity.IsAuthenticated() && _backOfficeSecurityAccessor.BackOfficeSecurity.CurrentUser.HasSectionAccess(UmbracoConstants.Applications.Members)))
                 {
                     property = null;
                 }

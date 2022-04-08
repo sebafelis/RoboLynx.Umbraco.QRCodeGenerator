@@ -116,7 +116,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
                 Mock.Of<IQRCodeFormatFactory>(f=>f.Id == "id3" && f.RequiredSettings == new List<string> { "setting1", "setting3" }),
             });
 
-            var controller = new QRCodeController(Mock.Of<IQRCodeResponesFactory>(), formats, UmbracoHelper, MemberManager, Mock.Of<IdKeyMap>(), Mock.Of<ILogger<QRCodeController>>());
+            var controller = new QRCodeController(Mock.Of<IQRCodeResponesFactory>(), formats, UmbracoHelper, MemberManager, Mock.Of<IIdKeyMap>(), Mock.Of<ILogger<QRCodeController>>());
 
             //Act
             var actionResult = controller.RequiredSettingsForFormats();
@@ -141,7 +141,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit.Controllers
             IQRCodeResponesFactory responesFactory = Mock.Of<IQRCodeResponesFactory>();
             IEntityService entityService = Mock.Of<IEntityService>();
 
-            var controller = new QRCodeController(responesFactory, formats, UmbracoHelper, MemberManager, Mock.Of<IdKeyMap>(), Mock.Of<ILogger<QRCodeController>>());
+            var controller = new QRCodeController(responesFactory, formats, UmbracoHelper, MemberManager, Mock.Of<IIdKeyMap>(), Mock.Of<ILogger<QRCodeController>>());
 
             //Act
             var actionResult = controller.RequiredSettingsForFormats();
