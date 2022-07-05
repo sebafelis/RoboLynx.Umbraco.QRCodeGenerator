@@ -2,8 +2,19 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- Custom classes for **QRCoder** library (`ImageSharpQRCode`, `ImageSharpSvgQRCode`) to support raster graphic generation through ImageSharp library
+
+### Changed
+
+- Migration to .NET 6
+- Support for Umbraco 10
+- Enable nullable reference types in projects
  
-## [] - 2022-04-11
+## [9.0.0] - 2022-04-11
 
 ### Added
 
