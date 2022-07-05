@@ -79,10 +79,10 @@ steps:
         Write-Host "##vso[task.setvariable variable=changelogUpdated]false"
         exit 1
     }
-  displayName: 'Update Unrelease section in CHANGELOG to current version'
+  displayName: 'Change [Unrelease] section header in CHANGELOG to [$current_version]'
   condition: and(succeeded(), eq(variables['updateChangelogVersion'], true))
   env:
-    current_version: $(GitVersion.NuGetVersion)
+    current_version: $(GitVersion.NuGetVersionV2)
 - script: |
     git add CHANGELOG.md 
     git commit -m "CHNAGELOG.md update"
@@ -111,15 +111,15 @@ steps:
     projects: '$(solution)'
     includesymbols: true
     versioningScheme: byEnvVar
-    versionEnvVar: 'GitVersion.NuGetVersion'
+    versionEnvVar: 'GitVersion.NuGetVersionV2'
     buildProperties: 'SymbolPackageFormat=snupkg'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
 - script: |
-     git tag v$(GitVersion.NuGetVersion)
-     git push origin v$(GitVersion.NuGetVersion) 
+     git tag v$(GitVersion.NuGetVersionV2)
+     git push origin v$(GitVersion.NuGetVersionV2) 
   condition: and(succeeded(), eq(variables['addTagToRepository'], true))
   workingDirectory: $(Build.SourcesDirectory)
   displayName: 'Add tag to commit'
@@ -139,7 +139,7 @@ steps:
     nuGetFeedType: external
     publishFeedCredentials: sebafelisNuGetAccountForQRCodeGenerator
     versioningScheme: byEnvVar
-    versionEnvVar: 'GitVersion.NuGetVersion'
+    versionEnvVar: 'GitVersion.NuGetVersionV2'
 - powershell: | 
     $regex_current_version = $current_version -replace '\.','\.'
     $regex_pattern = "(?s)(?:\n##\s\[$regex_current_version\].*?\r\n(?:\s*\r\n)*)(?<content>.*?)(?:\r\n##\s\[\d+\.\d+\.\d+].*?\r\n|\s*\Z)"
@@ -160,7 +160,7 @@ steps:
   displayName: 'Extract release note from CHANGELOG.md'
   condition: and(succeeded(), eq(variables['publishOnGithubRelease'], true))
   env:
-    current_version: $(GitVersion.NuGetVersion)
+    current_version: $(GitVersion.NuGetVersionV2)
 - task: GitHubRelease@1
   displayName: 'Publish on Github Release'
   condition: and(succeeded(), eq(variables['publishOnGithubRelease'], true))
