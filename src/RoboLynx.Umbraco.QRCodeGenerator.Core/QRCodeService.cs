@@ -28,7 +28,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             return CodeBuilder.CreateStream(config, cacheName);
         }
 
-        public QRCodeSettings GetDefaultSettings(IPublishedContent publishedContent, string propertyAlias)
+        public QRCodeSettings? GetDefaultSettings(IPublishedContent publishedContent, string propertyAlias)
         {
             return CodeBuilder.GetDefaultSettings(publishedContent, propertyAlias);
         }

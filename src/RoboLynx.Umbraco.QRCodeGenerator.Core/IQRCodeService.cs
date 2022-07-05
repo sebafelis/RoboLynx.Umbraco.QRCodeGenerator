@@ -16,7 +16,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         /// <param name="settings">QR code settings</param>
         /// <param name="cacheName">Cache name where code is cached</param>
         /// <returns>Stream with QR code</returns>
-        QRCodeSettings GetDefaultSettings(IPublishedContent publishedContent, string propertyAlias);
+        QRCodeSettings? GetDefaultSettings(IPublishedContent publishedContent, string propertyAlias);
 
         /// <summary>
         /// Get stream with QR code. Stream can be storing in and getting from specify cache if is defined.
