@@ -24,7 +24,6 @@ variables:
   umbracoPackageDefinitionPath: '$(System.DefaultWorkingDirectory)/build/package.xml'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  s: false
   publishOnGithubRelease: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u10'), eq(variables['publishPrereleseVersion'], true))]
   publishOnNugetOrg: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u10'), eq(variables['publishPrereleseVersion'], true))]
   addTagToRepository: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u10'), eq(variables['publishPrereleseVersion'], true))]
@@ -172,7 +171,7 @@ steps:
     tagSource: gitTag
     tagPattern: 'v.*'
     isDraft: false
-    isPreRelease: false
+    isPreRelease: $[ne(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
     assetUploadMode: delete
     assets: '$(Build.ArtifactStagingDirectory)/*'
     addChangeLog: false   
