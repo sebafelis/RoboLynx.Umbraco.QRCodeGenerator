@@ -10,12 +10,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
         private const string numberArgumentName = "number";
         private const string subjectArgumentName = "subject";
 
-        private readonly IQRCodeSource _source;
-        private string _number;
-        private string _subject;
+        private readonly IQRCodeSource? _source;
+        private string? _number;
+        private string? _subject;
         private readonly bool _validate;
 
-        public SmsType(string number, string subject = null, bool validate = true) : this()
+        public SmsType(string? number, string? subject = null, bool validate = true) : this()
         {
             if (string.IsNullOrEmpty(number))
             {

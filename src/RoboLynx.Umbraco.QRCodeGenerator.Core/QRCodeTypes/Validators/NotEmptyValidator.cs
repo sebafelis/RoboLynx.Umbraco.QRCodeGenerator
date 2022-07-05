@@ -2,7 +2,7 @@
 {
     public class NotEmptyValidator : IQRCodeTypeValidator
     {
-        bool IQRCodeTypeValidator.Validate(object value, out string message)
+        bool IQRCodeTypeValidator.Validate(object? value, out string? message)
         {
             bool isValid;
 
@@ -12,7 +12,7 @@
             }
             else
             {
-                isValid = !(value is null);
+                isValid = value is not null;
             }
 
             message = !isValid ? "Passed value can not be empty." : null;

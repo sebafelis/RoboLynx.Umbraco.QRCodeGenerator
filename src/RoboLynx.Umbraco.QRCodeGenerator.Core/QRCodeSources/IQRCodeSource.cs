@@ -5,6 +5,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 {
     public interface IQRCodeSource : IDiscoverable
     {
-        T GetValue<T>(int index, string key) where T : IConvertible;
+        T? GetValue<T>(int index, string key) where T : IConvertible;
     }
 }

@@ -4,7 +4,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
 {
     public class UrlValidator : IQRCodeTypeValidator
     {
-        bool IQRCodeTypeValidator.Validate(object url, out string message)
+        bool IQRCodeTypeValidator.Validate(object? url, out string? message)
         {
             if (url is string @string)
             {

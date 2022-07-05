@@ -6,7 +6,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 {
     public static class StringExtension
     {
-        public static bool TryParseJson<T>(this string @this, out T result)
+        public static bool TryParseJson<T>(this string @this, out T? result)
         {
             bool success = true;
             var settings = new JsonSerializerSettings

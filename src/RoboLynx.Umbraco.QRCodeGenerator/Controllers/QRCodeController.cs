@@ -42,7 +42,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         [HttpGet]
         public async Task<IActionResult> DefaultSettings(Udi nodeUdi, string propertyAlias)
         {
-            IPublishedContent publishedContent = await GetPublishedContent(nodeUdi);
+            IPublishedContent? publishedContent = await GetPublishedContent(nodeUdi);
 
             return _responesFactory.CreateResponseWithDefaultSettings(publishedContent, propertyAlias);
         }
@@ -56,17 +56,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Image(Udi nodeUdi, string propertyAlias, [FromQuery] QRCodeSettings settings, string culture = null)
+        public async Task<IActionResult> Image(Udi nodeUdi, string propertyAlias, [FromQuery] QRCodeSettings settings, string? culture = null)
         {
-            IPublishedContent publishedContent = await GetPublishedContent(nodeUdi);
+            IPublishedContent? publishedContent = await GetPublishedContent(nodeUdi);
 
             return _responesFactory.CreateResponesWithQRCode(publishedContent, propertyAlias, culture, settings, Constants.Backoffice.BackofficeCacheName);
         }
 
-        private async Task<IPublishedContent> GetPublishedContent(Udi nodeUdi)
+        private async Task<IPublishedContent?> GetPublishedContent(Udi nodeUdi)
         {
             var umbracoType = ObjectTypes.GetUmbracoObjectType(nodeUdi.EntityType);
-            IPublishedContent publishedContent = null;
+            IPublishedContent? publishedContent = null;
 
             switch (umbracoType)
             {

@@ -15,46 +15,46 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             _caches = caches?.ToDictionary(k => k.Name, v => v) ?? new Dictionary<string, IQRCodeCache>();
         }
 
-        private IQRCodeCache GetCache(string cacheName)
+        private IQRCodeCache? GetCache(string? cacheName)
         {
-            if (_caches.ContainsKey(cacheName))
+            if (!string.IsNullOrEmpty(cacheName) && _caches.ContainsKey(cacheName))
             {
                 return _caches[cacheName];
             }
             return null;
         }
 
-        public bool IsCached(string hashId, string cacheName)
+        public bool IsCached(string hashId, string? cacheName)
         {
             return GetCache(cacheName)?.IsCached(hashId) ?? false;
         }
 
-        public Stream GetStream(string hashId, string cacheName)
+        public Stream? GetStream(string hashId, string? cacheName)
         {
             return GetCache(cacheName)?.GetStream(hashId);
         }
 
-        public void Add(string hashId, string extension, Stream stream, string cacheName)
+        public void Add(string hashId, string extension, Stream stream, string? cacheName)
         {
             GetCache(cacheName)?.Add(hashId, extension, stream);
         }
 
-        public void Clear(string hashId, string cacheName)
+        public void Clear(string hashId, string? cacheName)
         {
             GetCache(cacheName)?.Clear(hashId);
         }
 
-        public void CleanupCache(string cacheName)
+        public void CleanupCache(string? cacheName)
         {
             GetCache(cacheName)?.CleanupCache();
         }
 
-        public void ClearAll(string cacheName)
+        public void ClearAll(string? cacheName)
         {
             GetCache(cacheName)?.ClearAll();
         }
 
-        public string GetUrl(string hashId, UrlMode uriKind, string cacheName)
+        public string? GetUrl(string hashId, UrlMode uriKind, string? cacheName)
         {
             if (!UrlSupport(cacheName))
             {
@@ -63,22 +63,22 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             return GetCache(cacheName)?.Url(hashId, uriKind);
         }
 
-        public bool UrlSupport(string cacheName)
+        public bool UrlSupport(string? cacheName)
         {
             return GetCache(cacheName)?.UrlSupport() ?? false;
         }
 
-        public DateTimeOffset? Expired(string hashId, string cacheName)
+        public DateTimeOffset? Expired(string hashId, string? cacheName)
         {
             return GetCache(cacheName)?.Expired(hashId);
         }
 
-        public DateTimeOffset? LastModified(string hashId, string cacheName)
+        public DateTimeOffset? LastModified(string hashId, string? cacheName)
         {
             return GetCache(cacheName)?.LastModified(hashId);
         }
 
-        public void Initialize(string cacheName)
+        public void Initialize(string? cacheName)
         {
             GetCache(cacheName)?.Initialize();
         }

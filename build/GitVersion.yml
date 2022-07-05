@@ -1,24 +1,24 @@
 assembly-versioning-scheme: MajorMinorPatch
 assembly-file-versioning-scheme: MajorMinorPatch
 mode: ContinuousDelivery
-next-version: 9.0
+next-version: 10.0
 commit-message-incrementing: Enabled
 branches:
   develop:
-    regex: ^develop-u9[/-]?
+    regex: ^develop-u10[/-]?
   main:
-    regex: ^main-u9[/-]?
+    regex: ^main-u10[/-]?
   release:
-    regex: ^releases?-u9[/-]?
+    regex: ^releases?-u10[/-]?
     mode: ContinuousDeployment
   feature:
-    regex: ^features?(-u9)?[/-]?
+    regex: ^features?(-u10)?[/-]?
   pull-request:  
-    regex: ^(pull|pull\-requests|pr)(-u9)?[/-]?
+    regex: ^(pull|pull\-requests|pr)(-u10)?[/-]?
   hotfix:
-    regex: ^hotfix(es)?-u9[/-]?
+    regex: ^hotfix(es)?-u10[/-]?
   support:
-    regex: ^support(-u9)?[/-]?
+    regex: ^support(-u10)?[/-]?
 ignore:
   sha: []
 merge-message-formats: {}

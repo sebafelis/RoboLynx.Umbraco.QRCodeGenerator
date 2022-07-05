@@ -30,67 +30,76 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
         public IQRCodeFormat GetFormat(IQRCodeType codeType, QRCodeSettings settings)
         {
-            return _formats.FirstOrDefault(f => f.Id == settings.Format).Create(codeType, settings) ?? throw new ArgumentException($"{Constants.FieldsNames.FormatFieldName} parameter has wrong value.");
+            return _formats.FirstOrDefault(f => f.Id == settings.Format)?.Create(codeType, settings) ?? throw new ArgumentException($"{Constants.FieldsNames.FormatFieldName} parameter has wrong value.");
         }
 
         private IQRCodeSource GetSource(string id, IPublishedContent publishedContent, string culture, string sourceSettings)
         {
-            return _sources.FirstOrDefault(f => f.Id == id).Create(publishedContent, sourceSettings, culture) ?? throw new ArgumentException($"{Constants.FieldsNames.FormatFieldName} parameter has wrong value.");
+            return _sources.FirstOrDefault(f => f.Id == id)?.Create(publishedContent, sourceSettings, culture) ?? throw new ArgumentException($"{Constants.FieldsNames.FormatFieldName} parameter has wrong value.");
         }
 
         private IQRCodeType GetType(string id, IQRCodeSource qtCodeSource)
         {
-            return _types.FirstOrDefault(f => f.Id == id).Create(qtCodeSource) ?? throw new ArgumentException($"{Constants.FieldsNames.FormatFieldName} parameter has wrong value.");
+            return _types.FirstOrDefault(f => f.Id == id)?.Create(qtCodeSource) ?? throw new ArgumentException($"{Constants.FieldsNames.FormatFieldName} parameter has wrong value.");
         }
 
-        public QRCodeSettings GetDefaultSettings(IPublishedContent publishedContent, string propertyAlias)
+        public QRCodeSettings? GetDefaultSettings(IPublishedContent publishedContent, string propertyAlias)
         {
-            return CreateDefaultSettings(GetDataTypePrevalues(publishedContent, propertyAlias));
-        }
-
-        public QRCodeConfig CreateConfiguration(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings userSettings)
-        {
-            if (publishedContent is null)
+            var prevalues = GetDataTypePrevalues(publishedContent, propertyAlias);
+            if (prevalues is null)
             {
                 return null;
             }
+            return CreateDefaultSettings(prevalues);
+        }
 
+        public QRCodeConfig CreateConfiguration(IPublishedContent publishedContent, string propertyAlias, string? culture, QRCodeSettings? userSettings)
+        {
+            if (publishedContent is null)
+            {
+                throw new ArgumentNullException(nameof(publishedContent));
+            }
             var dataTypePrevalue = GetDataTypePrevalues(publishedContent, propertyAlias);
 
-            if (dataTypePrevalue != null)
+            if (dataTypePrevalue is not null)
             {
                 var finalSettings = MargeSettings(CreateDefaultSettings(dataTypePrevalue), userSettings);
-                var codeSourceSettings = dataTypePrevalue.ContainsKey(Constants.FieldsNames.CodeSourceSettingsFieldName) ? dataTypePrevalue[Constants.FieldsNames.CodeSourceSettingsFieldName] : string.Empty;
+                var codeSourceSettings = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.FieldsNames.CodeSourceSettingsFieldName) ? dataTypePrevalue[Constants.FieldsNames.CodeSourceSettingsFieldName] : string.Empty;
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
                 var codeSource = dataTypePrevalue.ContainsKey(Constants.FieldsNames.CodeSourceFieldName) ? ((GetSource(dataTypePrevalue[Constants.FieldsNames.CodeSourceFieldName], publishedContent, culture, codeSourceSettings)) ?? throw new ArgumentException($"{Constants.FieldsNames.CodeSourceFieldName} parameter has wrong value.")) : throw new ArgumentException($"{Constants.FieldsNames.CodeSourceFieldName} parameter is not set up.");
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
                 var codeType = dataTypePrevalue.ContainsKey(Constants.FieldsNames.CodeTypeFieldName) ? ((GetType(dataTypePrevalue[Constants.FieldsNames.CodeTypeFieldName], codeSource)) ?? throw new ArgumentException($"{Constants.FieldsNames.CodeTypeFieldName} parameter has wrong value.")) : throw new ArgumentException($"{Constants.FieldsNames.CodeTypeFieldName} parameter is not set up.");
+#pragma warning restore CS8604 // Possible null reference argument.
+
                 var codeFormat = GetFormat(codeType, finalSettings);
 
                 CompleteSettings(ref finalSettings);
 
-                return new QRCodeConfig()
-                {
-                    Settings = finalSettings,
-                    Source = codeSource,
-                    Type = codeType,
-                    Format = codeFormat
-                };
+                return new QRCodeConfig(codeSource, codeType, codeFormat, finalSettings);
             }
-            return null;
+            throw new MissingFieldException("Property not exist or has a wrong property editor type.");
         }
 
-        public QRCodeConfig CreateConfiguration(IQRCodeType codeType, QRCodeSettings userSettings)
+        public QRCodeConfig CreateConfiguration(IQRCodeType codeType, QRCodeSettings? userSettings)
         {
+            if (codeType is null)
+            {
+                throw new ArgumentNullException(nameof(codeType));
+            }
+
+            if (userSettings == null)
+            {
+                userSettings = new QRCodeSettings();
+            }
             CompleteSettings(ref userSettings);
 
             var codeFormat = GetFormat(codeType, userSettings);
 
-            return new QRCodeConfig()
-            {
-                Settings = userSettings,
-                Source = null,
-                Type = codeType,
-                Format = codeFormat
-            };
+            return new QRCodeConfig(codeType, codeFormat, userSettings);
         }
 
         private static void CompleteSettings(ref QRCodeSettings userSettings)
@@ -101,7 +110,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             if (string.IsNullOrEmpty(userSettings.LightColor))
                 userSettings.DarkColor = Constants.DefaultFieldsValues.DefaultLightColorFieldValue;
 
-            if (userSettings.Size <= 0)
+            if (!userSettings.Size.HasValue || userSettings.Size <= 0)
                 userSettings.Size = Constants.DefaultFieldsValues.DefaultSizeFieldValue;
 
             if (!userSettings.ECCLevel.HasValue)
@@ -110,17 +119,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             if (!userSettings.DrawQuiteZone.HasValue)
                 userSettings.DrawQuiteZone = Constants.DefaultFieldsValues.DefaultDrawQuietZoneFieldValue;
 
-            if (userSettings.IconSizePercent <= 0)
+            if (!userSettings.IconSizePercent.HasValue || userSettings.IconSizePercent <= 0)
                 userSettings.IconSizePercent = Constants.DefaultFieldsValues.DefaultIconSizePercentFieldValue;
 
-            if (userSettings.IconBorderWidth < 0)
+            if (!userSettings.IconBorderWidth.HasValue || userSettings.IconBorderWidth < 0)
                 userSettings.IconBorderWidth = Constants.DefaultFieldsValues.DefaultIconBorderWidthFieldValue;
 
             if (string.IsNullOrEmpty(userSettings.Format))
                 userSettings.Format = Constants.DefaultFieldsValues.DefaultFormatFieldValue;
         }
 
-        public Stream CreateStream(QRCodeConfig config, string cacheName)
+        public Stream CreateStream(QRCodeConfig config, string? cacheName)
         {
             var hashId = config.Format.HashId;
             var extension = config.Format.FileExtension;
@@ -129,46 +138,84 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             {
                 var stream = CacheManager.GetStream(hashId, cacheName);
 
-                return stream;
+                if (stream is not null)
+                {
+                    return stream;
+                }
             }
-            else
-            {
-                var qrCodeStream = config.Format.Stream();
-                qrCodeStream.Seek(0, SeekOrigin.Begin);
 
-                CacheManager.Add(hashId, extension, qrCodeStream, cacheName);
+            var qrCodeStream = config.Format.Stream();
+            qrCodeStream.Seek(0, SeekOrigin.Begin);
 
-                qrCodeStream.Seek(0, SeekOrigin.Begin);
-                return qrCodeStream;
-            }
+            CacheManager.Add(hashId, extension, qrCodeStream, cacheName);
+
+            qrCodeStream.Seek(0, SeekOrigin.Begin);
+            return qrCodeStream;
         }
 
-        private static QRCodeSettings CreateDefaultSettings(IDictionary<string, string> dataTypePrevalue)
+        private static QRCodeSettings CreateDefaultSettings(IDictionary<string, string?> dataTypePrevalue)
         {
-            if (dataTypePrevalue is null)
+            var settings = new QRCodeSettings();
+            if (dataTypePrevalue is not null)
             {
-                return null;
-            }
+                if (dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultSizeFieldName))
+                {
+                    if (int.TryParse(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultSizeFieldName], out var setSizeFieldValue))
+                    {
+                        settings.Size = setSizeFieldValue;
+                    }
+                }
 
-            var settings = new QRCodeSettings()
-            {
-                Size = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultSizeFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultSizeFieldName]) : 0,
-                IconSizePercent = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultIconSizePercentFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultIconSizePercentFieldName]) : 0,
-                Format = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultFormatFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultFormatFieldName] : null,
-                DarkColor = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultDarkColorFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultDarkColorFieldName] : null,
-                LightColor = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultLightColorFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultLightColorFieldName] : null,
-                DrawQuiteZone = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultDrawQuietZoneFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultDrawQuietZoneFieldName]?.StringToBoolean(false) : null,
-                IconBorderWidth = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultIconBorderWidthFieldName) ? int.Parse(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultIconBorderWidthFieldName]) : -1,
-                Icon = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultIconFieldName) ? dataTypePrevalue[Constants.DefaultFieldsNames.DefaultIconFieldName] : null,
-                ECCLevel = dataTypePrevalue != null && dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultECCLevelFieldName) ? (ECCLevel)Enum.Parse(typeof(ECCLevel), dataTypePrevalue[Constants.DefaultFieldsNames.DefaultECCLevelFieldName]) : null
-            };
+                if (dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultIconSizePercentFieldName)
+                    && int.TryParse(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultIconSizePercentFieldName], out var setIconSizePercentFieldValue))
+                {
+                    settings.IconSizePercent = setIconSizePercentFieldValue;
+                }
+
+                if (dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultFormatFieldName))
+                {
+                    settings.Format = dataTypePrevalue[Constants.DefaultFieldsNames.DefaultFormatFieldName];
+                }
+
+                if (dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultDarkColorFieldName))
+                {
+                    settings.DarkColor = dataTypePrevalue[Constants.DefaultFieldsNames.DefaultDarkColorFieldName];
+                }
+
+                if (dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultLightColorFieldName))
+                {
+                    settings.LightColor = dataTypePrevalue[Constants.DefaultFieldsNames.DefaultLightColorFieldName];
+                }
+
+                if (dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultDrawQuietZoneFieldName))
+                {
+                    settings.DrawQuiteZone = dataTypePrevalue[Constants.DefaultFieldsNames.DefaultDrawQuietZoneFieldName]?.StringToBoolean(false);
+                }
+
+                if (dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultIconBorderWidthFieldName)
+                    && int.TryParse(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultIconBorderWidthFieldName], out var setIconBorderWidthFieldValue))
+                {
+                    settings.IconBorderWidth = setIconBorderWidthFieldValue;
+                }
+
+                if (dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultIconFieldName))
+                {
+                    settings.Icon = dataTypePrevalue[Constants.DefaultFieldsNames.DefaultIconFieldName];
+                }
+
+                if (dataTypePrevalue.ContainsKey(Constants.DefaultFieldsNames.DefaultECCLevelFieldName)
+                    && Enum.TryParse<ECCLevel>(dataTypePrevalue[Constants.DefaultFieldsNames.DefaultECCLevelFieldName], out var setECCLevelFieldValue))
+                {
+                    settings.ECCLevel = setECCLevelFieldValue;
+                }
+            }
 
             CompleteSettings(ref settings);
 
             return settings;
         }
 
-        private static IDictionary<string, string> GetDataTypePrevalues(IPublishedContent publishedContent, string propertyAlias)
+        private static IDictionary<string, string?>? GetDataTypePrevalues(IPublishedContent publishedContent, string propertyAlias)
         {
             var dataType = publishedContent.GetProperty(propertyAlias)?.PropertyType.DataType;
             if (dataType?.EditorAlias == Constants.Backoffice.PropertyEditorAlias && dataType.Configuration != null)
@@ -180,14 +227,14 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             return null;
         }
 
-        private static QRCodeSettings MargeSettings(QRCodeSettings defaultSettings, QRCodeSettings userSettings)
+        private static QRCodeSettings MargeSettings(QRCodeSettings defaultSettings, QRCodeSettings? userSettings)
         {
             if (defaultSettings is null)
             {
                 throw new ArgumentNullException(nameof(defaultSettings));
             }
 
-            var settings = (QRCodeSettings)defaultSettings?.Clone();
+            var settings = (QRCodeSettings)defaultSettings.Clone();
 
             if (userSettings is not null)
             {

@@ -16,7 +16,7 @@
             InputType = inputType;
         }
 
-        bool IQRCodeTypeValidator.Validate(object value, out string message)
+        bool IQRCodeTypeValidator.Validate(object? value, out string? message)
         {
             if (!InputType.HasValue)
             {
@@ -38,11 +38,11 @@
                 case QRCodeInputType.Alphanumeric:
                 case QRCodeInputType.Numeric:
                 case QRCodeInputType.Kanji:
-                    lenght = value.ToString().Length;
+                    lenght = value?.ToString()?.Length ?? 0;
                     break;
 
                 case QRCodeInputType.Binary:
-                    lenght = (value as byte[]).Length;
+                    lenght = (value as byte[])?.Length ?? 0;
                     break;
             }
 
@@ -67,8 +67,10 @@
             };
         }
 
-        private static QRCodeInputType? GetInputType(object value)
+        private static QRCodeInputType? GetInputType(object? value)
         {
+            if (value == null) return null;
+
             return value switch
             {
                 string => QRCodeInputType.Alphanumeric,

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
+using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using System;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
@@ -50,7 +51,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var redirectUrl = "http://test.url";
 
             IQRCodeBuilder qrCodeBuilderMock = Mock.Of<IQRCodeBuilder>(b =>
-                b.CreateConfiguration(publishedContent, propertyAlias, culture, settings) == Mock.Of<QRCodeConfig>(c => c.Format == Mock.Of<IQRCodeFormat>(f => f.HashId == hashId))
+                b.CreateConfiguration(publishedContent, propertyAlias, culture, settings) == new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(f => f.HashId == hashId), Mock.Of<QRCodeSettings>())  
                 && b.CacheManager == Mock.Of<IQRCodeCacheManager>(c => c.UrlSupport(cacheName) == true && c.IsCached(hashId, cacheName) == true && c.GetUrl(hashId, It.IsAny<UrlMode>(), cacheName) == redirectUrl)
             );
 
@@ -80,7 +81,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var stream = CreateMockStream("test");
 
             IQRCodeBuilder qrCodeBuilderMock = Mock.Of<IQRCodeBuilder>(b =>
-                b.CreateConfiguration(publishedContent, propertyAlias, culture, settings) == Mock.Of<QRCodeConfig>(c => c.Format == Mock.Of<IQRCodeFormat>(f => f.HashId == hashId))
+                b.CreateConfiguration(publishedContent, propertyAlias, culture, settings) == new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(f => f.HashId == hashId), Mock.Of<QRCodeSettings>())
                 && b.CacheManager == Mock.Of<IQRCodeCacheManager>(c => c.UrlSupport(cacheName) == true && c.IsCached(hashId, cacheName) == true && c.GetUrl(hashId, It.IsAny<UrlMode>(), cacheName) == redirectUrl)
             );
 
@@ -112,7 +113,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var lastModified = fixture.Create<DateTimeOffset>();
 
             IQRCodeBuilder qrCodeBuilderMock = Mock.Of<IQRCodeBuilder>(b =>
-                b.CreateConfiguration(publishedContent, propertyAlias, culture, settings) == Mock.Of<QRCodeConfig>(c => c.Format == Mock.Of<IQRCodeFormat>(f => f.HashId == hashId && f.Mime == "test/mine"))
+                b.CreateConfiguration(publishedContent, propertyAlias, culture, settings) == new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(f => f.HashId == hashId && f.Mime == "test/mine"), Mock.Of<QRCodeSettings>())
                 && b.CacheManager == Mock.Of<IQRCodeCacheManager>(c => c.UrlSupport(cacheName) == false && c.LastModified(hashId, cacheName) == lastModified)
                 && b.CreateStream(It.IsAny<QRCodeConfig>(), cacheName) == stream);
 

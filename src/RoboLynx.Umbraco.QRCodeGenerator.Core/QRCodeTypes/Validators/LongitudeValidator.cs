@@ -5,7 +5,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
 {
     public class LongitudeValidator : IQRCodeTypeValidator
     {
-        bool IQRCodeTypeValidator.Validate(object value, out string message)
+        bool IQRCodeTypeValidator.Validate(object? value, out string? message)
         {
             double? lng = null;
 

@@ -41,7 +41,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         /// </summary>
         /// <param name="icon">Image path, Media ID or Media UDI</param>
         /// <returns>Image path</returns>
-        protected string ResolveIconUrl(string icon)
+        protected string? ResolveIconUrl(string? icon)
         {
             if (!string.IsNullOrEmpty(icon))
             {
@@ -49,7 +49,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
                 {
                     return GetUmbracoHelper()?.Media(mediaId)?.Url();
                 }
-                if (UdiParser.TryParse(icon, out Udi mediaUdi))
+                if (UdiParser.TryParse(icon, out Udi? mediaUdi))
                 {
                     return GetUmbracoHelper()?.Media(mediaUdi)?.Url();
                 }
@@ -58,7 +58,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             return null;
         }
 
-        private UmbracoHelper GetUmbracoHelper()
+        private UmbracoHelper? GetUmbracoHelper()
         {
             if (UmbracoHelperAccessor.TryGetUmbracoHelper(out var umbracoHelper))
             {

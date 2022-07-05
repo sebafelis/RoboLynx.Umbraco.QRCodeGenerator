@@ -126,12 +126,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                         new KeyValuePair<string, object>("defaultDrawQuiteZone", "1"),
                         new KeyValuePair<string, object>("defaultECCLevel", "M")
                     },
-                    new QRCodeConfig()
-                    {
-                        Format = Format1,
-                        Source = Source1,
-                        Type = Type1,
-                        Settings = new QRCodeSettings()
+                    new QRCodeConfig(Source1, Type1, Format1, new QRCodeSettings()
                         {
                             Size = 40,
                             Format = Format1Id,
@@ -142,8 +137,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                             IconBorderWidth = 1,
                             DrawQuiteZone = true,
                             ECCLevel = ECCLevel.M
-                        }
-                    });
+                        })
+                    );
 
                 yield return new TestCaseData(
                     new QRCodeSettings()
@@ -173,12 +168,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                         new KeyValuePair<string, object>("defaultDrawQuiteZone", "1"),
                         new KeyValuePair<string, object>("defaultECCLevel", "M")
                     },
-                    new QRCodeConfig()
-                    {
-                        Format = Format2,
-                        Source = Source1,
-                        Type = Type1,
-                        Settings = new QRCodeSettings()
+                    new QRCodeConfig(Source1, Type1, Format2, new QRCodeSettings()
                         {
                             Size = 40,
                             Format = Format2Id,
@@ -190,7 +180,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                             DrawQuiteZone = false,
                             ECCLevel = ECCLevel.H
                         }
-                    });
+                    )
+                );
 
                 yield return new TestCaseData(
                     new QRCodeSettings()
@@ -212,12 +203,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                         new KeyValuePair<string, object>("defaultDrawQuiteZone", "1"),
                         new KeyValuePair<string, object>("defaultECCLevel", "M")
                     },
-                    new QRCodeConfig()
-                    {
-                        Format = Format1,
-                        Source = Source1,
-                        Type = Type1,
-                        Settings = new QRCodeSettings()
+                    new QRCodeConfig(Source1, Type1, Format1, new QRCodeSettings()
                         {
                             Size = 40,
                             Format = Format1Id,
@@ -229,7 +215,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                             DrawQuiteZone = true,
                             ECCLevel = ECCLevel.M
                         }
-                    });
+                    )
+                );
 
                 yield return new TestCaseData(
                     new QRCodeSettings()
@@ -251,12 +238,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                         new KeyValuePair<string, object>("defaultDrawQuiteZone", "1"),
                         new KeyValuePair<string, object>("defaultECCLevel", "M")
                     },
-                    new QRCodeConfig()
-                    {
-                        Format = Format1,
-                        Source = Source1,
-                        Type = Type1,
-                        Settings = new QRCodeSettings()
+                    new QRCodeConfig(Source1, Type1, Format1, new QRCodeSettings()
                         {
                             Size = 40,
                             Format = Format1Id,
@@ -268,7 +250,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                             DrawQuiteZone = true,
                             ECCLevel = ECCLevel.M
                         }
-                    });
+                    )
+                );
 
                 yield return new TestCaseData(
                    new QRCodeSettings()
@@ -289,12 +272,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                         new KeyValuePair<string, object>("defaultDrawQuiteZone", "1"),
                         new KeyValuePair<string, object>("defaultECCLevel", "M")
                    },
-                   new QRCodeConfig()
-                   {
-                       Format = Format1,
-                       Source = Source1,
-                       Type = Type1,
-                       Settings = new QRCodeSettings()
+                   new QRCodeConfig(Source1, Type1, Format1, new QRCodeSettings()
                        {
                            Size = 40,
                            Format = Format1Id,
@@ -306,7 +284,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
                            DrawQuiteZone = true,
                            ECCLevel = ECCLevel.M
                        }
-                   });
+                   )
+                );
             }
         }
 
@@ -394,7 +373,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         }
 
         [Test]
-        public void GetDefaultSettings_WhenPropertyWithSpecifyAliasExist_WhenPropertyIsNotQRCodeGeneratorType_ShouldReturnNull()
+        public void GetDefaultSettings_WhenPropertyWithSpecifyAliasExist_AndPropertyIsNotQRCodeGeneratorType_ShouldReturnNull()
         {
             //Assign
             var contentId = 123;
@@ -504,7 +483,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             PublishedContentQuery.Setup(c => c.Content(contentId)).Returns(publishedContent);
 
             var format = Mock.Of<IQRCodeFormat>(f => f.Stream() == stream && f.Mime == mime);
-            var qrCodeConfig = new QRCodeConfig() { Format = format, Settings = new QRCodeSettings() };
+            var qrCodeConfig = new QRCodeConfig(Mock.Of<IQRCodeType>(), format, new QRCodeSettings());
 
             var builder = new QRCodeBuilder(
                    new QRCodeFormatFactoryCollection(() => Array.Empty<IQRCodeFormatFactory>()),

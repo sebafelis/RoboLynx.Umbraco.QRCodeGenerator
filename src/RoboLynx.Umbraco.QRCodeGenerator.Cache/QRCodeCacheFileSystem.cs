@@ -33,7 +33,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         public bool CanAddPhysical => _innerFileSystem.CanAddPhysical;
 
-        public IEnumerable<FileCacheData> GetExpiredCacheFiles(string path = null)
+        public IEnumerable<FileCacheData> GetExpiredCacheFiles(string? path = null)
         {
             if (string.IsNullOrEmpty(path))
                 path = _defaultPath;
@@ -45,13 +45,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
                 var expiryDate = GetExpiryDate(file);
                 if (expiryDate < _dateTimeProvider.UtcNow)
                 {
-                    yield return new FileCacheData
-                    {
-                        HashId = Path.GetFileNameWithoutExtension(file),
-                        Path = path,
-                        ExpiryDate = expiryDate,
-                        LastModifiedDate = GetLastModified(file)
-                    };
+                    yield return new FileCacheData(Path.GetFileNameWithoutExtension(file), path, expiryDate, GetLastModified(file));
                 }
             }
         }
@@ -78,7 +72,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             });
         }
 
-        protected static string GetCachePath(string hash, string extension)
+        protected static string GetCachePath(string hash, string? extension)
         {
             var path = $"{_defaultPath}{hash}";
             if (!string.IsNullOrEmpty(extension))
@@ -88,7 +82,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             return path;
         }
 
-        public FileCacheData AddCacheFile(string hashId, string extension, Stream stream)
+        public FileCacheData AddCacheFile(string hashId, string? extension, Stream stream)
         {
             if (string.IsNullOrWhiteSpace(hashId))
             {
@@ -111,13 +105,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
             _logger.LogInformation("New cache file was add. Hash: {hashId}", hashId);
 
-            return new FileCacheData()
-            {
-                HashId = hashId,
-                Path = filePath,
-                ExpiryDate = expiryDate,
-                LastModifiedDate = GetLastModified(filePath)
-            };
+            return new FileCacheData(hashId, filePath, expiryDate, GetLastModified(filePath));
         }
 
         public DateTimeOffset GetExpiryDate(string file)
@@ -134,7 +122,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             return _dateTimeProvider.UtcNow.Add(TimeSpan.FromDays(365));
         }
 
-        public IEnumerable<FileCacheData> GetAllCacheFiles(string path = null)
+        public IEnumerable<FileCacheData> GetAllCacheFiles(string? path = null)
         {
             if (string.IsNullOrEmpty(path))
                 path = _defaultPath;
@@ -145,13 +133,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             {
                 var expiryDate = GetExpiryDate(file);
 
-                yield return new FileCacheData
-                {
-                    HashId = Path.GetFileNameWithoutExtension(file),
-                    Path = file,
-                    ExpiryDate = expiryDate,
-                    LastModifiedDate = GetLastModified(file)
-                };
+                yield return new FileCacheData(Path.GetFileNameWithoutExtension(file), file, expiryDate, GetLastModified(file));
             }
         }
 
@@ -220,7 +202,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             return _innerFileSystem.GetFullPath(path);
         }
 
-        public string GetUrl(string path)
+        public string GetUrl(string? path)
         {
             return _innerFileSystem.GetUrl(path);
         }

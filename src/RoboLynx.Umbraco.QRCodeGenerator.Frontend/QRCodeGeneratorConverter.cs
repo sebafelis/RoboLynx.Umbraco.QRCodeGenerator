@@ -13,7 +13,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
             _qRCodeService = qRCodeService;
         }
 
-        public override object ConvertSourceToIntermediate(IPublishedElement owner, IPublishedPropertyType propertyType, object source, bool preview)
+        public override object? ConvertSourceToIntermediate(IPublishedElement owner, IPublishedPropertyType propertyType, object? source, bool preview)
         {
             if (owner is IPublishedContent content)
             {

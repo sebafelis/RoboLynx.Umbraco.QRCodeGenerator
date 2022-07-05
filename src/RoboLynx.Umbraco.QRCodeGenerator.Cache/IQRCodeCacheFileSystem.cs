@@ -9,11 +9,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
     {
         TimeSpan ExpirationTimeSpan { get; }
 
-        FileCacheData AddCacheFile(string hashId, string extension, Stream stream);
+        FileCacheData AddCacheFile(string hashId, string? extension, Stream stream);
 
-        IEnumerable<FileCacheData> GetExpiredCacheFiles(string path = null);
+        IEnumerable<FileCacheData> GetExpiredCacheFiles(string? path = null);
 
-        IEnumerable<FileCacheData> GetAllCacheFiles(string path = null);
+        IEnumerable<FileCacheData> GetAllCacheFiles(string? path = null);
 
         void DeleteCacheFiles(IEnumerable<string> files);
 

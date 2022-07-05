@@ -11,7 +11,7 @@ using Umbraco.Extensions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 {
-    public class QRCodeCache<T> : IQRCodeCache
+    public class QRCodeCache<T> : IQRCodeCache where T : IQRCodeCacheRole
     {
         private readonly IProfilingLogger _profilingLogger;
         private readonly IDateTimeOffsetProvider _dateTimeProvider;
@@ -19,11 +19,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         private readonly ILogger<QRCodeCache<T>> _logger;
         private readonly IAppPolicyCache _isolatedCache;
         private readonly IQRCodeCacheFileSystem _fileSystem;
-        private readonly IQRCodeCacheUrlProvider _urlProvider;
+        private readonly IQRCodeCacheUrlProvider? _urlProvider;
 
         private bool _isInitialized = false;
 
-        public QRCodeCache(AppCaches appCaches, IQRCodeCacheFileSystem fileSystem, IQRCodeCacheUrlProvider urlProvider,
+        public QRCodeCache(AppCaches appCaches, IQRCodeCacheFileSystem fileSystem, IQRCodeCacheUrlProvider? urlProvider,
             IProfilingLogger profilingLogger, ILogger<QRCodeCache<T>> logger, IDateTimeOffsetProvider dateTimeProvider,
             IServerRoleAccessor serverRoleAccessor)
         {
@@ -63,14 +63,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             var cachedFile = _fileSystem.AddCacheFile(hashId, extension, stream);
 
             var timeout = cachedFile.ExpiryDate.UtcDateTime - _dateTimeProvider.UtcNow;
-            _isolatedCache.InsertCacheItem(hashId, () => new FileCacheData
-            {
-                HashId = hashId,
-                Path = cachedFile.Path,
-                ExpiryDate = cachedFile.ExpiryDate,
-                LastModifiedDate = cachedFile.LastModifiedDate
-            },
-            timeout);
+            _isolatedCache.InsertCacheItem(hashId, () => new FileCacheData(hashId, cachedFile.Path, cachedFile.ExpiryDate, cachedFile.LastModifiedDate), timeout);
         }
 
         /// <inheritdoc/>
@@ -78,7 +71,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         {
             var cacheItem = GetCacheItem(hashId);
 
-            _fileSystem.DeleteCacheFiles(cacheItem.Path.AsEnumerableOfOne());
+            if (cacheItem != null)
+                _fileSystem.DeleteCacheFiles(cacheItem.Path.AsEnumerableOfOne());
 
             _isolatedCache.Clear(hashId);
         }
@@ -93,11 +87,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         }
 
         /// <inheritdoc/>
-        public Stream GetStream(string hashId)
+        public Stream? GetStream(string hashId)
         {
             var cacheItem = GetCacheItem(hashId);
 
-            if (_fileSystem.FileExists(cacheItem.Path))
+            if (cacheItem != null && _fileSystem.FileExists(cacheItem.Path))
             {
                 return _fileSystem.OpenFile(cacheItem.Path);
             }
@@ -110,11 +104,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         }
 
         /// <inheritdoc/>
-        public string Url(string hashId, UrlMode urlMode)
+        public string? Url(string hashId, UrlMode urlMode)
         {
             var cacheItem = GetCacheItem(hashId);
 
-            return _urlProvider.Url(cacheItem.Path, urlMode);
+            if (cacheItem != null)
+            {
+                return _urlProvider?.Url(cacheItem.Path, urlMode);
+            }
+            return null;
         }
 
         /// <inheritdoc/>
@@ -132,7 +130,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             {
                 using var profiler = _profilingLogger.TraceDuration<QRCodeCache<T>>("Cache cleaning started", "Cache cleaned");
 
-                var expiredItems = _isolatedCache.GetCacheItemsByKeySearch<FileCacheData>("").Where(item => item.ExpiryDate < _dateTimeProvider.UtcNow);
+                var expiredItems = _isolatedCache.GetCacheItemsByKeySearch<FileCacheData>("").WhereNotNull().Where(item => item.ExpiryDate < _dateTimeProvider.UtcNow);
 
                 if (expiredItems.Any())
                 {
@@ -153,7 +151,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             }
         }
 
-        private FileCacheData GetCacheItem(string hashId)
+        private FileCacheData? GetCacheItem(string hashId)
         {
             if (string.IsNullOrWhiteSpace(hashId))
             {

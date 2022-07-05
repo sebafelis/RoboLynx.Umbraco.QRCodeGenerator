@@ -4,9 +4,9 @@
 trigger:
   branches:
     include:
-    - main-u9
-    - release-u9
-    - develop-u9
+    - main-u10
+    - release-u10
+    - develop-u10
   tags:
     exclude:
     - v*
@@ -24,11 +24,11 @@ variables:
   umbracoPackageDefinitionPath: '$(System.DefaultWorkingDirectory)/build/package.xml'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  publishOnGithubRelease: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
-  publishUmbracoPackage: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
-  publishOnNugetOrg: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
-  addTagToRepository: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
-  updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u9')]
+  publishOnGithubRelease: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
+  publishUmbracoPackage: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
+  publishOnNugetOrg: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
+  addTagToRepository: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
+  updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
   gitEmail: 'devops@robolynx.pl'
   gitUserName: 'DevOps Pipeline' 
 

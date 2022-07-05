@@ -14,7 +14,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
     public static class UmbracoBuilderExtensions
     {
         public static IUmbracoBuilder AddQRCodeCache<T>(this IUmbracoBuilder umbracoBuilder, Func<IServiceProvider, IFileSystem> fileSystem,
-            Func<IServiceProvider, IQRCodeCacheUrlProvider> cacheUrlProvider) where T : IQRCodeCacheRole
+            Func<IServiceProvider, IQRCodeCacheUrlProvider>? cacheUrlProvider) where T : IQRCodeCacheRole
         {
             var cacheName = Activator.CreateInstance<T>().Name;
             var configurationSectionKey = $"{Constants.Core.OptionsSectionName}:Cache:{cacheName}";
@@ -48,7 +48,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             }
             else
             {
-                umbracoBuilder.Services.BuildServiceProvider().GetService<ILogger<QRCodeCache<T>>>().LogWarning("Cache was disable in configuration.", cacheName);
+                umbracoBuilder.Services.BuildServiceProvider().GetRequiredService<ILogger<QRCodeCache<T>>>().LogWarning("Cache was disable in configuration.", cacheName);
             }
 
             return umbracoBuilder;

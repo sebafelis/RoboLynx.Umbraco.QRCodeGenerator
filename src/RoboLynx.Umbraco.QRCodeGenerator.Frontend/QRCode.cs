@@ -8,7 +8,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
     public class QRCode
     {
         private readonly IQRCodeService _qrCodeService;
-        private QRCodeSettings _defaultSettings;
+        private QRCodeSettings? _defaultSettings;
 
         internal QRCode(IQRCodeService qrCodeService, IPublishedContent publishedContent, string propertyAlias, string cacheName)
         {

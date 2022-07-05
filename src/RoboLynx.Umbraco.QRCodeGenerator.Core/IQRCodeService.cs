@@ -28,7 +28,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         /// <param name="cacheName">Cache name where code is cached</param>
         /// <returns>Stream with QR code</returns>
         /// <remarks>Property must be of defined with use QR Code Generator property editor.</remarks>
-        Stream GetStream(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings settings, string cacheName = null);
+        Stream GetStream(IPublishedContent publishedContent, string propertyAlias, string? culture, QRCodeSettings? settings, string? cacheName = null);
 
         /// <summary>
         /// Get stream with QR code. Stream can be storing in and getting from specify cache if is defined.
@@ -38,24 +38,24 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         /// <param name="cacheName">Cache name where code is cached</param>
         /// <returns>Stream with QR code</returns>
         /// <remarks>You can pass any data you wont.</remarks>
-        Stream GetStream(IQRCodeType codeType, QRCodeSettings settings, string cacheName = null);
+        Stream GetStream(IQRCodeType codeType, QRCodeSettings settings, string? cacheName = null);
 
         /// <summary>
         /// Clear all specify cache.
         /// </summary>
         /// <param name="cacheName">Cache name where codes are cached</param>
-        void ClearCache(string cacheName = null);
+        void ClearCache(string? cacheName = null);
 
         /// <summary>
         /// Remove from specific cache a file of specific QR code.
         /// </summary>
         /// <param name="cacheName">Cache name where codes are cached</param>
-        void ClearCache(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings settings = null, string cacheName = null);
+        void ClearCache(IPublishedContent publishedContent, string propertyAlias, string? culture, QRCodeSettings? settings = null, string? cacheName = null);
 
         /// <summary>
         /// Remove from specific cache a file of specific QR code.
         /// </summary>
         /// <param name="cacheName">Cache name where codes are cached</param>
-        void ClearCache(IQRCodeType codeType, QRCodeSettings settings, string cacheName = null);
+        void ClearCache(IQRCodeType codeType, QRCodeSettings settings, string? cacheName = null);
     }
 }

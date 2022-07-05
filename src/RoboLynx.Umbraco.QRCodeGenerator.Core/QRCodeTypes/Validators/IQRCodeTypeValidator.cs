@@ -2,6 +2,6 @@
 {
     public interface IQRCodeTypeValidator
     {
-        bool Validate(object value, out string message);
+        bool Validate(object? value, out string? message);
     }
 }
