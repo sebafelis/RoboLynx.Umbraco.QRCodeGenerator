@@ -11,13 +11,13 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
     {
         public IQRCodeCacheManager CacheManager { get; }
 
-        QRCodeConfig CreateConfiguration(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings userSettings);
+        QRCodeConfig CreateConfiguration(IPublishedContent publishedContent, string propertyAlias, string? culture, QRCodeSettings? userSettings);
 
-        QRCodeConfig CreateConfiguration(IQRCodeType codeType, QRCodeSettings userSettings);
+        QRCodeConfig CreateConfiguration(IQRCodeType codeType, QRCodeSettings? userSettings);
 
-        Stream CreateStream(QRCodeConfig config, string cacheName);
+        Stream CreateStream(QRCodeConfig config, string? cacheName);
 
-        QRCodeSettings GetDefaultSettings(IPublishedContent publishedContent, string propertyAlias);
+        QRCodeSettings? GetDefaultSettings(IPublishedContent publishedContent, string propertyAlias);
 
         IQRCodeFormat GetFormat(IQRCodeType codeType, QRCodeSettings settings);
     }

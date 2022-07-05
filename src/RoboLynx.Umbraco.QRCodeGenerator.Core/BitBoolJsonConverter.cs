@@ -10,7 +10,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             return objectType.Equals(typeof(bool)) || objectType.Equals(typeof(bool?));
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             return reader.Value switch
             {
@@ -19,7 +19,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             };
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             if (value is bool boolValue)
             {

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
-using System.Drawing.Imaging;
 using System.IO;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Web.Common;
@@ -11,7 +10,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
 {
     public class JpegFormat : RasterFormat
     {
-        private readonly ImageFormat _imageFormat = ImageFormat.Jpeg;
+        private readonly SixLabors.ImageSharp.Formats.IImageEncoder _imageFormat = new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder() { Quality = 80 };
 
         public JpegFormat(IMediaService mediaService, IUmbracoHelperAccessor umbracoHelperAccessor,
             IQRCodeHashIdFactory hashIdFactory, IColorParser colorParser, ILogger<JpegFormat> logger,

@@ -17,7 +17,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             this._textService = textService;
         }
 
-        public ContentApp GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups)
+        public ContentApp? GetContentAppFor(object source, IEnumerable<IReadOnlyUserGroup> userGroups)
         {
             if (source is IContentBase entity)
             {

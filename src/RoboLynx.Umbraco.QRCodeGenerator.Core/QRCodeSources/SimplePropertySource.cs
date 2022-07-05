@@ -2,6 +2,7 @@
 using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -28,7 +29,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 
                 private static SettingsItem ConvertFromString(string s)
                 {
-                    string sn = s, sr = null;
+                    string sn = s, sr = string.Empty;
                     var expresion = new Regex(@"(\w*)(?:\{\{(.*)\}\})?", RegexOptions.Singleline);
                     var match = expresion.Match(s);
                     if (match.Success)
@@ -48,10 +49,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
                 }
             }
 
-            public IDictionary<object, SettingsItem> Properties { get; set; }
+            public IDictionary<object, SettingsItem> Properties { get; set; } = new Dictionary<object, SettingsItem>();
         }
 
-        private readonly SilmplePropertySourceSettings _settings;
+        private readonly SilmplePropertySourceSettings? _settings;
         private readonly IBackOfficeSecurityAccessor _backOfficeSecurityAccessor;
         private readonly IPublishedValueFallback _publishedValueFallback;
         private readonly IPublishedContent _content;
@@ -83,32 +84,36 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             _culture = culture;
         }
 
-        public override T GetValue<T>(int index, string key)
+        [return: MaybeNull]
+        public override T GetValue<T>(int index, string? key)
         {
-            object propertyValue = null;
-            string regexPattern = null;
+            object? propertyValue = null;
+            string? regexPattern = null;
 
             var settingItem = GetSettingItem(index, key);
-            IPublishedProperty property = _content.GetProperty(settingItem.Name);
-            if (property != null)
+            if (settingItem != null)
             {
-                if (property.PropertyType.ContentType.ItemType == PublishedItemType.Member && !property.PropertyType.IsUserProperty
-                    && !(_backOfficeSecurityAccessor.BackOfficeSecurity.IsAuthenticated() && _backOfficeSecurityAccessor.BackOfficeSecurity.CurrentUser.HasSectionAccess(UmbracoConstants.Applications.Members)))
+                IPublishedProperty? property = _content.GetProperty(settingItem.Value.Name);
+                if (property != null)
                 {
-                    property = null;
+                    if (property.PropertyType.ContentType?.ItemType == PublishedItemType.Member && !property.PropertyType.IsUserProperty
+                        && !(_backOfficeSecurityAccessor.BackOfficeSecurity?.IsAuthenticated() ?? false && _backOfficeSecurityAccessor.BackOfficeSecurity.CurrentUser.HasSectionAccess(UmbracoConstants.Applications.Members)))
+                    {
+                        property = null;
+                    }
+
+                    regexPattern = settingItem.Value.Regex;
+
+                    if (property is null)
+                    {
+                        throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure correctly.");
+                    }
+
+                    propertyValue = property.Value(_publishedValueFallback, _culture);
                 }
-
-                regexPattern = settingItem.Regex;
-
-                if (property is null)
-                {
-                    throw new SourceConfigurationQRCodeGeneratorException(GetType(), "QR Code Source is not configure correctly.");
-                }
-
-                propertyValue = property.Value(_publishedValueFallback, _culture);
             }
 
-            if (propertyValue == null && settingItem.Name.Equals(nameof(_content.Name), StringComparison.OrdinalIgnoreCase))
+            if (propertyValue == null && settingItem.HasValue && settingItem.Value.Name.Equals(nameof(_content.Name), StringComparison.OrdinalIgnoreCase))
             {
                 propertyValue = _content.Name;
             }
@@ -125,7 +130,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
 
             try
             {
-                return propertyValue != null ? (T)Convert.ChangeType(propertyValue, typeof(T), CultureInfo.InvariantCulture) : default;
+                if (propertyValue != null)
+                {
+                    var convertedPropertyValue = (T)Convert.ChangeType(propertyValue, typeof(T), CultureInfo.InvariantCulture);
+                    if (convertedPropertyValue != null)
+                    {
+                        return convertedPropertyValue;
+                    }
+                }
+                return default;
             }
             catch (System.FormatException fex)
             {
@@ -133,19 +146,18 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
             }
         }
 
-        private SettingsItem GetSettingItem(int index, string key)
+        private SettingsItem? GetSettingItem(int index, string? key)
         {
-            object settingPropertyIndex = null;
-            if (!string.IsNullOrEmpty(key) && (_settings.Properties?.ContainsKey(key) ?? false) && _settings.Properties[key] != null)
+            if (!string.IsNullOrEmpty(key) && (_settings?.Properties?.ContainsKey(key) ?? false) && _settings.Properties[key] != null)
             {
-                settingPropertyIndex = key;
+                return _settings?.Properties[key];
             }
-            else if (_settings.Properties.Count > index && _settings.Properties[index] != null)
+            else if (_settings?.Properties.Count > index && _settings.Properties[index] != null)
             {
-                settingPropertyIndex = index;
+                return _settings?.Properties[index];
             }
 
-            return _settings.Properties[settingPropertyIndex];
+            return null;
         }
     }
 }

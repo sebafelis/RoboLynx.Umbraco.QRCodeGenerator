@@ -8,6 +8,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources
         {
         }
 
-        public abstract T GetValue<T>(int index, string key) where T : IConvertible;
+        public abstract T? GetValue<T>(int index, string key) where T : IConvertible;
     }
 }

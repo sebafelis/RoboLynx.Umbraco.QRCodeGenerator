@@ -9,8 +9,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
     {
         private const string TextArgumentName = "text";
 
-        private string _text;
-        private readonly IQRCodeSource _source;
+        private string? _text;
+        private readonly IQRCodeSource? _source;
         private readonly bool _validate;
 
         public TextType(string text, bool validate = true) : this()
@@ -47,7 +47,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
                 Validate(TextArgumentName, _text);
                 Validate(AllFieldsValidator, _text);
             }
-            return _text;
+            return _text ?? string.Empty;
         }
     }
 }

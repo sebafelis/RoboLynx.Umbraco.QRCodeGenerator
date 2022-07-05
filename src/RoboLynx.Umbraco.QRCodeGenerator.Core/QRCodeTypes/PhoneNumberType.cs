@@ -10,8 +10,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
     {
         private const string NumberArgumentName = "number";
 
-        private readonly IQRCodeSource _source;
-        private string _number;
+        private readonly IQRCodeSource? _source;
+        private string? _number;
         private readonly bool _validate;
 
         public PhoneNumberType(string number, bool validate = true) : this()
@@ -38,7 +38,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
                 _number = _source.GetValue<string>(0, NumberArgumentName);
             }
 
-            var number = Regex.Replace(_number, @"[\s\(\)-]", string.Empty);
+            string? number = null;
+            if (_number != null)
+            {
+                number = Regex.Replace(_number, @"[\s\(\)-]", string.Empty);
+            }
 
             if (_validate)
             {

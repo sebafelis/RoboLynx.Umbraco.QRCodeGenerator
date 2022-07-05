@@ -17,7 +17,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         private readonly ILogger<CacheInitializeTask> _logger;
 
         public CacheInitializeTask(string cacheName, IServerRoleAccessor serverRoleAccessor, IQRCodeCacheManager qrCodeCacheManager,
-            ILogger<CacheInitializeTask> logger) : base(_period, _delay)
+            ILogger<CacheInitializeTask> logger) : base(logger, _period, _delay)
         {
             _cacheName = cacheName;
             _serverRoleAccessor = serverRoleAccessor;
@@ -25,7 +25,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             _logger = logger;
         }
 
-        public override Task PerformExecuteAsync(object state)
+        public override Task PerformExecuteAsync(object? state)
         {
             _logger.LogInformation($"Checking {_cacheName} QR code cache for existing items.");
 
@@ -47,7 +47,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
             StopAsync(System.Threading.CancellationToken.None);
 
-            _logger.LogInformation($"{_cacheName} QR code cache initialized.");
+            _logger.LogInformation(message: $"{_cacheName} QR code cache initialized.");
 
             return Task.CompletedTask;
         }

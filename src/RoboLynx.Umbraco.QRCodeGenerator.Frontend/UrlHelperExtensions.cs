@@ -23,28 +23,32 @@ namespace Umbraco.Extensions
         /// <param name="urlMode">Define relative or absolute URL mode.</param>
         /// <returns>URL to file containing QR code<./returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0037:Use inferred member name", Justification = "<Pending>")]
-        public static string GetQRCodeUrl(this IUrlHelper urlHelper, IPublishedContent publishedContent, string propertyAlias, QRCodeSettings settings, string culture, UrlMode urlMode = UrlMode.Auto)
+        public static string? GetQRCodeUrl(this IUrlHelper urlHelper, IPublishedContent publishedContent, string propertyAlias, QRCodeSettings? settings, string? culture, UrlMode urlMode = UrlMode.Auto)
         {
             var controllerType = typeof(PublicQRCodeController);
 
             var metaData = PluginController.GetMetadata(controllerType);
 
-            var routeValues = new
+            object? routeValues = null;
+            if (settings != null)
             {
-                darkColor = settings.DarkColor,
-                drawQuiteZone = settings.DrawQuiteZone,
-                eCCLevel = settings.ECCLevel,
-                format = settings.Format,
-                icon = settings.Icon,
-                iconBorderWidth = settings.IconBorderWidth,
-                iconSizePercent = settings.IconSizePercent,
-                lightColor = settings.LightColor,
-                size = settings.Size,
-                nodeUdi = publishedContent.GetUdi(),
-                propertyAlias = propertyAlias,
-                culture = culture,
-                area = metaData.AreaName
-            };
+                routeValues = new
+                {
+                    darkColor = settings.DarkColor,
+                    drawQuiteZone = settings.DrawQuiteZone,
+                    eCCLevel = settings.ECCLevel,
+                    format = settings.Format,
+                    icon = settings.Icon,
+                    iconBorderWidth = settings.IconBorderWidth,
+                    iconSizePercent = settings.IconSizePercent,
+                    lightColor = settings.LightColor,
+                    size = settings.Size,
+                    nodeUdi = publishedContent.GetUdi(),
+                    propertyAlias = propertyAlias,
+                    culture = culture,
+                    area = metaData.AreaName
+                };
+            }
 
             var actionUrl = urlHelper.Action("Get", metaData.ControllerName, routeValues);
 
@@ -68,7 +72,7 @@ namespace Umbraco.Extensions
         /// <param name="culture">Documents culture.</param>
         /// <param name="urlMode">Define relative or absolute URL mode.</param>
         /// <returns>URL to file containing QR code<./returns>
-        public static string GetQRCodeUrl(this IUrlHelper urlHelper, QRCode qrCodeProperty, QRCodeSettings settings, string culture, UrlMode urlMode = UrlMode.Auto)
+        public static string? GetQRCodeUrl(this IUrlHelper urlHelper, QRCode qrCodeProperty, QRCodeSettings? settings, string? culture, UrlMode urlMode = UrlMode.Auto)
         {
             return urlHelper.GetQRCodeUrl(qrCodeProperty.PublishedContent, qrCodeProperty.PropertyAlias, settings, culture, urlMode);
         }
@@ -80,7 +84,7 @@ namespace Umbraco.Extensions
         /// <param name="culture">Documents culture.</param>
         /// <param name="urlMode">Define relative or absolute URL mode.</param>
         /// <returns>URL to file containing QR code<./returns>
-        public static string GetQRCodeUrl(this IUrlHelper urlHelper, QRCode qrCodeProperty, string culture, UrlMode urlMode = UrlMode.Auto)
+        public static string? GetQRCodeUrl(this IUrlHelper urlHelper, QRCode qrCodeProperty, string? culture, UrlMode urlMode = UrlMode.Auto)
         {
             return urlHelper.GetQRCodeUrl(qrCodeProperty, qrCodeProperty.DefaultSettings, culture, urlMode);
         }
@@ -91,9 +95,9 @@ namespace Umbraco.Extensions
         /// <param name="qrCodeProperty">Content property.</param>
         /// <param name="urlMode">Define relative or absolute URL mode.</param>
         /// <returns>URL to file containing QR code<./returns>
-        public static string GetQRCodeUrl(this IUrlHelper urlHelper, QRCode qrCodeProperty, UrlMode urlMode = UrlMode.Auto)
+        public static string? GetQRCodeUrl(this IUrlHelper urlHelper, QRCode qrCodeProperty, UrlMode urlMode = UrlMode.Auto)
         {
-            return urlHelper.GetQRCodeUrl(qrCodeProperty, qrCodeProperty.DefaultSettings, qrCodeProperty.PublishedContent.GetCultureFromDomains(), urlMode);
+            return urlHelper.GetQRCodeUrl(qrCodeProperty, qrCodeProperty.DefaultSettings, qrCodeProperty?.PublishedContent?.GetCultureFromDomains(), urlMode);
         }
     }
 }

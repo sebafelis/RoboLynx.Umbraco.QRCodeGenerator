@@ -17,8 +17,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache
             var cacheLocation = Constants.FrontendCache.DefaultFrontendCacheLocation;
             builder.AddQRCodeCache<FrontendQRCodeCache>(f =>
             {
-                var hostingEnvironment = f.GetService<IHostingEnvironment>();
-                return new PhysicalFileSystem(f.GetService<IIOHelper>(), hostingEnvironment, f.GetService<ILogger<PhysicalFileSystem>>(),
+                var hostingEnvironment = f.GetRequiredService<IHostingEnvironment>();
+                return new PhysicalFileSystem(f.GetRequiredService<IIOHelper>(), hostingEnvironment, f.GetRequiredService<ILogger<PhysicalFileSystem>>(),
                     Path.Join(hostingEnvironment.LocalTempPath, cacheLocation), "/");
             }, null);
         }

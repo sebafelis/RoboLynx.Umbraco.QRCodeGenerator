@@ -11,9 +11,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
         private const string LatitudeArgumentName = "latitude";
         private const string LongitudeArgumentName = "longitude";
 
-        private readonly IQRCodeSource _source;
-        private string _latitude;
-        private string _longitude;
+        private readonly IQRCodeSource? _source;
+        private string? _latitude;
+        private string? _longitude;
         private readonly bool _validate;
 
         public GeolocationGooleMapType(string latitude, string longitude, bool validate = true) : this()

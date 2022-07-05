@@ -4,7 +4,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
 {
     public class PhoneNumberValidator : IQRCodeTypeValidator
     {
-        public bool Validate(object value, out string message)
+        public bool Validate(object? value, out string? message)
         {
             if (value is string stringValue)
             {

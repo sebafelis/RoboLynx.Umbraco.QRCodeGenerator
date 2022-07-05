@@ -6,7 +6,22 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Models
 {
     public class QRCodeConfig
     {
-        public IQRCodeSource Source { get; set; }
+        public QRCodeConfig(IQRCodeSource source, IQRCodeType type, IQRCodeFormat format, QRCodeSettings settings)
+        {
+            Type = type;
+            Format = format;
+            Settings = settings;
+            Source = source;
+        }
+
+        public QRCodeConfig(IQRCodeType type, IQRCodeFormat format, QRCodeSettings settings)
+        {
+            Type = type;
+            Format = format;   
+            Settings = settings;
+        }
+
+        public IQRCodeSource? Source { get; set; }
         public IQRCodeType Type { get; set; }
         public IQRCodeFormat Format { get; set; }
         public QRCodeSettings Settings { get; set; }

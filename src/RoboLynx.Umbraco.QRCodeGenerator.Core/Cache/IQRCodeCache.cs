@@ -37,7 +37,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// </summary>
         /// <param name="codeId">Unique code ID base on hash code.</param>
         /// <returns>QR code file</returns>
-        Stream GetStream(string hashId);
+        Stream? GetStream(string hashId);
 
         /// <summary>
         /// Get URL address direct to cache file.
@@ -45,7 +45,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <param name="hashId">Unique ID base on hash code.</param>
         /// <param name="uriKind">URL mode</param>
         /// <returns>URL</returns>
-        string Url(string hashId, UrlMode urlMode);
+        string? Url(string hashId, UrlMode urlMode);
 
         /// <summary>
         /// Are direct cache URLs supported.

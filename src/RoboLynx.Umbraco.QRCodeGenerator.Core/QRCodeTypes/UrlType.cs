@@ -10,8 +10,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
     {
         private const string UrlArgumentName = "url";
 
-        private readonly IQRCodeSource _source;
-        private string _url;
+        private readonly IQRCodeSource? _source;
+        private string? _url;
         private readonly bool _validate;
 
         public class AbsoluteUrlSourceSettings

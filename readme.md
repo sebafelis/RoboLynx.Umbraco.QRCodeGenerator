@@ -2,13 +2,14 @@
 # QR Code Generator
 
 [![Our Umbraco project page](https://img.shields.io/badge/our-umbraco-orange.svg)](https://our.umbraco.com/packages/backoffice-extensions/qr-code-generator/) 
-[![Build Status](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_apis/build/status/sebafelis.RoboLynx.Umbraco.QRCodeGenerator?branchName=main-u9)](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_build/latest?definitionId=7&branchName=main-u9)
+[![Build Status](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_apis/build/status/sebafelis.RoboLynx.Umbraco.QRCodeGenerator?branchName=main-u10)](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_build/latest?definitionId=7&branchName=main-u10)
 ![Licence](https://img.shields.io/github/license/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)
 
 ## Description
 
-_Property editor_ and _Content app_ for **Umbraco 9** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
+_Property editor_ and _Content app_ for **Umbraco 10** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
 
+>Version for Umbraco 9 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u9)
 >Version for Umbraco 8 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
 >Version for Umbraco 7 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
  
@@ -47,10 +48,11 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 > * 7.* are intended for Umbraco 7.
 > * 8.* are intended for Umbraco 8.
 > * 9.* are intended for Umbraco 9.
+> * 10.* are intended for Umbraco 10.
 
 Install RoboLynx.Umbraco.QRCodeGenerator by NuGet calling the following command in your main project:
 
-```Install-Package RoboLynx.Umbraco.QRCodeGenerator -Version 9.0.0```
+```Install-Package RoboLynx.Umbraco.QRCodeGenerator -Version 10.0.0```
 
 and choose what other packages you need to from bellow table.
 

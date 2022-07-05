@@ -27,7 +27,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
             var binaryObject = ObjectToByteArray(configContainer);
 
-            var hashAlgoritm = System.Security.Cryptography.HashAlgorithm.Create(System.Security.Cryptography.HashAlgorithmName.MD5.Name);
+            var hashAlgoritm = System.Security.Cryptography.HashAlgorithm.Create(System.Security.Cryptography.HashAlgorithmName.MD5.Name ?? "MD5");
+            if (hashAlgoritm is null)
+            {
+                throw new NotSupportedException("Hash algorithm was not found.");
+            }
             var hashData = hashAlgoritm.ComputeHash(binaryObject);
 
             // Create a new Stringbuilder to collect the bytes
@@ -48,7 +52,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         public static byte[] ObjectToByteArray(object objData)
         {
             if (objData == null)
-                return default;
+                return Array.Empty<byte>();
 
             return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(objData, GetJsonSerializerOptions()));
         }

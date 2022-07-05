@@ -22,15 +22,15 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes
         /// <inheritdoc/>
         public abstract string GetCodeContent();
 
-        protected void Validate(string key, object value)
+        protected void Validate(string key, object? value)
         {
             if (Validators.ContainsKey(key) && Validators[key].Any())
             {
                 foreach (var validator in Validators[key])
                 {
-                    if (!validator.Validate(value, out string message))
+                    if (!validator.Validate(value, out string? message))
                     {
-                        throw new ValidationQRCodeGeneratorException(GetType(), key, message);
+                        throw new ValidationQRCodeGeneratorException(GetType(), key, message ?? string.Empty);
                     }
                 }
             }

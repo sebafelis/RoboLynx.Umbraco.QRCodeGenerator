@@ -16,9 +16,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             _qrCodeBuilder = codeBuilder;
         }
 
-        public IActionResult CreateResponesWithQRCode(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings settings, string cacheName)
+        public IActionResult CreateResponesWithQRCode(IPublishedContent? publishedContent, string? propertyAlias, string? culture, QRCodeSettings? settings, string? cacheName)
         {
-            if (publishedContent != null)
+            if (publishedContent != null && !string.IsNullOrEmpty(propertyAlias))
             {
                 try
                 {
@@ -53,6 +53,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
                         }
                         var cacheUrl = _qrCodeBuilder.CacheManager.GetUrl(hashId, UrlMode.Default, cacheName);
 
+                        if (cacheUrl == null)
+                        {
+                            throw new NullReferenceException("URL can not be generate.");
+                        }
                         return new RedirectResult(cacheUrl, false);
                     }
                 }
@@ -69,9 +73,9 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             return new NotFoundResult();
         }
 
-        public IActionResult CreateResponseWithDefaultSettings(IPublishedContent publishedContent, string propertyAlias)
+        public IActionResult CreateResponseWithDefaultSettings(IPublishedContent? publishedContent, string? propertyAlias)
         {
-            if (publishedContent != null)
+            if (publishedContent != null && !string.IsNullOrEmpty(propertyAlias))
             {
                 try
                 {

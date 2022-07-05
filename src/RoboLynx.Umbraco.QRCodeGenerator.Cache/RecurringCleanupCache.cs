@@ -15,7 +15,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         public RecurringCleanupCache(string cacheName, IOptionsMonitor<QRCodeCacheOptions> cacheOptions,
             IServerRoleAccessor serverRoleAccessor, IQRCodeCacheManager cacheManager, ILogger<RecurringCleanupCache> logger)
-                : base(cacheOptions.Get(cacheName).PeriodCleanCache, cacheOptions.Get(cacheName).DelayCleanCache)
+                : base(logger, cacheOptions.Get(cacheName).PeriodCleanCache, cacheOptions.Get(cacheName).DelayCleanCache)
         {
             _cacheName = cacheName;
             _serverRoleAccessor = serverRoleAccessor;
@@ -23,7 +23,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             _logger = logger;
         }
 
-        public override Task PerformExecuteAsync(object state)
+        public override Task PerformExecuteAsync(object? state)
         {
             _logger.LogInformation($"Cleaning {_cacheName} QR code cache.");
 

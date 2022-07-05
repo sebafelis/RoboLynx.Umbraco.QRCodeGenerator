@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Description>Cache configuration for QRCodeGenerator using local file system to store data for requests from property editor. (Don't install if you won apply your own cache configuration!)</Description>
 		<Copyright>Sebastian Felis @ 2022</Copyright>
@@ -9,13 +9,14 @@
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
 		<PackageTags>umbraco, propety editor, qr code, generator, cache, local</PackageTags>
-		<PackageReleaseNotes>Release for Umbraco 9</PackageReleaseNotes>
+		<PackageReleaseNotes>Release for Umbraco 10</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
 		<Company>RoboLynx</Company>
 		<Authors>Sebastian Felis</Authors>
 		<LangVersion>latest</LangVersion>
 		<PackageIcon>RoboLynx.Umbraco.QRCodeGenerator_128.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -48,7 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[9,10)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[10.0.0-rc*,11)" />
 	</ItemGroup>
 
 	<ItemGroup>

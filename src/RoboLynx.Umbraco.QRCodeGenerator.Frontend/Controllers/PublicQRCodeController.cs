@@ -33,22 +33,27 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(Udi nodeUdi, string propertyAlias, [FromQuery] QRCodeSettings settings, string culture = null)
+        public async Task<IActionResult> Get(Udi nodeUdi, string propertyAlias, [FromQuery] QRCodeSettings? settings, string? culture = null)
         {
             if (nodeUdi is null || propertyAlias is null)
             {
                 return BadRequest();
             }
 
-            IPublishedContent publishedContent = await GetPublishedContent(nodeUdi);
+            IPublishedContent? publishedContent = await GetPublishedContent(nodeUdi);
+
+            if (publishedContent is null)
+            {
+                return BadRequest();
+            }
 
             return _responesFactory.CreateResponesWithQRCode(publishedContent, propertyAlias, culture, settings, Constants.Frontend.FrontendCacheName);
         }
 
-        private async Task<IPublishedContent> GetPublishedContent(Udi nodeUdi)
+        private async Task<IPublishedContent?> GetPublishedContent(Udi nodeUdi)
         {
             var umbracoType = ObjectTypes.GetUmbracoObjectType(nodeUdi.EntityType);
-            IPublishedContent publishedContent = null;
+            IPublishedContent? publishedContent = null;
 
             switch (umbracoType)
             {

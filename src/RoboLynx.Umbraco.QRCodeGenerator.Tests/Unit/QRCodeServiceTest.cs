@@ -25,7 +25,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var publishedContent = Mock.Of<IPublishedContent>();
             var culture = "cu";
             var userSettings = Mock.Of<QRCodeSettings>();
-            var configuraton = Mock.Of<QRCodeConfig>();
+            var configuraton = new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(), Mock.Of<QRCodeSettings>());
             var cacheName = "testCache";
             var stream = CreateMockStream();
 
@@ -50,7 +50,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         {
             //Assign
             var userSettings = Mock.Of<QRCodeSettings>();
-            var configuraton = Mock.Of<QRCodeConfig>();
+            var configuraton = new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(), Mock.Of<QRCodeSettings>());
             var cacheName = "testCache";
             var stream = CreateMockStream();
 
@@ -98,7 +98,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         {
             //Assign
             var userSettings = Mock.Of<QRCodeSettings>();
-            var configuraton = Mock.Of<QRCodeConfig>(c => c.Format == Mock.Of<IQRCodeFormat>());
+            var configuraton = new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(), userSettings);
             var cacheName = "testCache";
 
             var cacheManagerMock = new Mock<IQRCodeCacheManager>();
@@ -142,7 +142,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
         {
             //Assign
             var userSettings = Mock.Of<QRCodeSettings>();
-            var configuraton = Mock.Of<QRCodeConfig>(c => c.Format == Mock.Of<IQRCodeFormat>());
+            var configuraton = new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(), Mock.Of<QRCodeSettings>());
             var cacheName = "testCache";
 
             var cacheManagerMock = new Mock<IQRCodeCacheManager>();

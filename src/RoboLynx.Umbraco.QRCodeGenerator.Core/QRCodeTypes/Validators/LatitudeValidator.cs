@@ -5,7 +5,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes.Validators
 {
     public class LatitudeValidator : IQRCodeTypeValidator
     {
-        bool IQRCodeTypeValidator.Validate(object value, out string message)
+        bool IQRCodeTypeValidator.Validate(object? value, out string? message)
         {
             double? lat = null;
 

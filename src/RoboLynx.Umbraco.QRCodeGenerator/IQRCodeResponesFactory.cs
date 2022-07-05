@@ -6,8 +6,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 {
     public interface IQRCodeResponesFactory
     {
-        IActionResult CreateResponesWithQRCode(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings settings, string cacheName);
+        IActionResult CreateResponesWithQRCode(IPublishedContent? publishedContent, string? propertyAlias, string? culture, QRCodeSettings? settings, string? cacheName);
 
-        IActionResult CreateResponseWithDefaultSettings(IPublishedContent publishedContent, string propertyAlias);
+        IActionResult CreateResponseWithDefaultSettings(IPublishedContent? publishedContent, string? propertyAlias);
     }
 }

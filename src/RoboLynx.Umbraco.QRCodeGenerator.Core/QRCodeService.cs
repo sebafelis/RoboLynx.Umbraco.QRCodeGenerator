@@ -14,14 +14,14 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             CodeBuilder = codeBuilder ?? throw new System.ArgumentNullException(nameof(codeBuilder));
         }
 
-        public Stream GetStream(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings settings, string cacheName = null)
+        public Stream GetStream(IPublishedContent publishedContent, string propertyAlias, string? culture, QRCodeSettings? settings, string? cacheName = null)
         {
             var config = CodeBuilder.CreateConfiguration(publishedContent, propertyAlias, culture, settings);
 
             return CodeBuilder.CreateStream(config, cacheName);
         }
 
-        public Stream GetStream(IQRCodeType codeType, QRCodeSettings settings, string cacheName = null)
+        public Stream GetStream(IQRCodeType codeType, QRCodeSettings? settings, string? cacheName = null)
         {
             var config = CodeBuilder.CreateConfiguration(codeType, settings);
 
@@ -33,7 +33,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             return CodeBuilder.GetDefaultSettings(publishedContent, propertyAlias);
         }
 
-        public void ClearCache(IPublishedContent publishedContent, string propertyAlias, string culture, QRCodeSettings settings = null, string cacheName = null)
+        public void ClearCache(IPublishedContent publishedContent, string propertyAlias, string? culture, QRCodeSettings? settings = null, string? cacheName = null)
         {
             var qrCodeGeneratorConfig = CodeBuilder.CreateConfiguration(publishedContent, propertyAlias, culture, settings);
 
@@ -42,7 +42,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             CodeBuilder.CacheManager.Clear(hashId, cacheName);
         }
 
-        public void ClearCache(IQRCodeType codeType, QRCodeSettings settings, string cacheName = null)
+        public void ClearCache(IQRCodeType codeType, QRCodeSettings settings, string? cacheName = null)
         {
             var config = CodeBuilder.CreateConfiguration(codeType, settings);
 
@@ -51,7 +51,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
             CodeBuilder.CacheManager.Clear(hashId, cacheName);
         }
 
-        public void ClearCache(string cacheName = null)
+        public void ClearCache(string? cacheName = null)
         {
             CodeBuilder.CacheManager.ClearAll(cacheName);
         }

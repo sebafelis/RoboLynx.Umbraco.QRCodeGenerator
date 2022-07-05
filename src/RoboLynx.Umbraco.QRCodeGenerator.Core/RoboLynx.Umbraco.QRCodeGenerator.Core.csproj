@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Description>QR Code Generator for Umbraco. Core implements service to generates QR codes from code.</Description>
 		<Copyright>Sebastian Felis @ 2022</Copyright>
@@ -9,7 +9,7 @@
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
 		<PackageTags>umbraco, propety editor, qr code, generator</PackageTags>
-		<PackageReleaseNotes>Release for Umbraco 9</PackageReleaseNotes>
+		<PackageReleaseNotes>Release for Umbraco 10</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
 		<Company>RoboLynx</Company>
 		<Authors>Sebastian Felis</Authors>
@@ -17,6 +17,7 @@
 		<PackageIcon>RoboLynx.Umbraco.QRCodeGenerator_128.png</PackageIcon>
 		<RootNamespace>RoboLynx.Umbraco.QRCodeGenerator</RootNamespace>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -57,9 +58,10 @@
 	<ItemGroup>
 		<PackageReference Include="Chronos.Abstractions" Version="2.0.24" />
 		<PackageReference Include="Chronos.Net" Version="2.0.24" />
-		<PackageReference Include="DotNetColorParser" Version="2.0.0" />
+		<PackageReference Include="DotNetColorParser" Version="[2,3)" />
 		<PackageReference Include="QRCoder" Version="1.4.3" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[9,10)" />
+		<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="[1.0.0-beta*,2)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[10.0.0-rc*,11)" />
 	</ItemGroup>
 
 </Project>

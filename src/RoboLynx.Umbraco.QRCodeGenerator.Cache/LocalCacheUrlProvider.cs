@@ -29,6 +29,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
             if (!url.IsAbsoluteUri)
             {
+                if (_httpContextAccessor.HttpContext == null)
+                {
+                    throw new NullReferenceException("HttpContext not found.");
+                }
                 var requestUrl = new Uri(_httpContextAccessor.HttpContext.Request.GetEncodedUrl());
 
                 if (requestUrl is not null && requestUrl.IsAbsoluteUri)
