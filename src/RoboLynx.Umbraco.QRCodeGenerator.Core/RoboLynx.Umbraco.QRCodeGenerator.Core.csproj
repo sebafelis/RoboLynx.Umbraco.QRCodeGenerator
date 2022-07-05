@@ -61,7 +61,7 @@
 		<PackageReference Include="DotNetColorParser" Version="[2,3)" />
 		<PackageReference Include="QRCoder" Version="1.4.3" />
 		<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="[1.0.0-beta*,2)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[10.0.0-rc*,11)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[10,11)" />
 	</ItemGroup>
 
 </Project>
