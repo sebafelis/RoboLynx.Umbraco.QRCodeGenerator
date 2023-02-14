@@ -2,7 +2,7 @@
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace RoboLynx.Umbraco.QRCodeGenerator
+namespace RoboLynx.Umbraco.QRCodeGenerator.Extensions
 {
     public static class PublishedContentExtensions
     {

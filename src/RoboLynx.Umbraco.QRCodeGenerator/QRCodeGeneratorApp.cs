@@ -21,11 +21,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
         {
             if (source is IContentBase entity)
             {
-                if (entity.Properties.Where(p => p.PropertyType.PropertyEditorAlias == Constants.Backoffice.PropertyEditorAlias).Any())
+                if (entity.Properties.Where(p => p.PropertyType.PropertyEditorAlias == Backoffice.PropertyEditorAlias).Any())
                 {
                     var qrCodeGeneratorApp = new ContentApp
                     {
-                        Alias = Constants.Backoffice.ContentAppAlias,
+                        Alias = Backoffice.ContentAppAlias,
                         Name = _textService.Localize("qrCode", "qrCode"),
                         Icon = "icon-qr-code",
                         View = "/App_Plugins/QRCodeGenerator/contentApps/qrCodeGeneratorApp/qrCodeGeneratorApp.html",

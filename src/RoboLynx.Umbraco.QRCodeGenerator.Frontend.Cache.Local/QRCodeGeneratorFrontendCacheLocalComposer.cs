@@ -7,14 +7,14 @@ using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Core.IO;
 
-namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache
+namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local
 {
     [ComposeBefore(typeof(QRCodeGeneratorCoreComposer))]
     public class QRCodeGeneratorFrontendCacheLocalComposer : IComposer
     {
         public void Compose(IUmbracoBuilder builder)
         {
-            var cacheLocation = Constants.FrontendCache.DefaultFrontendCacheLocation;
+            var cacheLocation = FrontendCache.DefaultFrontendCacheLocation;
             builder.AddQRCodeCache<FrontendQRCodeCache>(f =>
             {
                 var hostingEnvironment = f.GetRequiredService<IHostingEnvironment>();

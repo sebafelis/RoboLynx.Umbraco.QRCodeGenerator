@@ -1,4 +1,4 @@
-﻿namespace RoboLynx.Umbraco.QRCodeGenerator.Constants
+﻿namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 {
     public static class Frontend
     {
@@ -7,5 +7,7 @@
         private const string _frontendCacheNameValue = "Frontend";
 
         public static string FrontendCacheName { get; set; } = _frontendCacheNameValue;
+
+        internal const string CryptoParamName = "c";
     }
 }

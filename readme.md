@@ -9,9 +9,9 @@
 
 _Property editor_ and _Content app_ for **Umbraco 10** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
 
->Version for Umbraco 9 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u9)
->Version for Umbraco 8 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
->Version for Umbraco 7 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
+> * Version for Umbraco 9 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u9)
+> * Version for Umbraco 8 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
+> * Version for Umbraco 7 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
  
 User can customize generated code by color, size, output format, error correction level, adding quiet zone and also by adding icon (not for all formats). Code is available to generated from specify document type, base on specify data source like current document property or URL. The source from where the code content is get, the code type and the document type from which code can be generated are specify by developer. At this moment data source it can be property of current document (or part of it selected by regular expression), document URL or custom ([see **Source providers**](#source-providers)).
 
@@ -21,21 +21,19 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 ## Table of Contents
 
 1. [Installation](#installation)
-   1. [NuGet packages _(recommended)_](#nuget-packages-recommended)
-   1. [Umbraco Packge](#umbraco-package)
 1. [Configuration](#configuration)
 1. [Configuration file](#configuration-file)
 1. [Using in Umbraco Backoffice](#using-in-umbraco-backoffice)
 1. [Cache](#cache)
 1. [Using on frontend page](#using-on-frontend-page)
+   * [Secure URL](#secure-url)
 1. [Frontend cache](#frontend-cache)
 1. [Using service](#using-service)
-   1. [Dependency Injection](#dependency-injection)
-   1. [Static accessor](#static-accessor)
+   * [Dependency Injection](#dependency-injection)
 1. [Source providers](#source-providers)
-   1. [Content Property](#content-property)
-   1. [Absolute URL](#absolute-url)
-   1. [Custom](#custom)
+   a) [Content Property](#content-property)
+   b) [Absolute URL](#absolute-url)
+   c) [Custom](#custom)
 1. [Code Types](#code-types)
 1. [Formats](#formats)
 1. [Use examples](#use-examples)
@@ -52,7 +50,7 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 
 Install RoboLynx.Umbraco.QRCodeGenerator by NuGet calling the following command in your main project:
 
-```Install-Package RoboLynx.Umbraco.QRCodeGenerator -Version 10.0.0```
+```Install-Package RoboLynx.Umbraco.QRCodeGenerator -Version VERSION_NUMBER```
 
 and choose what other packages you need to from bellow table.
 
@@ -102,6 +100,7 @@ Some global settings can be configure from *appsetting.json* file. Default confi
         },
         "FrontendApi": { 
           "Disable": false // Disable access to frontend API. Display generated QR codes on frontend page will not be possible. 
+          "OnlyEncryptedCalls": false // If true only encrypted calls of frontend API will be accepted.
         }
     }
 }
@@ -148,13 +147,25 @@ Insert the above code to your razor template in place where you wont to see QR c
 > 
 > `GetQRCodeUrl()` return URL to the file with generated code. If you specify custom format that it isn't image format supported by browsers you must customize this code.
 
+### Secure URL
+
+Until version 9.1 is available also `GetSecureQRCodeUrl()` method. The difference between this and previous method is `GetSecureQRCodeUrl()` return a URL with encrypted parameters. This method occurs prevent modify QR code and can prevent from unwonted server load that can be use to DoS attack.
+
+> **Attention!**
+>
+> To actually really prevent DoS attack set up `OnlyEncryptedCalls` in [configuration file](#configuration-file) to disable possibility of calls an unencrypted API. When this setting is turn on the `GetQRCodeUrl()` method will take the same result as `GetSecureQRCodeUrl()`.
+
+> **Important**!
+> 
+>To encrypt request URL's parameters `GetSecureQRCodeUrl()` method use [**Data Protection**](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/introduction) build in to ASP.NET Core. It's a cryptographic API generating and storing cryptography key. In **production** version you probably will want to configure key storage other then default to prevent lose data. To do this read more **[here](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/)**.
+
 ### Frontend cache 
 
 For secure reason frontend package has a separate cache.
 
 If you don't use separate file storage, you should install `RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local` package. Like `RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local` also this package is a ready-to-use cache configuration using the local file system.
 
-```Install-Package RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local -Version 8.1.0```
+```Install-Package RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local -Version VERSION_NUMBER```
 
 > **Attention!**
 >
@@ -190,7 +201,7 @@ public class MyClass
 
 Source provider gets data from specify source and pass it to attributes containing by **Code type**. Now we have available only two build-in source providers. But you can write your own.
 
-### 1. Content Property
+### a) Content Property
 
 It's get data from content property by property name. Configuration is required. 
 Configuration can by write on two way:
@@ -215,11 +226,11 @@ Configuration can by write on two way:
         ```
         When you use this syntax property value is pass to **Code type** as attributes by attribute name. Check attribute names [hear](#code-types). You can find them also in information bellow selected **Code type** filed in backoffice.
 
-### 2. Absolute URL
+### b) Absolute URL
 
 It's always passing absolute document URL for each attribute of **Code type**. That's way this source provider should be use only with **URL Code type** ([see **Code Types**](#code-types)).
 
-### 3. Custom
+### c) Custom
 
 You can write your own **Code type** writing a two classes. First needs Implementing IQRCodeSourceFactory and second implementing IQRCodeSource. 
 

@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace RoboLynx.Umbraco.QRCodeGenerator
+namespace RoboLynx.Umbraco.QRCodeGenerator.Extensions
 {
     public static class StringExtension
     {

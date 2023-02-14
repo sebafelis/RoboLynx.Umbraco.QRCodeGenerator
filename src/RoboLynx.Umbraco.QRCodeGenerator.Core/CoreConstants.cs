@@ -1,4 +1,4 @@
-﻿namespace RoboLynx.Umbraco.QRCodeGenerator.Constants
+﻿namespace RoboLynx.Umbraco.QRCodeGenerator
 {
 #pragma warning disable IDE1006 // Add readonly modifier
 

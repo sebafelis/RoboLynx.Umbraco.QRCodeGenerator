@@ -1,4 +1,4 @@
-﻿namespace RoboLynx.Umbraco.QRCodeGenerator.Constants
+﻿namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local
 {
     internal static class FrontendCache
     {

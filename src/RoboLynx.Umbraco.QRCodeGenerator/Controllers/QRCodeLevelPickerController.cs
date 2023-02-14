@@ -9,7 +9,7 @@ using Umbraco.Extensions;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 {
-    [PluginController(Constants.Core.PluginAlias)]
+    [PluginController(Core.PluginAlias)]
     [AngularJsonOnlyConfiguration]
     public class QRCodeLevelPickerController : UmbracoAuthorizedJsonController
     {

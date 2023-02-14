@@ -17,7 +17,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             Func<IServiceProvider, IQRCodeCacheUrlProvider>? cacheUrlProvider) where T : IQRCodeCacheRole
         {
             var cacheName = Activator.CreateInstance<T>().Name;
-            var configurationSectionKey = $"{Constants.Core.OptionsSectionName}:Cache:{cacheName}";
+            var configurationSectionKey = $"{Core.OptionsSectionName}:Cache:{cacheName}";
             umbracoBuilder.Services.AddOptions<QRCodeCacheOptions>(cacheName).Bind(umbracoBuilder.Config.GetSection(configurationSectionKey)).ValidateDataAnnotations();
 
             var options = new QRCodeCacheOptions();

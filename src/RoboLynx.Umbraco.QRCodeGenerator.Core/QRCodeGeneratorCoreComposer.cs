@@ -2,6 +2,7 @@
 using DotNetColorParser;
 using Microsoft.Extensions.DependencyInjection;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
+using RoboLynx.Umbraco.QRCodeGenerator.Extensions;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
