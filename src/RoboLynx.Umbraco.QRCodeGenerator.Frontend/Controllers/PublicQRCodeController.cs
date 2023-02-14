@@ -13,7 +13,7 @@ using Umbraco.Cms.Web.Common.Controllers;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
 {
-    [PluginController(Constants.Core.PluginAlias)]
+    [PluginController(Core.PluginAlias)]
     public class PublicQRCodeController : UmbracoApiController
     {
         private readonly IQRCodeResponesFactory _responesFactory;
@@ -47,7 +47,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
                 return BadRequest();
             }
 
-            return _responesFactory.CreateResponesWithQRCode(publishedContent, propertyAlias, culture, settings, Constants.Frontend.FrontendCacheName);
+            return _responesFactory.CreateResponesWithQRCode(publishedContent, propertyAlias, culture, settings, Frontend.FrontendCacheName);
         }
 
         private async Task<IPublishedContent?> GetPublishedContent(Udi nodeUdi)

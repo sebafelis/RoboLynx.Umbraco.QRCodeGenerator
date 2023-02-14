@@ -13,7 +13,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache.Local
     {
         public void Compose(IUmbracoBuilder builder)
         {
-            var cacheLocation = Constants.Cache.DefaultLocalCacheLocation;
+            var cacheLocation = Cache.DefaultLocalCacheLocation;
 
             builder.AddQRCodeCache<BackofficeQRCodeCache>(f =>
             {

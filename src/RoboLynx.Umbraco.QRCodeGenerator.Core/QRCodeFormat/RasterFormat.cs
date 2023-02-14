@@ -28,7 +28,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             var lightColor = _colorParser.ParseColor(Settings.LightColor).ToImageSharpColor();
             var darkColor = _colorParser.ParseColor(Settings.DarkColor).ToImageSharpColor();
 
-            using var qrCodeBmp = GenerateBitmapQRCode(CodeType.GetCodeContent(), Settings.Size ?? Constants.DefaultFieldsValues.DefaultSizeFieldValue, darkColor, lightColor, Settings.DrawQuiteZone ?? Constants.DefaultFieldsValues.DefaultDrawQuietZoneFieldValue, ResolveIconUrl(Settings.Icon), Settings.IconSizePercent ?? Constants.DefaultFieldsValues.DefaultIconSizePercentFieldValue, Settings.IconBorderWidth ?? Constants.DefaultFieldsValues.DefaultIconBorderWidthFieldValue, Settings.ECCLevel ?? Constants.DefaultFieldsValues.DefaultECCLevelFieldValue);
+            using var qrCodeBmp = GenerateBitmapQRCode(CodeType.GetCodeContent(), Settings.Size ?? DefaultFieldsValues.DefaultSizeFieldValue, darkColor, lightColor, Settings.DrawQuiteZone ?? DefaultFieldsValues.DefaultDrawQuietZoneFieldValue, ResolveIconUrl(Settings.Icon), Settings.IconSizePercent ?? DefaultFieldsValues.DefaultIconSizePercentFieldValue, Settings.IconBorderWidth ?? DefaultFieldsValues.DefaultIconBorderWidthFieldValue, Settings.ECCLevel ?? DefaultFieldsValues.DefaultECCLevelFieldValue);
 
             MemoryStream memoryStream = new();
             qrCodeBmp.Save(memoryStream, imageFormat);

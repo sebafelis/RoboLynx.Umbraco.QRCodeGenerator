@@ -24,10 +24,9 @@ variables:
   umbracoPackageDefinitionPath: '$(System.DefaultWorkingDirectory)/build/package.xml'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  publishOnGithubRelease: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
-  publishUmbracoPackage: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
-  publishOnNugetOrg: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
-  addTagToRepository: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
+  publishOnGithubRelease: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u10'), eq(variables['publishPrereleseVersion'], true))]
+  publishOnNugetOrg: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u10'), eq(variables['publishPrereleseVersion'], true))]
+  addTagToRepository: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u10'), eq(variables['publishPrereleseVersion'], true))]
   updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
   gitEmail: 'devops@robolynx.pl'
   gitUserName: 'DevOps Pipeline' 
@@ -36,9 +35,9 @@ steps:
 - checkout: self
   persistCredentials: true
 - task: NuGetToolInstaller@1
-  displayName: 'Install NuGet 5.8.1'
+  displayName: 'Install NuGet 6.2.1'
   inputs:    
-    versionSpec: 5.8.1
+    versionSpec: 6.2.1
 - task: NuGetCommand@2
   displayName: 'Restore NuGets'
   inputs:
@@ -47,7 +46,7 @@ steps:
 - task: gitversion/setup@0
   displayName: 'Setup GitVersions'
   inputs:
-    versionSpec: 5.6.6
+    versionSpec: 5.12.0
 - task: gitversion/execute@0
   displayName: 'Get build version'
   inputs:
@@ -79,10 +78,10 @@ steps:
         Write-Host "##vso[task.setvariable variable=changelogUpdated]false"
         exit 1
     }
-  displayName: 'Update Unrelease section in CHANGELOG to current version'
+  displayName: 'Change [Unrelease] section header in CHANGELOG to [$current_version]'
   condition: and(succeeded(), eq(variables['updateChangelogVersion'], true))
   env:
-    current_version: $(GitVersion.NuGetVersion)
+    current_version: $(GitVersion.SemVer)
 - script: |
     git add CHANGELOG.md 
     git commit -m "CHNAGELOG.md update"
@@ -111,15 +110,15 @@ steps:
     projects: '$(solution)'
     includesymbols: true
     versioningScheme: byEnvVar
-    versionEnvVar: 'GitVersion.NuGetVersion'
-    buildProperties: 'SymbolPackageFormat=snupkg'
+    versionEnvVar: 'GitVersion.SemVer'
+    configurationToPack: '$(buildConfiguration)'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish artifacts'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
 - script: |
-     git tag v$(GitVersion.NuGetVersion)
-     git push origin v$(GitVersion.NuGetVersion) 
+     git tag v$(GitVersion.SemVer)
+     git push origin v$(GitVersion.SemVer) 
   condition: and(succeeded(), eq(variables['addTagToRepository'], true))
   workingDirectory: $(Build.SourcesDirectory)
   displayName: 'Add tag to commit'
@@ -139,7 +138,23 @@ steps:
     nuGetFeedType: external
     publishFeedCredentials: sebafelisNuGetAccountForQRCodeGenerator
     versioningScheme: byEnvVar
-    versionEnvVar: 'GitVersion.NuGetVersion'
+    versionEnvVar: 'GitVersion.SemVer'
+- task: InvokeRESTAPI@1
+  displayName: 'Refresh data in Umbraco Marketplace'
+  condition: and(succeeded(), eq(variables['publishOnNugetOrg'], true))
+  inputs:
+    connectionType: connectedServiceName
+    serviceConnection: Umbraco Marketplace - Package Sync
+    method: POST
+    headers: |
+        {
+        "Content-Type":"application/json"
+        }
+    body: |
+        {
+	    "PackageId":"RoboLynx.Umbraco.QRCodeGenerator"
+        }
+    waitForCompletion: 'false'
 - powershell: | 
     $regex_current_version = $current_version -replace '\.','\.'
     $regex_pattern = "(?s)(?:\n##\s\[$regex_current_version\].*?\r\n(?:\s*\r\n)*)(?<content>.*?)(?:\r\n##\s\[\d+\.\d+\.\d+].*?\r\n|\s*\Z)"
@@ -160,7 +175,7 @@ steps:
   displayName: 'Extract release note from CHANGELOG.md'
   condition: and(succeeded(), eq(variables['publishOnGithubRelease'], true))
   env:
-    current_version: $(GitVersion.NuGetVersion)
+    current_version: $(GitVersion.SemVer)
 - task: GitHubRelease@1
   displayName: 'Publish on Github Release'
   condition: and(succeeded(), eq(variables['publishOnGithubRelease'], true))
@@ -172,10 +187,10 @@ steps:
     tagSource: gitTag
     tagPattern: 'v.*'
     isDraft: false
-    isPreRelease: false
+    isPreRelease: $[ne(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
     assetUploadMode: delete
     assets: '$(Build.ArtifactStagingDirectory)/*'
     addChangeLog: false   
     releaseNotesSource: inline
-    releaseNotesInline: $(releaseNotes)
+    releaseNotesInline: '$(releaseNotes)'
     

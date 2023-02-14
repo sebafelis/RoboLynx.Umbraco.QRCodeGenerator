@@ -11,12 +11,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
     {
         public void Compose(IUmbracoBuilder builder)
         {
-            var options = new QRCodeFrontendOptions();
-            builder.Config.GetSection($"{Constants.Core.OptionsSectionName}:{Constants.Frontend.FrontendApiOptionSectionName}").Bind(options);
+            var configSection = builder.Config.GetSection($"{Core.OptionsSectionName}:{Frontend.FrontendApiOptionSectionName}");
+            builder.Services.Configure<QRCodeFrontendOptions>(configSection);
+
+            var options = configSection.Get<QRCodeFrontendOptions>() ?? new QRCodeFrontendOptions();
 
             if (!options.Disable)
             {
+                builder.Services.AddSingleton<IQueryCipher, QueryCipher>();
                 builder.Services.AddTransient<PublicQRCodeController>();
+                UrlHelperExtensionsForQRCodeGenerator.QueryCipher = builder.Services.BuildServiceProvider().GetService<IQueryCipher>();
             }
         }
     }
