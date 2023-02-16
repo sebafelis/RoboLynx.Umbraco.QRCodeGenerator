@@ -147,33 +147,35 @@ steps:
     serviceConnection: Umbraco Marketplace - Package Sync
     method: POST
     headers: |
-        {
-        "Content-Type":"application/json"
-        }
+      {
+        "Content-Type": "application/json"
+      }
     body: |
-        {
-	    "PackageId":"RoboLynx.Umbraco.QRCodeGenerator"
-        }
+      {
+        "PackageId": "RoboLynx.Umbraco.QRCodeGenerator"
+      }
     waitForCompletion: 'false'
-- powershell: | 
-    $regex_current_version = $current_version -replace '\.','\.'
-    $regex_pattern = "(?s)(?:\n##\s\[$regex_current_version\].*?\r\n(?:\s*\r\n)*)(?<content>.*?)(?:\r\n##\s\[\d+\.\d+\.\d+].*?\r\n|\s*\Z)"
-
-    $changelog = Get-Content -Path .\CHANGELOG.md -Raw
-    if ($changelog -match "##\s?\[$regex_current_version\]") 
-    {
+- task: PowerShell@2
+  displayName: 'Extract release note from CHANGELOG.md'
+  condition: and(succeeded(), eq(variables['publishOnGithubRelease'], true))
+  inputs:
+    targetType: 'inline'
+    script: |
+      $regex_current_version = $current_version -replace '\.','\.'
+      $regex_pattern = "(?s)(?:\n##\s\[$regex_current_version\].*?\r\n(?:\s*\r\n)*)(?<content>.*?)(?:\r\n##\s\[\d+\.\d+\.\d+].*?\r\n|\s*\Z)"
+      $changelog = Get-Content -Path .\CHANGELOG.md -Raw
+      if ($changelog -match "##\s?\[$regex_current_version\]") 
+      {
         $changes = $changelog | Select-String -Pattern $regex_pattern
         $releaseNotes = $changes.Matches[0].Groups['content'] -replace "\r\n","%0D%0A"
         Write-Host "##vso[task.setvariable variable=releaseNotes]$releaseNotes"
         Write-Host "Extracted release note:"
         Write-Host "$releaseNotes"
-    }
-    else 
-    {
-        Write-Host "##vso[task.LogIssue type=error;]CHANGELOG.md don't contains section for current version."
-    }
-  displayName: 'Extract release note from CHANGELOG.md'
-  condition: and(succeeded(), eq(variables['publishOnGithubRelease'], true))
+      }
+      else 
+      { 
+        Write-Host "##vso[task.LogIssue type=error;]CHANGELOG.md don't contains section for current version." 
+      }
   env:
     current_version: $(GitVersion.SemVer)
 - task: GitHubRelease@1
