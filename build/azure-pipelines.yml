@@ -139,22 +139,21 @@ steps:
     publishFeedCredentials: sebafelisNuGetAccountForQRCodeGenerator
     versioningScheme: byEnvVar
     versionEnvVar: 'GitVersion.SemVer'
-- task: InvokeRESTAPI@1
+- task: PowerShell@2
   displayName: 'Refresh data in Umbraco Marketplace'
   condition: and(succeeded(), eq(variables['publishOnNugetOrg'], true))
   inputs:
-    connectionType: connectedServiceName
-    serviceConnection: Umbraco Marketplace - Package Sync
-    method: POST
-    headers: |
-      {
-        "Content-Type": "application/json"
-      }
-    body: |
-      {
-        "PackageId": "RoboLynx.Umbraco.QRCodeGenerator"
-      }
-    waitForCompletion: 'false'
+    targetType: 'inline'
+    errorActionPreference: 'continue'
+    script: |
+        $url = "https://functions.marketplace.umbraco.com/api/InitiateSinglePackageSyncFunction"
+        $body = '{
+          "PackageId": "RoboLynx.Umbraco.QRCodeGenerator"
+        }'
+        $headers = @{
+            'Content-Type' = 'application/json'
+        }
+        Invoke-RestMethod -Method 'Post' -Uri $url -Headers $headers -Body $body
 - task: PowerShell@2
   displayName: 'Extract release note from CHANGELOG.md'
   condition: and(succeeded(), eq(variables['publishOnGithubRelease'], true))
