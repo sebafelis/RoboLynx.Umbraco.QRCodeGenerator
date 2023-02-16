@@ -20,7 +20,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 
             var metaData = PluginController.GetMetadata(controllerType);
 
-            var routeValues = new
+            var routeValues = settings != null ? new
             {
                 darkColor = settings.DarkColor,
                 drawQuiteZone = settings.DrawQuiteZone,
@@ -35,7 +35,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
                 propertyAlias,
                 culture,
                 area = metaData.AreaName
-            };
+            } : null;
 
             var actionUrl = urlHelper.Action("Get", metaData.ControllerName, routeValues);
 

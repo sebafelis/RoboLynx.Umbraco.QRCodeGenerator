@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
 {
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class DecryptQueryParametersAttribute : Attribute, IResourceFilter
     {
         private readonly IQueryCipher _queryCipher;
@@ -41,6 +42,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
                     {
                         _logger.LogWarning("Parsing of request query failed.");
                         context.Result = new BadRequestResult();
+                        return;
                     }
 
                     context.HttpContext.Request.QueryString = QueryString.Create(query);
