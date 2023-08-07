@@ -57,7 +57,7 @@
 		<PackageReference Include="Chronos.Abstractions" Version="2.0.24" />
 		<PackageReference Include="DotNetColorParser" Version="2.0.0" />
 		<PackageReference Include="QRCoder" Version="1.4.3" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[10.0.0-rc*,11)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[10,11)" />
 	</ItemGroup>
 
 	<ItemGroup>
