@@ -4,8 +4,8 @@ using SixLabors.ImageSharp;
 using static QRCoder.QRCodeGenerator;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Drawing;
+using SixLabors.ImageSharp.Advanced;
+using System.Collections.Generic;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.ImageSharp
 {
@@ -34,36 +34,29 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.ImageSharp
             var offset = drawQuietZones ? 0 : 4 * pixelsPerModule;
 
             var bmp = new Image<Rgba32>(size, size);
-            if (drawQuietZones)
-            {
-                bmp.Mutate(x => x.Clear(lightColor));
-            }
+
+
+            bmp.DrawRectangle(0, 0, size, size, lightColor);
+
             for (var x = 0; x < size + offset; x += pixelsPerModule)
             {
                 for (var y = 0; y < size + offset; y += pixelsPerModule)
                 {
                     var module = this.QrCodeData.ModuleMatrix[(y + pixelsPerModule) / pixelsPerModule - 1][(x + pixelsPerModule) / pixelsPerModule - 1];
-                    var color = module ? darkColor : lightColor;
-                    var rectangle = new Rectangle(x - offset, y - offset, pixelsPerModule, pixelsPerModule);
-                    bmp.Mutate(x => x.Fill(color, rectangle));
+                    if (module)
+                    {
+                        bmp.DrawRectangle(x - offset, y - offset, pixelsPerModule, pixelsPerModule, darkColor);
+                    }
                 }
             }
-
             return bmp;
         }
+
+
 
         public Image GetGraphic(int pixelsPerModule, Color darkColor, Color lightColor, Image? icon = null, int iconSizePercent = 15, int iconBorderWidth = 0, bool drawQuietZones = true, Color? iconBackgroundColor = null)
         {
             var bmp = GetGraphic(pixelsPerModule, darkColor, lightColor, drawQuietZones);
-
-            DrawingOptions options = new()
-            {
-                GraphicsOptions = new()
-                { 
-                    ColorBlendingMode = PixelColorBlendingMode.Normal,
-                    Antialias = true
-                }
-            };
 
             var drawIconFlag = icon is not null && iconSizePercent > 0 && iconSizePercent <= 100;
 
@@ -76,34 +69,80 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.ImageSharp
                 var centerDest = new RectangleF(iconX - iconBorderWidth, iconY - iconBorderWidth, iconDestWidth + iconBorderWidth * 2, iconDestHeight + iconBorderWidth * 2);
                 var iconDestRect = new RectangleF(iconX, iconY, iconDestWidth, iconDestHeight);
                 var iconBgBrush = iconBackgroundColor ?? lightColor;
-                //Only render icon/logo background, if iconBorderWith is set > 0
+
+                icon.Mutate(x => x.Resize((int)iconDestWidth, (int)iconDestHeight));
+
+                var iconRgba = icon.CloneAs<Rgba32>();
+
                 if (iconBorderWidth > 0)
                 {
-                    IPath iconPath = CreateRoundedRectanglePath(centerDest, iconBorderWidth * 2);
-                    icon.Mutate(x => x.Resize((int)iconDestWidth, (int)iconDestHeight));
-                    IBrush brush = new ImageBrush(icon);
-                    bmp.Mutate(x => x.Fill(options, iconBgBrush, iconPath).Fill(options, brush, iconDestRect));
+                    var iconBorder = CreateIconBorder(iconRgba, iconBorderWidth, iconBackgroundColor ?? lightColor);
+
+                    bmp.Mutate(x => x.DrawImage(iconBorder, new Point((int)iconX - iconBorderWidth, (int)iconY - iconBorderWidth), 1));
                 }
-                //gfx.DrawImage(icon, iconDestRect, new RectangleF(0, 0, icon.Width, icon.Height), GraphicsUnit.Pixel);
+
+                bmp.Mutate(x => x.DrawImage(iconRgba, new Point((int)iconX, (int)iconY), 1));
             }
 
             return bmp;
         }
 
-        internal static IPath CreateRoundedRectanglePath(RectangleF rect, int cornerRadius)
+
+        private Image CreateIconBorder(Image<Rgba32> icon, int iconBorderWidth, Color iconBackgroundColor)
         {
-            var roundedRect = new Polygon(
-                    new CubicBezierLineSegment(new PointF(rect.Left, rect.Top + cornerRadius), new PointF(rect.Left, rect.Top + cornerRadius / 2), new PointF(rect.Left + cornerRadius / 2, rect.Top), new PointF(rect.Left + cornerRadius, rect.Top)),
-                    new LinearLineSegment(new PointF(rect.Left + cornerRadius, rect.Top), new PointF(rect.Right - cornerRadius, rect.Top)),
-                    new CubicBezierLineSegment(new PointF(rect.Right - cornerRadius, rect.Top), new PointF(rect.Right - cornerRadius / 2, rect.Top), new PointF(rect.Right, rect.Top + cornerRadius / 2), new PointF(rect.Right, rect.Top + cornerRadius)),
-                    new LinearLineSegment(new PointF(rect.Right, rect.Top + cornerRadius), new PointF(rect.Right, rect.Bottom - cornerRadius)),
-                    new CubicBezierLineSegment(new PointF(rect.Right, rect.Bottom - cornerRadius), new PointF(rect.Right, rect.Bottom - cornerRadius / 2), new PointF(rect.Right - cornerRadius / 2, rect.Bottom), new PointF(rect.Right - cornerRadius, rect.Bottom)),
-                    new LinearLineSegment(new PointF(rect.Right - cornerRadius, rect.Bottom), new PointF(rect.Left + cornerRadius, rect.Bottom)),
-                    new CubicBezierLineSegment(new PointF(rect.Left + cornerRadius, rect.Bottom), new PointF(rect.Left + cornerRadius / 2, rect.Bottom), new PointF(rect.Left, rect.Bottom - cornerRadius / 2), new PointF(rect.Left, rect.Bottom - cornerRadius)),
-                    new LinearLineSegment(new PointF(rect.Left, rect.Bottom - cornerRadius), new PointF(rect.Left, rect.Top + cornerRadius))
-                );
-            return roundedRect.AsClosedPath();
+            //TODO: Use Span to make method more efficient (https://docs.sixlabors.com/articles/imagesharp/pixelbuffers.html)
+
+            var iconBorder = new Image<Rgba32>(icon.Width + iconBorderWidth * 2, icon.Height + iconBorderWidth * 2);
+
+            // Define the directions for 8-connectivity (top, bottom, left, right)
+            var directions = new List<(int dx, int dy)>
+                    {
+                        (0, -1), // Top
+                        (-1, -1), // Top-left
+                        (1, -1), // Top-Right
+                        (0, 1),  // Bottom
+                        (-1, 1),  // Bottom-left
+                        (1, 1),  // Bottom-right
+                        (-1, 0), // Left
+                        (1, 0)   // Right
+                    };
+
+            // Iterate through each pixel to find the non-transparent region's contour
+            for (int y = 0; y < icon.Height; y++)
+            {
+                for (int x = 0; x < icon.Width; x++)
+                {
+                    if (icon[x, y].A == 0) // Transparent pixel, skip
+                        continue;
+
+                    // Check the neighboring pixels for transparent pixels
+                    foreach (var (dx, dy) in directions)
+                    {
+                        int nx = x + dx;
+                        int ny = y + dy;
+
+                        // Check if the neighboring pixel is outside the image boundary or transparent
+                        //
+                        if (nx < 0 || nx >= icon.Width || ny < 0 || ny >= icon.Height || icon[nx, ny].A == 0)
+                        {
+                            // If a transparent pixel is found, it means we are on the boundary, draw the border
+                            for (int i = 1; i <= iconBorderWidth; i++)
+                            {
+                                int bx = x + iconBorderWidth + i * dx;
+                                int by = y + iconBorderWidth + i * dy;
+
+                                if (bx >= 0 && bx < iconBorder.Width && by >= 0 && by < iconBorder.Height)
+                                {
+                                    iconBorder[bx, by] = iconBackgroundColor;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return iconBorder;
         }
+
     }
 
     public static class ImageSharpQRCodeHelper
