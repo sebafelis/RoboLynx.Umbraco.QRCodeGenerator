@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.ImageSharp
 {
-    internal static class ColorHelpers
+    internal static class ColorExtensions
     {
         public static System.Drawing.Color ToSystemDrawingColor(this SixLabors.ImageSharp.Color c)
         {

@@ -71,6 +71,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// <param name="hashId">Unique code ID base on hash code</param>
         /// <param name="cacheName">Cache name</param>
         /// <returns>Value or NULL if cache not exist</returns>
+        [Obsolete]
         DateTimeOffset? Expired(string hashId, string? cacheName);
 
         /// <summary>

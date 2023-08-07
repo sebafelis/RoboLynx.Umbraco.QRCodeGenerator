@@ -42,11 +42,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             var darkColor = _colorParser.ParseColor(settings.DarkColor).ToImageSharpColor();
 
             var qrGenerator = new QRCoder.QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(codeContent, (QRCoder.QRCodeGenerator.ECCLevel)(int)(settings.ECCLevel ?? Constants.DefaultFieldsValues.DefaultECCLevelFieldValue), true);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(codeContent, (QRCoder.QRCodeGenerator.ECCLevel)(int)(settings.ECCLevel ?? DefaultFieldsValues.DefaultECCLevelFieldValue), true);
 
             ImageSharpSvgQRCode svgQrCode = new(qrCodeData);
 
-            var svgString = svgQrCode.GetGraphic(settings.Size ?? Constants.DefaultFieldsValues.DefaultSizeFieldValue, darkColor, lightColor, settings.DrawQuiteZone ?? Constants.DefaultFieldsValues.DefaultDrawQuietZoneFieldValue, ImageSharpSvgQRCode.SizingMode.WidthHeightAttribute);
+            var svgString = svgQrCode.GetGraphic(settings.Size ?? DefaultFieldsValues.DefaultSizeFieldValue, darkColor, lightColor, settings.DrawQuiteZone ?? DefaultFieldsValues.DefaultDrawQuietZoneFieldValue, ImageSharpSvgQRCode.SizingMode.WidthHeightAttribute);
 
             svgString = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"> \n" + svgString;
 

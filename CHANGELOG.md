@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Support for Umbraco Marketplace 
+- Secure URLs support
 - Custom classes for **QRCoder** library (`ImageSharpQRCode`, `ImageSharpSvgQRCode`) to support raster graphic generation through ImageSharp library
 
 ### Changed
@@ -13,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Migration to .NET 6
 - Support for Umbraco 10
 - Enable nullable reference types in projects
+- Constants moved to dedicate classes
  
 ## [9.0.0] - 2022-04-11
 
@@ -71,4 +74,5 @@ If you extend property editor with custom QR code Format, Source or Type you nee
 - Support output formats: BMP, JPEG, PNG, SVG
 - Support code content types: SMS, Phone Number, Text, URL, Geolocation (GEO), Geolocation (Google Maps)
 - Support code content source: Absolute URL, Simple Property
+
 

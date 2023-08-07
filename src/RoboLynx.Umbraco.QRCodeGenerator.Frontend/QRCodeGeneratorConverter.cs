@@ -17,7 +17,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
         {
             if (owner is IPublishedContent content)
             {
-                return new QRCode(_qRCodeService, content, propertyType.Alias, Constants.Frontend.FrontendCacheName);
+                return new QRCode(_qRCodeService, content, propertyType.Alias, Frontend.FrontendCacheName);
             }
             return null;
         }
@@ -34,7 +34,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
 
         public override bool IsConverter(IPublishedPropertyType propertyType)
         {
-            return propertyType.EditorAlias.Equals(Constants.Backoffice.PropertyEditorAlias);
+            return propertyType.EditorAlias.Equals(Backoffice.PropertyEditorAlias);
         }
     }
 }

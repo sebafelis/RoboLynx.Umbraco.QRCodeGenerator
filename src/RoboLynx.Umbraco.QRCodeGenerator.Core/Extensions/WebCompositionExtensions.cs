@@ -3,7 +3,7 @@ using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
 using Umbraco.Cms.Core.DependencyInjection;
 
-namespace RoboLynx.Umbraco.QRCodeGenerator
+namespace RoboLynx.Umbraco.QRCodeGenerator.Extensions
 {
     public static class WebCompositionExtensions
     {

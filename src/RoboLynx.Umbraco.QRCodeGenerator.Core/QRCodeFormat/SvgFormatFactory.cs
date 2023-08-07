@@ -27,11 +27,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
         public override string Id => "svg";
 
         public override IEnumerable<string> RequiredSettings => new List<string> {
-            Constants.SettingProperties.Size,
-            Constants.SettingProperties.DarkColor,
-            Constants.SettingProperties.LightColor,
-            Constants.SettingProperties.DrawQuietZone,
-            Constants.SettingProperties.ECCLevel
+            SettingProperties.Size,
+            SettingProperties.DarkColor,
+            SettingProperties.LightColor,
+            SettingProperties.DrawQuietZone,
+            SettingProperties.ECCLevel
         };
 
         public override IQRCodeFormat Create(IQRCodeType codeType, QRCodeSettings settings)

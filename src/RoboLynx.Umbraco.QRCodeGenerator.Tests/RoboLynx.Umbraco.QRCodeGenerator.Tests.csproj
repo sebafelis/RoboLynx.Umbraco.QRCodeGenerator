@@ -41,6 +41,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Cache\RoboLynx.Umbraco.QRCodeGenerator.Cache.csproj" />
+		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Frontend\RoboLynx.Umbraco.QRCodeGenerator.Frontend.csproj" />
 		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator\RoboLynx.Umbraco.QRCodeGenerator.csproj" />
 	</ItemGroup>
 

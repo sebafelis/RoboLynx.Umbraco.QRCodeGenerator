@@ -7,7 +7,7 @@ using Umbraco.Cms.Web.Common.Filters;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 {
-    [PluginController(Constants.Core.PluginAlias)]
+    [PluginController(Core.PluginAlias)]
     [AngularJsonOnlyConfiguration]
     public class QRCodeSourcePickerController : UmbracoAuthorizedJsonController
     {

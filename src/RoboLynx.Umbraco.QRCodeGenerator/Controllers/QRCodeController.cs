@@ -17,7 +17,7 @@ using Umbraco.Cms.Web.Common.Attributes;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
 {
-    [PluginController(Constants.Core.PluginAlias)]
+    [PluginController(Core.PluginAlias)]
     [JsonCamelCaseFormatter]
     public class QRCodeController : UmbracoAuthorizedJsonController
     {
@@ -60,7 +60,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Controllers
         {
             IPublishedContent? publishedContent = await GetPublishedContent(nodeUdi);
 
-            return _responesFactory.CreateResponesWithQRCode(publishedContent, propertyAlias, culture, settings, Constants.Backoffice.BackofficeCacheName);
+            return _responesFactory.CreateResponesWithQRCode(publishedContent, propertyAlias, culture, settings, Backoffice.BackofficeCacheName);
         }
 
         private async Task<IPublishedContent?> GetPublishedContent(Udi nodeUdi)
