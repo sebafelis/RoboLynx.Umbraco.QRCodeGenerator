@@ -33,6 +33,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend.Controllers
         }
 
         [HttpGet]
+        [TypeFilter(typeof(DecryptQueryParametersAttribute))]
         public async Task<IActionResult> Get(Udi nodeUdi, string propertyAlias, [FromQuery] QRCodeSettings? settings, string? culture = null)
         {
             if (nodeUdi is null || propertyAlias is null)
