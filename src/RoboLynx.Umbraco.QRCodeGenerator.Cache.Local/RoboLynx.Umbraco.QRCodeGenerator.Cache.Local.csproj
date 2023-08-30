@@ -23,6 +23,8 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
+
+	<Import Project="..\..\build\ProjectReferenceVersion.targets" />
 	
 	<ItemGroup>
 		<Compile Remove="Configuration\**" />
@@ -58,7 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Cache\RoboLynx.Umbraco.QRCodeGenerator.Cache.csproj" />
+	  <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Cache\RoboLynx.Umbraco.QRCodeGenerator.Cache.csproj" ExactVersion="true" />
 	</ItemGroup>
 
 </Project>
