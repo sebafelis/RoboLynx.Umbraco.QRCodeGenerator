@@ -20,6 +20,11 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png">
 			<Pack>True</Pack>

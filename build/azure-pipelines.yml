@@ -1,4 +1,4 @@
-# QR Code Generator for Umbraco 8
+# QR Code Generator for Umbraco
 # Build, test, create packages, publish packages and create release on GitHub.
 
 trigger:
@@ -35,9 +35,9 @@ steps:
 - checkout: self
   persistCredentials: true
 - task: NuGetToolInstaller@1
-  displayName: 'Install NuGet 6.2.1'
+  displayName: 'Install NuGet 6.6.1'
   inputs:    
-    versionSpec: 6.2.1
+    versionSpec: 6.6.1
 - task: NuGetCommand@2
   displayName: 'Restore NuGets'
   inputs:
@@ -148,7 +148,7 @@ steps:
     script: |
       $url = "https://functions.marketplace.umbraco.com/api/InitiateSinglePackageSyncFunction"
       $body = '{
-        "PackageId": "RoboLynx.Umbraco.QRCodeGenerator"
+         "PackageId": "RoboLynx.Umbraco.QRCodeGenerator"
       }'
       $headers = @{
           'Content-Type' = 'application/json'
