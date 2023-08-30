@@ -26,10 +26,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="ImageSharp\IconBorderFilter.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
@@ -69,7 +65,7 @@
 		<PackageReference Include="Chronos.Net" Version="2.0.24" />
 		<PackageReference Include="DotNetColorParser" Version="[2,3)" />
 		<PackageReference Include="QRCoder" Version="1.4.3" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[10.0.0-rc*,11)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[10,11)" />
 	</ItemGroup>
 
 </Project>

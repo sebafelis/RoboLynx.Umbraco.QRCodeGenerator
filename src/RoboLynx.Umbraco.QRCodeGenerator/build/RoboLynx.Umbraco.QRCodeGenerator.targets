@@ -1,0 +1,21 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <QRCodeGeneratorContentFilesPath>$(MSBuildThisFileDirectory)..\App_Plugins\QRCodeGenerator\**\*.*</QRCodeGeneratorContentFilesPath>
+  </PropertyGroup>
+
+  <Target Name="CopyQRCodeGeneratorAssets" BeforeTargets="Build">
+    <ItemGroup>
+      <QRCodeGeneratorContentFiles Include="$(QRCodeGeneratorContentFilesPath)" />
+    </ItemGroup>
+    <Message Text="Copying QRCodeGenerator files: $(QRCodeGeneratorContentFilesPath) - #@(QRCodeGeneratorContentFiles->Count()) files" Importance="high" />
+    <Copy SourceFiles="@(QRCodeGeneratorContentFiles)" DestinationFiles="@(QRCodeGeneratorContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\QRCodeGenerator\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="ClearQRCodeGeneratorAssets" BeforeTargets="Clean">
+    <ItemGroup>
+      <QRCodeGeneratorDir Include="$(MSBuildProjectDirectory)\App_Plugins\QRCodeGenerator\" />
+    </ItemGroup>
+    <Message Text="Clear old QRCodeGenerator data" Importance="high" />
+    <RemoveDir Directories="@(QRCodeGeneratorDir)" />
+  </Target>
+</Project>

@@ -2,7 +2,10 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<ContentTargetFolders>.</ContentTargetFolders>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		
 		<Description>Property editor for Umbraco to generating QR codes. It generate QR codes for the specify data source (e.g. published document property value, URL, any custom source). It's accessible for backoffice user, but it's can be also use at frontend page after RoboLynx.Umbraco.QRCodeGenerator.Frontend package installation.</Description>
 		<Copyright>Sebastian Felis @ 2022</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -41,48 +44,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="App_Plugins\QRCodeGenerator\contentApps\qrCodeGeneratorApp\qrCodeGeneratorApp.html" />
-	  <None Remove="App_Plugins\QRCodeGenerator\directives\hideUmbProperty.js" />
-	  <None Remove="App_Plugins\QRCodeGenerator\libs\downloadjs\download.min.js" />
-	  <None Remove="App_Plugins\QRCodeGenerator\qrCodeGeneratorStyle.min.css" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10,11)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10,11)" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="App_Plugins\QRCodeGenerator\contentApps\qrCodeGeneratorApp\qrCodeGeneratorApp.Controller.js" />
-		<Content Include="App_Plugins\QRCodeGenerator\contentApps\qrCodeGeneratorApp\qrCodeGeneratorApp.html" />
-		<Content Include="App_Plugins\QRCodeGenerator\directives\hideUmbProperty.js" />
-		<Content Include="App_Plugins\QRCodeGenerator\lang\pl-PL.xml" />
-		<Content Include="App_Plugins\QRCodeGenerator\lang\en-US.xml" />
-		<Content Include="App_Plugins\QRCodeGenerator\lang\en-GB.xml" />
-		<Content Include="App_Plugins\QRCodeGenerator\libs\downloadjs\download.min.js" />
-		<Content Include="App_Plugins\QRCodeGenerator\package.manifest" />
-		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.Controller.js" />
-		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeFormatPicker\qrCodeFormatPicker.html" />
-		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeSourcePicker\qrCodeSourcePicker.Controller.js" />
-		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeSourcePicker\qrCodeSourcePicker.html" />
-		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeTypePicker\qrCodeTypePicker.Controller.js" />
-		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeTypePicker\qrCodeTypePicker.html" />
-		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeLevelPicker\qrCodeLevelPicker.Controller.js" />
-		<Content Include="App_Plugins\QRCodeGenerator\parameterEditors\qrCodeLevelPicker\qrCodeLevelPicker.html" />
-		<Content Include="App_Plugins\QRCodeGenerator\propertyEditors\qrCodeGenerator\qrCodeGenerator.html" />
-		<Content Include="App_Plugins\QRCodeGenerator\qrCodeGeneratorStyle.min.css" />
-		<Content Include="App_Plugins\QRCodeGenerator\services\qrCodeGenerator.Resources.js" />
+		<Content Include="App_Plugins\QRCodeGenerator\**\*.*" Exclude="App_Plugins\QRCodeGenerator\**\*.less" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />
+		<None Include="build\**" Pack="true" PackagePath="build" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0-rc*,11)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0-rc*,11)" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\CustomWelcomeDashboard\**\*.*">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Core\RoboLynx.Umbraco.QRCodeGenerator.Core.csproj" />
+	  <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Core\RoboLynx.Umbraco.QRCodeGenerator.Core.csproj" ExactVersion="true" />
 	</ItemGroup>
 
 </Project>
