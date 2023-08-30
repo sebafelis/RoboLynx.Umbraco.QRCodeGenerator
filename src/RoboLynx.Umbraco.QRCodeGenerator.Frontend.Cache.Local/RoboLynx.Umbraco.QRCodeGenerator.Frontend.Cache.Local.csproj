@@ -24,6 +24,8 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
 
+	<Import Project="..\..\build\ProjectReferenceVersion.targets" />
+
 	<ItemGroup>
 		<None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png">
 			<Pack>True</Pack>
@@ -46,7 +48,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Cache\RoboLynx.Umbraco.QRCodeGenerator.Cache.csproj" />
-		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Frontend\RoboLynx.Umbraco.QRCodeGenerator.Frontend.csproj" />
+		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Cache\RoboLynx.Umbraco.QRCodeGenerator.Cache.csproj" ExactVersion="true" />
+		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Frontend\RoboLynx.Umbraco.QRCodeGenerator.Frontend.csproj" ExactVersion="true" />
 	</ItemGroup>
 </Project>
