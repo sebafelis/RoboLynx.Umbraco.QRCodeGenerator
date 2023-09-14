@@ -58,12 +58,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.ImageSharp
         {
             var bmp = GetGraphic(pixelsPerModule, darkColor, lightColor, drawQuietZones);
 
-            var drawIconFlag = icon is not null && iconSizePercent > 0 && iconSizePercent <= 100;
-
-            if (drawIconFlag)
+            if (icon != null && iconSizePercent > 0 && iconSizePercent <= 100)
             {
                 float iconDestWidth = iconSizePercent * bmp.Width / 100f;
-                float iconDestHeight = drawIconFlag && icon != null ? iconDestWidth * icon.Height / icon.Width : 0;
+                float iconDestHeight = iconDestWidth * icon.Height / icon.Width;
                 float iconX = (bmp.Width - iconDestWidth) / 2;
                 float iconY = (bmp.Height - iconDestHeight) / 2;
                 var centerDest = new RectangleF(iconX - iconBorderWidth, iconY - iconBorderWidth, iconDestWidth + iconBorderWidth * 2, iconDestHeight + iconBorderWidth * 2);
@@ -88,7 +86,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.ImageSharp
         }
 
 
-        private Image CreateIconBorder(Image<Rgba32> icon, int iconBorderWidth, Color iconBackgroundColor)
+        private static Image CreateIconBorder(Image<Rgba32> icon, int iconBorderWidth, Color iconBackgroundColor)
         {
             //TODO: Use Span to make method more efficient (https://docs.sixlabors.com/articles/imagesharp/pixelbuffers.html)
 

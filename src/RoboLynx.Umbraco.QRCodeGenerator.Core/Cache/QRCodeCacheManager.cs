@@ -58,7 +58,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         {
             if (!UrlSupport(cacheName))
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException("Cache not support public URLs.");
             }
             return GetCache(cacheName)?.Url(hashId, uriKind);
         }

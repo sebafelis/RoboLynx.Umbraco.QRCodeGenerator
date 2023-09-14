@@ -6,11 +6,6 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
     public class QRCodeCacheOptions
     {
         /// <summary>
-        /// Disable this cache
-        /// </summary>
-        public bool Disable { get; set; }
-
-        /// <summary>
         /// Number of days cache storing
         /// </summary>
         [Range(0, 365, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
@@ -25,5 +20,16 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         /// Running period hosted service clearing cache. Hosted service is running only on master server.
         /// </summary>
         public TimeSpan PeriodCleanCache { get; set; } = TimeSpan.FromHours(3);
+
+        /// <summary>
+        /// Directory location where cache will be stored. Absolute or relative to web root.
+        /// </summary>
+        public string? CacheLocation { get; set; }
+
+        /// <summary>
+        /// URL where cache is accessible from web
+        /// </summary>
+        /// <remarks>If is set and use <c>AddLocalQRCodeCache<TCacheRole>()</c> method then LocalCacheUrlProvider will be configure.</remarks>
+        public string? CacheBaseUrl { get; set; }
     }
 }

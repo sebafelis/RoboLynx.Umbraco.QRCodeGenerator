@@ -23,12 +23,11 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
 
         private bool _isInitialized = false;
 
-        public QRCodeCache(AppCaches appCaches, IQRCodeCacheFileSystem fileSystem, IQRCodeCacheUrlProvider? urlProvider,
+        public QRCodeCache(AppCaches appCaches, IQRCodeCacheFileSystem fileSystem, IQRCodeCacheUrlProvider? urlProvider, T cacheRole, 
             IProfilingLogger profilingLogger, ILogger<QRCodeCache<T>> logger, IDateTimeOffsetProvider dateTimeProvider,
             IServerRoleAccessor serverRoleAccessor)
         {
-            var cacheInsance = (IQRCodeCacheRole)Activator.CreateInstance<T>();
-            Name = cacheInsance.Name;
+            Name = cacheRole.Name;
 
             _isolatedCache = appCaches.IsolatedCaches.GetOrCreate<T>();
             _profilingLogger = profilingLogger;

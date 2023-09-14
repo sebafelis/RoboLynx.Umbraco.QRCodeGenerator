@@ -24,12 +24,11 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 1. [Configuration](#configuration)
 1. [Configuration file](#configuration-file)
 1. [Using in Umbraco Backoffice](#using-in-umbraco-backoffice)
-1. [Cache](#cache)
 1. [Using on frontend page](#using-on-frontend-page)
    * [Secure URL](#secure-url)
-1. [Frontend cache](#frontend-cache)
+1. [Cache](#cache)
+   * [Azure Blob Storage](#azure-blob-storage) 
 1. [Using service](#using-service)
-   * [Dependency Injection](#dependency-injection)
 1. [Source providers](#source-providers)
    a) [Content Property](#content-property)
    b) [Absolute URL](#absolute-url)
@@ -57,11 +56,8 @@ and choose what other packages you need to from bellow table.
 Package name | Description | NuGet link
 -------------|------------|------------
 RoboLynx.Umbraco.QRCodeGenerator.Core | Project core  | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
-RoboLynx.Umbraco.QRCodeGenerator | Property editor for Umbraco backoffice [[more](#using-in-umbraco-backoffice)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/) 
-RoboLynx.Umbraco.QRCodeGenerator.Cache | Cache implementation [[more](#cache)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Cache](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Cache?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Cache/)
-RoboLynx.Umbraco.QRCodeGenerator.Cache.Local | Default cache configuration for property editor [[more](#cache)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Cache.Local](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Cache.Local/)
+RoboLynx.Umbraco.QRCodeGenerator | Property editor for Umbraco backoffice [[more](#using-in-umbraco-backoffice)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
 RoboLynx.Umbraco.QRCodeGenerator.Frontend | Controller for frontend page and property editor converter [[more](#using-on-frontend-page)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Frontend](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Frontend?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Frontend/)
-RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local | Default cache configuration for frontend page [[more](#frontend-cache)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local/)
 
 ## Configuration
 
@@ -86,16 +82,18 @@ Some global settings can be configure from *appsetting.json* file. Default confi
     "QRCodeGenerator": {
         "Cache": {
           "Backoffice": { // Settings for cache storing requests from backoffice property editors.
-            "Disable": false, // Disable this cache.
             "MaxDays": 365,  // How many days file in cache will be store
             "DelayCleanCache": "0.0:1:0", // Delay before first running of cache clearing service. Is running only on master server. Default value: 1 minute.
             "PeriodCleanCache": "0.1:0:0" // Period between running cache clearing service. Is running only on master server. Default value: 1 day.
+            "CacheLocation": "~/umbraco/Data/TEMP/QRCodeGeneratorCache/Backoffice" //Directory where cache file are store.
+            "CacheBaseUrl": null //Base URL using to build URL where cache file are accessible directly. Default is null. (Umbraco TEMP directory is not accessible by default throw web) 
           },
           "Frontend": { // Settings for cache storing requests from frontend page
-            "Disable": false, // Disable this cache.
             "MaxDays": 365, // How many days file in cache will be store
             "DelayCleanCache": "0.0:1:0", // Delay before first running of cache clearing service. Is running only on master server. Default value: 1 minute.
             "PeriodCleanCache": "0.1:0:0" // Period between running cache clearing service. Is running only on master server. Default value: 1 day  .
+            "CacheLocation": "~/umbraco/Data/TEMP/QRCodeGeneratorCache/Frontend" //Directory where cache file are store.
+            "CacheBaseUrl": null //Base URL using to build URL where cache file are accessible directly. Default is null. (Umbraco TEMP directory is not accessible by default throw web) 
           }
         },
         "FrontendApi": { 
@@ -116,19 +114,6 @@ Some global settings can be configure from *appsetting.json* file. Default confi
 1. HearUmbraco backoffice users can create QR codes and download them.
    
     ![QR Code tab](assets/screenshots/screen4.png)
-
-## Cache
-
-To caching generated QR codes you need to install `RoboLynx.Umbraco.QRCodeGenerator.Cache` package.
-This package contains all base classes needed to setup cache. You can use it to create your own cache configuration.
-
-If you wont to cache all generated QR codes in local file system just install `RoboLynx.Umbraco.QRCodeGenerator.Cache.Local` package. It's ready-to-use cache configuration.
-
-This package configure automatically cache for all requests from Umbraco Backoffice (making by __QR Code Generator__ property editor) and store all in the local file system.
-
-> **Attention!**
->
-> For frontend page you need to configure separate cache for secure reasons.
 
 ## Using on frontend page
 
@@ -159,17 +144,73 @@ Until version 9.1 is available also `GetSecureQRCodeUrl()` method. The differenc
 > 
 >To encrypt request URL's parameters `GetSecureQRCodeUrl()` method use [**Data Protection**](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/introduction) build in to ASP.NET Core. It's a cryptographic API generating and storing cryptography key. In **production** version you probably will want to configure key storage other then default to prevent lose data. To do this read more **[here](https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/configuration/)**.
 
-### Frontend cache 
 
-For secure reason frontend package has a separate cache.
+## Cache
 
-If you don't use separate file storage, you should install `RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local` package. Like `RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local` also this package is a ready-to-use cache configuration using the local file system.
+To caching generated QR codes you need to install 
+This package contains all base classes needed to setup cache. You can use it to create your own cache configuration.
 
-```Install-Package RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local -Version VERSION_NUMBER```
+The simplest way to enable cache for QR code generator is call `AddLocalQRCodeCache<TCacheRole>()` method in Startup class. 
+This method configure cache stored in local file system with `BackofficeQRCodeCache` type parameter for backoffice (every request from Umbraco Backoffice will be stored hear) and with `FrontendQRCodeCache` type parameter for frontend (every request with use of method `GetQRCodeUrl()` or `GetSecureQRCodeUrl()` in views. 
+
+```c#
+public class Startup
+    {
+        ...
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddUmbraco(_env, _config)
+                .AddBackOffice()
+                ...
+                .AddLocalQRCodeCache<BackofficeQRCodeCache>()
+                .AddLocalQRCodeCache<FrontendQRCodeCache>()
+                ...
+                .Build();
+        }
+        ...
+}
+```
+
+You can configure or override configuration of cache by `configure` parameter, e.g.:
+
+```c#
+.AddLocalQRCodeCache<BackofficeQRCodeCache>(options => { 
+    options.CacheLocation = "\\QRCodes"; 
+    options.CacheBaseUrl = "/QRCodes";
+})
+```
+Is also possible more custom configuration using `AddQRCodeCache()` method. 
 
 > **Attention!**
 >
-> If you don't install this package all requests from frontend will not be cached. It's may have a negative impact on the performance of your website.
+> `RoboLynx.Umbraco.QRCodeGenerator.Cache` package existing in earlier version was removed. All functionality is moved Core package `RoboLynx.Umbraco.QRCodeGenerator.Core` package.
+
+> **Attention!**
+>
+> For frontend page you need to configure separate cache for secure reasons.
+
+
+### Azure Blob Storage
+
+To store cache on Azure storage use [Umbraco.StorageProviders.AzureBlob](https://www.nuget.org/packages/Umbraco.StorageProviders.AzureBlob) package.
+Install package and configure in follow way:
+
+```c#
+        public void ConfigureServices(IServiceCollection services)
+        {
+#pragma warning disable IDE0022 // Use expression body for methods
+            services.AddUmbraco(_env, _config)
+                .AddBackOffice()
+                .AddWebsite()
+                .AddComposers()
+                .AddAzureBlobFileSystem(BackofficeQRCodeCache.CacheName)
+                .AddQRCodeCache<BackofficeQRCodeCache>(f => f.GetRequiredService<IAzureBlobFileSystemProvider>().GetFileSystem(BackofficeQRCodeCache.CacheName), f => f.CreateInstance<CdnCacheUrlProvider>(new Uri(@"https://<storage-account-name>.blob.core.windows.net/<container-name>")))
+                .Build();
+#pragma warning restore IDE0022 // Use expression body for methods
+        }
+```
+
+Configuration of the `AzureBlobFileSystem` is describe in [Umbraco Documentation](https://docs.umbraco.com/umbraco-cms/v/10.latest-lts/extending/filesystemproviders/azure-blob-storage#configuring-blob-storage).
 
 ## Using service
 
@@ -179,8 +220,6 @@ Through the service you can:
 * Get stream containing generate QR code by passing the **QR Code Generator** property or by passing your own value of the code content through an object of type implementing `IQRCodeType` [(see **Code Types**)](#code-types). (`GetStream()`)
 * Get default settings for the specify **QR Code Generator** data type by the content property. (`GetDefaultSettings()`)
 * Clear data stored in cache (`ClearCache()`)
-
-### Dependency Injection
 
 You may able to use **Dependency Injection**. For instance if you have registered your own class in Umbraco's dependency injection, you can specify the `IQRCodeService` interface in your constructor:
 
