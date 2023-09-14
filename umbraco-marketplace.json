@@ -6,7 +6,7 @@
     "Name": "Sebastian Felis",
     "Description": "Web applications programmer and Umbraco fan.",
     "Url": "https://www.linkedin.com/in/sebastian-felis-5a08021a7/",
-    "SyncContributorsFromRepository": "true"
+    "SyncContributorsFromRepository": true
   },
   "Category": "Editor Tools",
   "DiscussionForumUrl": "https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/discussions",
