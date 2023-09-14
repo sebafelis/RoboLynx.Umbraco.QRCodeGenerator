@@ -26,11 +26,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png">
+		<None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png" Link="Cache\RoboLynx.Umbraco.QRCodeGenerator_128.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
-		<None Include="..\..\readme.md">
+		<None Include="..\..\readme.md" Link="Cache\readme.md">
 		  <Pack>True</Pack>
 		  <PackagePath>\</PackagePath>
 		</None>

@@ -4,6 +4,8 @@ using RoboLynx.Umbraco.QRCodeGenerator.Cache;
 using RoboLynx.Umbraco.QRCodeGenerator.Models;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
+using System;
+using Umbraco.Cms.Core.Hosting;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
@@ -32,7 +34,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var builderMock = new Mock<IQRCodeBuilder>();
             builderMock.Setup(b => b.CreateConfiguration(publishedContent, propertyAlias, culture, userSettings)).Returns(configuraton);
             builderMock.Setup(b => b.CreateStream(configuraton, cacheName)).Returns(stream);
-            var service = new QRCodeService(builderMock.Object);
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>());
 
             //Act
             var returnedStream = service.GetStream(publishedContent, propertyAlias, culture, userSettings, cacheName);
@@ -40,7 +42,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             //Assert
             Assert.AreEqual(stream, returnedStream);
             builderMock.Verify(e => e.CreateConfiguration(It.IsAny<IPublishedContent>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<QRCodeSettings>()), Times.Once, "CreateConfiguration method was not invoke.");
-            builderMock.Verify(e => e.CreateStream(It.IsAny<QRCodeConfig>(), It.IsAny<string>()), Times.Once, "CreateStream method was not invoke.");
+            builderMock.Verify(e => e.CreateStream(It.IsAny<QRCodeConfig>(), It.Is<string>(s => s == cacheName)), Times.Once, "CreateStream method was not invoke.");
 
             stream.Dispose();
         }
@@ -58,10 +60,65 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var builderMock = new Mock<IQRCodeBuilder>();
             builderMock.Setup(b => b.CreateConfiguration(codeType, userSettings)).Returns(configuraton);
             builderMock.Setup(b => b.CreateStream(configuraton, cacheName)).Returns(stream);
-            var service = new QRCodeService(builderMock.Object);
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>());
 
             //Act
             var returnedStream = service.GetStream(codeType, userSettings, cacheName);
+
+            //Assert
+            Assert.AreEqual(stream, returnedStream);
+            builderMock.Verify(e => e.CreateConfiguration(It.IsAny<IQRCodeType>(), It.IsAny<QRCodeSettings>()), Times.Once, "CreateConfiguration method was not invoke.");
+            builderMock.Verify(e => e.CreateStream(It.IsAny<QRCodeConfig>(), It.IsAny<string>()), Times.Once, "CreateStream method was not invoke.");
+
+            stream.Dispose();
+        }
+
+        [Test]
+        public void GetStream_GenericVariant1_ShouldUseBuilder()
+        {
+            //Assign
+            var propertyAlias = "qrCodePropertyAlias";
+
+            var publishedContent = Mock.Of<IPublishedContent>();
+            var culture = "cu";
+            var userSettings = Mock.Of<QRCodeSettings>();
+            var configuraton = new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(), Mock.Of<QRCodeSettings>());
+            var cacheName = BackofficeQRCodeCache.CacheName;
+            var stream = CreateMockStream();
+
+            var builderMock = new Mock<IQRCodeBuilder>();
+            builderMock.Setup(b => b.CreateConfiguration(publishedContent, propertyAlias, culture, userSettings)).Returns(configuraton);
+            builderMock.Setup(b => b.CreateStream(configuraton, cacheName)).Returns(stream);
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>(b=>b.GetService(typeof(BackofficeQRCodeCache)) == new BackofficeQRCodeCache(Mock.Of<IHostingEnvironment>())));
+
+            //Act
+            var returnedStream = service.GetStream<BackofficeQRCodeCache>(publishedContent, propertyAlias, culture, userSettings);
+
+            //Assert
+            Assert.AreEqual(stream, returnedStream);
+            builderMock.Verify(e => e.CreateConfiguration(It.IsAny<IPublishedContent>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<QRCodeSettings>()), Times.Once, "CreateConfiguration method was not invoke.");
+            builderMock.Verify(e => e.CreateStream(It.IsAny<QRCodeConfig>(), It.Is<string>(s => s == cacheName)), Times.Once, "CreateStream method was not invoke.");
+
+            stream.Dispose();
+        }
+
+        [Test]
+        public void GetStream_GenericVariant2_ShouldUseBuilder()
+        {
+            //Assign
+            var userSettings = Mock.Of<QRCodeSettings>();
+            var configuraton = new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(), Mock.Of<QRCodeSettings>());
+            var cacheName = BackofficeQRCodeCache.CacheName;
+            var stream = CreateMockStream();
+
+            var codeType = Mock.Of<IQRCodeType>();
+            var builderMock = new Mock<IQRCodeBuilder>();
+            builderMock.Setup(b => b.CreateConfiguration(codeType, userSettings)).Returns(configuraton);
+            builderMock.Setup(b => b.CreateStream(configuraton, cacheName)).Returns(stream);
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>(b => b.GetService(typeof(BackofficeQRCodeCache)) == new BackofficeQRCodeCache(Mock.Of<IHostingEnvironment>())));
+
+            //Act
+            var returnedStream = service.GetStream<BackofficeQRCodeCache>(codeType, userSettings);
 
             //Assert
             Assert.AreEqual(stream, returnedStream);
@@ -83,7 +140,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
 
             var builderMock = new Mock<IQRCodeBuilder>();
             builderMock.Setup(b => b.GetDefaultSettings(publishedContent, propertyAlias)).Returns(settings);
-            var service = new QRCodeService(builderMock.Object);
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>());
 
             //Act
             var returnedSettings = service.GetDefaultSettings(publishedContent, propertyAlias);
@@ -108,10 +165,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             builderMock.Setup(b => b.CreateConfiguration(codeType, userSettings)).Returns(configuraton);
             builderMock.Setup(b => b.CacheManager).Returns(cacheManagerMock.Object);
 
-            var service = new QRCodeService(builderMock.Object);
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>());
 
             //Act
-            service.ClearCache(codeType, userSettings, cacheName);
+            service.ClearCache(cacheName, codeType, userSettings);
 
             //Assert
             cacheManagerMock.Verify(e => e.Clear(It.IsAny<string>(), cacheName), Times.Once, "Clear method was not invoke.");
@@ -128,7 +185,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             var builderMock = new Mock<IQRCodeBuilder>();
             builderMock.Setup(b => b.CacheManager).Returns(cacheManagerMock.Object);
 
-            var service = new QRCodeService(builderMock.Object);
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>());
 
             //Act
             service.ClearCache(cacheName);
@@ -154,10 +211,80 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Tests.Unit
             builderMock.Setup(b => b.CreateConfiguration(publishedContent, propertyAlias, culture, userSettings)).Returns(configuraton);
             builderMock.Setup(b => b.CacheManager).Returns(cacheManagerMock.Object);
 
-            var service = new QRCodeService(builderMock.Object);
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>());
 
             //Act
-            service.ClearCache(publishedContent, propertyAlias, culture, userSettings, cacheName);
+            service.ClearCache(cacheName, publishedContent, propertyAlias, culture, userSettings);
+
+            //Assert
+            cacheManagerMock.Verify(e => e.Clear(It.IsAny<string>(), cacheName), Times.Once, "Clear method was not invoke.");
+        }
+
+        [Test]
+        public void ClearCache_GenericVariant1_ShouldUseCacheManager()
+        {
+            //Assign
+            var userSettings = Mock.Of<QRCodeSettings>();
+            var configuraton = new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(), userSettings);
+            var cacheName = BackofficeQRCodeCache.CacheName;
+
+            var cacheManagerMock = new Mock<IQRCodeCacheManager>();
+            var codeType = Mock.Of<IQRCodeType>();
+
+            var builderMock = new Mock<IQRCodeBuilder>();
+            builderMock.Setup(b => b.CreateConfiguration(codeType, userSettings)).Returns(configuraton);
+            builderMock.Setup(b => b.CacheManager).Returns(cacheManagerMock.Object);
+
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>(b => b.GetService(typeof(BackofficeQRCodeCache)) == new BackofficeQRCodeCache(Mock.Of<IHostingEnvironment>())));
+
+            //Act
+            service.ClearCache(cacheName, codeType, userSettings);
+
+            //Assert
+            cacheManagerMock.Verify(e => e.Clear(It.IsAny<string>(), cacheName), Times.Once, "Clear method was not invoke.");
+        }
+
+        [Test]
+        public void ClearCache_GenericVariant2_ShouldUseCacheManager()
+        {
+            //Assign
+            var cacheName = BackofficeQRCodeCache.CacheName;
+
+            var cacheManagerMock = new Mock<IQRCodeCacheManager>();
+
+            var builderMock = new Mock<IQRCodeBuilder>();
+            builderMock.Setup(b => b.CacheManager).Returns(cacheManagerMock.Object);
+
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>(b => b.GetService(typeof(BackofficeQRCodeCache)) == new BackofficeQRCodeCache(Mock.Of<IHostingEnvironment>())));
+
+            //Act
+            service.ClearCache(cacheName);
+
+            //Assert
+            cacheManagerMock.Verify(e => e.ClearAll(cacheName), Times.Once, "Clear method was not invoke.");
+        }
+
+        [Test]
+        public void ClearCache_GenericVariant3_ShouldUseCacheManager()
+        {
+            //Assign
+            var userSettings = Mock.Of<QRCodeSettings>();
+            var configuraton = new QRCodeConfig(Mock.Of<IQRCodeType>(), Mock.Of<IQRCodeFormat>(), Mock.Of<QRCodeSettings>());
+            var cacheName = BackofficeQRCodeCache.CacheName;
+
+            var cacheManagerMock = new Mock<IQRCodeCacheManager>();
+            var publishedContent = Mock.Of<IPublishedContent>();
+            var propertyAlias = "qrCodePropertyAlias";
+            var culture = "co";
+
+            var builderMock = new Mock<IQRCodeBuilder>();
+            builderMock.Setup(b => b.CreateConfiguration(publishedContent, propertyAlias, culture, userSettings)).Returns(configuraton);
+            builderMock.Setup(b => b.CacheManager).Returns(cacheManagerMock.Object);
+
+            var service = new QRCodeService(builderMock.Object, Mock.Of<IServiceProvider>(b => b.GetService(typeof(BackofficeQRCodeCache)) == new BackofficeQRCodeCache(Mock.Of<IHostingEnvironment>())));
+
+            //Act
+            service.ClearCache(cacheName, publishedContent, propertyAlias, culture, userSettings);
 
             //Assert
             cacheManagerMock.Verify(e => e.Clear(It.IsAny<string>(), cacheName), Times.Once, "Clear method was not invoke.");

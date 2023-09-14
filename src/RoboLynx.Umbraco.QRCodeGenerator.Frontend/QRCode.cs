@@ -18,7 +18,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Frontend
             CacheName = cacheName;
         }
 
-        public QRCodeSettings DefaultSettings
+        public QRCodeSettings? DefaultSettings
         {
             get
             {

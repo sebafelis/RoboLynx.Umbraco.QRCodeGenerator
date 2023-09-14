@@ -12,6 +12,12 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
         private readonly Uri _baseUrl;
         private readonly bool _absoluteModeIsDefault;
 
+        /// <summary>
+        /// Initialize class
+        /// </summary>
+        /// <param name="baseUrl">Relative or absolute URL to location where resources are stored</param>
+        /// <param name="absoluteModeIsDefault">If <c>true</c> then urlMode set to UrlMode.Auto or UrlMode. Default give a absolute URL as result</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public LocalCacheUrlProvider(IHttpContextAccessor httpContextAccessor, Uri baseUrl, bool absoluteModeIsDefault)
         {
             if (baseUrl is null)
@@ -23,7 +29,17 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Cache
             _absoluteModeIsDefault = absoluteModeIsDefault;
         }
 
-        public string Url(string path, UrlMode urlMode)
+        public LocalCacheUrlProvider(IHttpContextAccessor httpContextAccessor, Uri baseUrl): this(httpContextAccessor, baseUrl, baseUrl.IsAbsoluteUri)
+        {
+            
+        }
+
+        public LocalCacheUrlProvider(IHttpContextAccessor httpContextAccessor, string baseUrl) : this(httpContextAccessor, new Uri(baseUrl, UriKind.RelativeOrAbsolute))
+        {
+
+        }
+
+        public virtual string Url(string path, UrlMode urlMode)
         {
             Uri url = new(_baseUrl.ToString().EnsureEndsWith("/") + path.TrimStart("/"), UriKind.RelativeOrAbsolute);
 
