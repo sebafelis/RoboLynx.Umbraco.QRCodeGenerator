@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 - Support for Umbraco Marketplace 
 - Secure URLs support
 - Custom classes for **QRCoder** library (`ImageSharpQRCode`, `ImageSharpSvgQRCode`) to support raster graphic generation through ImageSharp library
+- Add AddLocalQRCodeCache() extension method for UmbracoBuilder
+- Add support for CDN
+- Add generic methods to QRCodeService
 
 ### Changed
 
@@ -16,6 +19,13 @@ All notable changes to this project will be documented in this file.
 - Support for Umbraco 10
 - Enable nullable reference types in projects
 - Constants moved to dedicate classes
+- Code from RoboLynx.Umbraco.QRCodeGenerator.Cache moved to RoboLynx.Umbraco.QRCodeGenerator.Core project 
+- Change AddQRCodeCache() extension method for UmbracoBuilder
+
+### Removed
+- Removed RoboLynx.Umbraco.QRCodeGenerator.Cache project
+- Removed RoboLynx.Umbraco.QRCodeGenerator.Cache.Local project
+- Removed RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local project
  
 ## [9.0.0] - 2022-04-11
 
