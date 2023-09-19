@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<ContentTargetFolders>.</ContentTargetFolders>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		
-		<Description>Property editor for Umbraco to generating QR codes. It generate QR codes for the specify data source (e.g. published document property value, URL, any custom source). It's accessible for backoffice user, but it's can be also use at frontend page after RoboLynx.Umbraco.QRCodeGenerator.Frontend package installation.</Description>
+		<Description>QR Code Generator for Umbraco - property editor for Umbraco to generating QR codes. Generate QR codes for the specify data source (e.g. published document property value, URL, any custom source). It's accessible for backoffice user, but it's can be also use at frontend page after RoboLynx.Umbraco.QRCodeGenerator.Frontend package installation.</Description>
 		<Copyright>Sebastian Felis @ 2022</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
 		<PackageTags>umbraco-marketplace, umbraco, propety editor, qr code, generator</PackageTags>
-		<PackageReleaseNotes>Release for Umbraco 10</PackageReleaseNotes>
+		<PackageReleaseNotes>Release for Umbraco 11</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
 		<Company>RoboLynx</Company>
 		<Authors>Sebastian Felis</Authors>
@@ -46,13 +46,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10,11)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10,11)" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[11,12)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[11,12)" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="App_Plugins\QRCodeGenerator\**\*.*" Exclude="App_Plugins\QRCodeGenerator\**\*.less" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />
-		<None Include="build\**" Pack="true" PackagePath="build" />
+		<None Include="build\**" Pack="true" PackagePath="buildTransitive" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Description>QR Code Generator for Umbraco. Core implements service to generates QR codes from code.</Description>
+		<Description>Part of QR Code Generator for Umbraco. Package implements necessary infrastructure and services to generate QR codes from code under Umbraco CMS.</Description>
 		<Copyright>Sebastian Felis @ 2022</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
 		<PackageTags>umbraco, propety editor, qr code, generator</PackageTags>
-		<PackageReleaseNotes>Release for Umbraco 10</PackageReleaseNotes>
+		<PackageReleaseNotes>Release for Umbraco 11</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
 		<Company>RoboLynx</Company>
 		<Authors>Sebastian Felis</Authors>
@@ -44,13 +44,7 @@
 			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Frontend</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Frontend.Cache.Local</_Parameter1>
-		</AssemblyAttribute>
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Cache</_Parameter1>
-		</AssemblyAttribute>
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Cache.Local</_Parameter1>
+			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
 			<_Parameter1>Umbraco.Tests</_Parameter1>
@@ -65,7 +59,7 @@
 		<PackageReference Include="Chronos.Net" Version="2.0.24" />
 		<PackageReference Include="DotNetColorParser" Version="[2,3)" />
 		<PackageReference Include="QRCoder" Version="1.4.3" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[10,11)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[11,12)" />
 	</ItemGroup>
 
 </Project>

@@ -1,11 +1,14 @@
 ﻿using Chronos;
 using DotNetColorParser;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using RoboLynx.Umbraco.QRCodeGenerator.Cache;
+using RoboLynx.Umbraco.QRCodeGenerator.Exceptions;
 using RoboLynx.Umbraco.QRCodeGenerator.Extensions;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeSources;
 using RoboLynx.Umbraco.QRCodeGenerator.QRCodeTypes;
+using System.Linq;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 
@@ -21,7 +24,19 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
             builder.QRCodeSources().Add(() => builder.TypeLoader.GetTypes<IQRCodeSourceFactory>());
 
-            builder.QRCodeFormats().Add(() => builder.TypeLoader.GetTypes<IQRCodeFormatFactory>());
+            builder.QRCodeFormats().Add(() =>
+            {
+                var formatTypes = builder.TypeLoader.GetTypes<IQRCodeFormatFactory>();
+                if (!formatTypes.Any())
+                {
+                    throw new QRCodeGeneratorException("Not found any class implementing IQRCodeFormat interface. Add RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp package to project.");
+                }
+
+                return formatTypes;
+            });
+
+
+            if (!builder.TypeLoader.GetTypes<IQRCodeFormatFactory>().Any()) { }
 
             builder.Services.AddSingleton<IQRCodeHashIdFactory, MD5HashIdFactory>();
             builder.Services.AddSingleton<IQRCodeCacheManager, QRCodeCacheManager>();

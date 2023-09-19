@@ -4,9 +4,9 @@
 trigger:
   branches:
     include:
-    - main-u10
-    - release-u10
-    - develop-u10
+    - main-u11
+    - release-u11
+    - develop-u11
   tags:
     exclude:
     - v*
@@ -24,10 +24,10 @@ variables:
   umbracoPackageDefinitionPath: '$(System.DefaultWorkingDirectory)/build/package.xml'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  publishOnGithubRelease: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u10'), eq(variables['publishPrereleseVersion'], true))]
-  publishOnNugetOrg: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u10'), eq(variables['publishPrereleseVersion'], true))]
-  addTagToRepository: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u10'), eq(variables['publishPrereleseVersion'], true))]
-  updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
+  publishOnGithubRelease: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u11'), eq(variables['publishPrereleseVersion'], true))]
+  publishOnNugetOrg: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u11'), eq(variables['publishPrereleseVersion'], true))]
+  addTagToRepository: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u11'), eq(variables['publishPrereleseVersion'], true))]
+  updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u11')]
   gitEmail: 'devops@robolynx.pl'
   gitUserName: 'DevOps Pipeline' 
 
@@ -188,7 +188,7 @@ steps:
     tagSource: gitTag
     tagPattern: 'v.*'
     isDraft: false
-    isPreRelease: $[ne(variables['Build.SourceBranch'], 'refs/heads/main-u10')]
+    isPreRelease: $[ne(variables['Build.SourceBranch'], 'refs/heads/main-u11')]
     assetUploadMode: delete
     assets: '$(Build.ArtifactStagingDirectory)/*'
     addChangeLog: false   

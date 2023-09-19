@@ -2,6 +2,17 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- Separate project to ImageSharp support
+
+### Changed 
+
+- Migration to .NET 7
+- Support for Umbraco 11
+
 ## [10.0.0] - 2023-09-14
 
 ### Added
