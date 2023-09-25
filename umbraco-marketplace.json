@@ -1,20 +1,23 @@
 {
   "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
-  "AddOnPackagesRequiredForUmbracoCloud": [],
-  "AlternatePackageNames": [ "QR Code" ],
+  "AddOnPackagesRequiredForUmbracoCloud": [ "RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp" ],
+  "AlternatePackageNames": [ "QR Code Generator" ],
   "AuthorDetails": {
     "Name": "Sebastian Felis",
     "Description": "Web applications programmer and Umbraco fan.",
     "Url": "https://www.linkedin.com/in/sebastian-felis-5a08021a7/",
     "SyncContributorsFromRepository": true
   },
+  "Title": "QR Code Generator",
+  "Descriotion":  "Property editor to generating QR codes base on specify data source (e.g. document property value, URL, any custom source). It's accessible for Umbraco Backoffice user, but it's can be also use at frontend page after additional package installation.",
   "Category": "Editor Tools",
   "DiscussionForumUrl": "https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/discussions",
   "DocumentationUrl": "https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator",
   "LicenseTypes": [ "Free" ],
   "IssueTrackerUrl": "https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/issues",
-  "IsSubPackageOf": "RoboLynx.Umbraco.QRCodeGenerator",
+  "IsSubPackageOf": "RoboLynx.Umbraco.QRCodeGenerator.Core",
   "PackageType": "Package",
+  "VersionSpecificPackageIds": null,
   "Screenshots": [
     {
       "ImageUrl": "https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u10/assets/screenshots/screen1.png",

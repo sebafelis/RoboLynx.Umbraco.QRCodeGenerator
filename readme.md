@@ -53,6 +53,10 @@ Install RoboLynx.Umbraco.QRCodeGenerator by NuGet calling the following command 
 
 ```Install-Package RoboLynx.Umbraco.QRCodeGenerator -Version VERSION_NUMBER```
 
+> **Important**!
+> 
+> Until **version 11** you must install package supporting specify graphic library, e.g. *RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp*
+
 and choose what other packages you need to from bellow table.
 
 Package name | Description | NuGet link
