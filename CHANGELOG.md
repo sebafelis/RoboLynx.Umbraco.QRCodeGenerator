@@ -2,6 +2,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed 
+
+- Support for Umbraco 12
+ 
 ## [11.0.0] - 2023-09-26
 
 ### Added

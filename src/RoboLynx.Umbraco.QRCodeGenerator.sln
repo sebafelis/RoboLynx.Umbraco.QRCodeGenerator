@@ -27,7 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{30C4EFCA-D80
 		..\doc\Create a custom format.md = ..\doc\Create a custom format.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp", "RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp\RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp.csproj", "{5E7159E2-5DBD-459A-9B97-089ACDC97DC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp", "RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp\RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp.csproj", "{5E7159E2-5DBD-459A-9B97-089ACDC97DC5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2", "RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2\RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2.csproj", "{CCD30C47-E02F-4721-9C97-123116392325}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{5E7159E2-5DBD-459A-9B97-089ACDC97DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E7159E2-5DBD-459A-9B97-089ACDC97DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E7159E2-5DBD-459A-9B97-089ACDC97DC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCD30C47-E02F-4721-9C97-123116392325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCD30C47-E02F-4721-9C97-123116392325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCD30C47-E02F-4721-9C97-123116392325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCD30C47-E02F-4721-9C97-123116392325}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

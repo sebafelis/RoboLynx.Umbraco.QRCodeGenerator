@@ -2,13 +2,14 @@
 # QR Code Generator
 
 [![Our Umbraco project page](https://img.shields.io/badge/our-umbraco-orange.svg)](https://our.umbraco.com/packages/backoffice-extensions/qr-code-generator/) 
-[![Build Status](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_apis/build/status/sebafelis.RoboLynx.Umbraco.QRCodeGenerator?branchName=main-u10)](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_build/latest?definitionId=7&branchName=main-u10)
+[![Build Status](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_apis/build/status/sebafelis.RoboLynx.Umbraco.QRCodeGenerator?branchName=main-u12)](https://dev.azure.com/robolynx/RoboLynx.Umbraco.QRCodeGenerator/_build/latest?definitionId=13&branchName=main-u12)
 ![Licence](https://img.shields.io/github/license/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)
 
 ## Description
 
-_Property editor_ and _Content app_ for **Umbraco 11** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
+_Property editor_ and _Content app_ for **Umbraco 12** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
 
+> * Version for Umbraco 11 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u11)
 > * Version for Umbraco 10 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u10)
 > * Version for Umbraco 9 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u9)
 > * Version for Umbraco 8 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
@@ -48,6 +49,7 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 > * 9.* are intended for Umbraco 9.
 > * 10.* are intended for Umbraco 10.
 > * 11.* are intended for Umbraco 11.
+> * 12.* are intended for Umbraco 12.
 
 Install RoboLynx.Umbraco.QRCodeGenerator by NuGet calling the following command in your main project:
 
@@ -63,6 +65,7 @@ Package name | Description | NuGet link
 -------------|------------|------------
 RoboLynx.Umbraco.QRCodeGenerator.Core | Project core  | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Core?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
 RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp | Add ImageSharp support | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.ImageSharp?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp/)
+RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2 | Add ImageSharp 2 support | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.ImageSharp2?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2/)
 RoboLynx.Umbraco.QRCodeGenerator | Property editor for Umbraco backoffice [[more](#using-in-umbraco-backoffice)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
 RoboLynx.Umbraco.QRCodeGenerator.Frontend | Controller for frontend page and property editor converter [[more](#using-on-frontend-page)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Frontend](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Frontend?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Frontend/)
 
