@@ -12,7 +12,7 @@
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
 		<PackageTags>umbraco-marketplace, umbraco, propety editor, qr code, generator</PackageTags>
-		<PackageReleaseNotes>Release for Umbraco 11</PackageReleaseNotes>
+		<PackageReleaseNotes>Release for Umbraco 12</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
 		<Company>RoboLynx</Company>
 		<Authors>Sebastian Felis</Authors>
@@ -46,13 +46,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[11,12)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[11,12)" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[12,13)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[12,13)" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="App_Plugins\QRCodeGenerator\**\*.*" Exclude="App_Plugins\QRCodeGenerator\**\*.less" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />
-		<None Include="build\**" Pack="true" PackagePath="buildTransitive" />
+		<None Include="buildTransitive\**" Pack="true" PackagePath="buildTransitive" />
 	</ItemGroup>
 
 	<ItemGroup>
