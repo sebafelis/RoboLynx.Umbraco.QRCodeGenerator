@@ -24,7 +24,8 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.QRCodeFormat
             _colorParser = colorParser;
 
 			var version = Assembly.GetAssembly(typeof(SixLabors.ImageSharp.Image)).GetName().Version;
-			logger.LogInformation("ImageSharp library in version {version} is use.", version);
+            var currentClass = GetType().Name;
+			logger.LogInformation("{currentClass} using ImageSharp library in version {version}.", version, currentClass);
 		}
 
         protected MemoryStream RasterStream(IImageEncoder imageFormat)
