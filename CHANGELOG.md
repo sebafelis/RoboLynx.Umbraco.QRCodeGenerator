@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added 
+    
+- Separate project to ImageSharp version 2 support
+
 ### Changed 
 
 - Support for Umbraco 12
