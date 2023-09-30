@@ -29,7 +29,7 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
                 var formatTypes = builder.TypeLoader.GetTypes<IQRCodeFormatFactory>();
                 if (!formatTypes.Any())
                 {
-                    throw new QRCodeGeneratorException("Not found any class implementing IQRCodeFormat interface. Add RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp package to project.");
+                    throw new QRCodeGeneratorException("Not found any class implementing IQRCodeFormat interface. Add RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp or RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2 package to project.");
                 }
 
                 return formatTypes;
