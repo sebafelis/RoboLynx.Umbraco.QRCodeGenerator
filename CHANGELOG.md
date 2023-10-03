@@ -7,10 +7,13 @@ All notable changes to this project will be documented in this file.
 ### Added 
     
 - Separate project to ImageSharp version 2 support
+- Main project containing now only references to default packages 
 
-### Changed 
+### Changed
 
 - Support for Umbraco 12
+- Project/library *RoboLynx.Umbraco.QRCodeGenerator* change name to *RoboLynx.Umbraco.QRCodeGenerator.Backoffice*
+- Packages descriptions
  
 ## [11.0.0] - 2023-09-26
 
