@@ -6,8 +6,8 @@
 		<ContentTargetFolders>.</ContentTargetFolders>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		
-		<Description>QR Code Generator for Umbraco - property editor for Umbraco to generating QR codes. Generate QR codes for the specify data source (e.g. published document property value, URL, any custom source). It's accessible for backoffice user, but it's can be also use at frontend page after RoboLynx.Umbraco.QRCodeGenerator.Frontend package installation.</Description>
-		<Copyright>Sebastian Felis @ 2022</Copyright>
+		<Description>Part of QR Code Generator for Umbraco. Property editor and Content App to generate QR codes in Umbraco Backoffice for the specify data source (e.g. published document property value, URL, any custom source).</Description>
+		<Copyright>Sebastian Felis @ 2023</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>

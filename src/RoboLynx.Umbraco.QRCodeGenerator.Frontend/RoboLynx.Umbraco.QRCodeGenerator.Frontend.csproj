@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Description>Part of QR Code Generator for Umbraco. Allows to shared QR codes at frontend website.</Description>
-		<Copyright>Sebastian Felis @ 2022</Copyright>
+		<Description>Part of QR Code Generator for Umbraco. Allows to shared QR codes on frontend page.</Description>
+		<Copyright>Sebastian Felis @ 2023</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>

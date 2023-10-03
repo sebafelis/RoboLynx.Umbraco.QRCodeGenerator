@@ -4,7 +4,7 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Description>Part of QR Code Generator for Umbraco. Package implements necessary infrastructure and services to generate QR codes from code under Umbraco CMS.</Description>
-		<Copyright>Sebastian Felis @ 2022</Copyright>
+		<Copyright>Sebastian Felis @ 2023</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
