@@ -26,11 +26,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png" Link="Cache\RoboLynx.Umbraco.QRCodeGenerator_128.png">
+		<None Include="..\..\assets\RoboLynx.Umbraco.QRCodeGenerator_128.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
-		<None Include="..\..\readme.md" Link="Cache\readme.md">
+		<None Include="..\..\readme.md">
 		  <Pack>True</Pack>
 		  <PackagePath>\</PackagePath>
 		</None>
@@ -38,7 +38,7 @@
 
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator</_Parameter1>
+			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Backoffice</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
 			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Frontend</_Parameter1>

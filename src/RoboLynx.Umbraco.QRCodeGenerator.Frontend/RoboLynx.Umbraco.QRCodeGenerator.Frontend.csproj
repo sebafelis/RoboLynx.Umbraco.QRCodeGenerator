@@ -48,7 +48,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator\RoboLynx.Umbraco.QRCodeGenerator.csproj" ExactVersion="true" />
+	  <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Backoffice\RoboLynx.Umbraco.QRCodeGenerator.Backoffice.csproj" ExactVersion="true" />
 	</ItemGroup>
 
 </Project>

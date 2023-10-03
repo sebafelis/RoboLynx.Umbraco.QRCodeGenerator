@@ -8,7 +8,7 @@
 			<license url="https://opensource.org/licenses/MIT">MIT</license>
 			<url>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</url>
 			<requirements type="strict">
-				<major>10</major>
+				<major>11</major>
 				<minor>0</minor>
 				<patch>0</patch>
 			</requirements>
@@ -17,7 +17,7 @@
 			<name>Sebastian Felis</name>
 			<website>https://github.com/sebafelis/</website>
 		</author>
-		<readme><![CDATA[QR Code Generator for Umbraco 10. It generate QR codes for specify data source (e.g. published document property value, URL, any custom source). Codes can be generated from code, backoffice property editor or insert in to the fronend websites. Codes are also cached to inprove performance.]]></readme>
+		<readme><![CDATA[QR Code Generator for Umbraco 11. It generate QR codes for specify data source (e.g. published document property value, URL, any custom source). Codes can be generated from code, backoffice property editor or insert in to the fronend websites. Codes are also cached to inprove performance.]]></readme>
 	</info>
 	<Actions />
 	<control />
