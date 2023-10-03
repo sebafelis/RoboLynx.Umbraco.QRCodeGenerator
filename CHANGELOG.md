@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Project containing references to default packages 
+- Main project containing now only references to default packages 
 
 ### Changed
 
