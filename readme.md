@@ -31,6 +31,7 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 1. [Cache](#cache)
    * [Azure Blob Storage](#azure-blob-storage) 
 1. [Using service](#using-service)
+1. [ImageSharp version](#imagesharp-version)
 1. [Source providers](#source-providers)
    a) [Content Property](#content-property)
    b) [Absolute URL](#absolute-url)
@@ -55,18 +56,15 @@ Install RoboLynx.Umbraco.QRCodeGenerator by NuGet calling the following command 
 
 ```Install-Package RoboLynx.Umbraco.QRCodeGenerator -Version VERSION_NUMBER```
 
-> **Important**!
-> 
-> Until **version 11** you must install package supporting specify graphic library, e.g. *RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp*
-
-and choose what other packages you need to from bellow table.
+List of all packages is bellow.
 
 Package name | Description | NuGet link
 -------------|------------|------------
-RoboLynx.Umbraco.QRCodeGenerator.Core | Project core  | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Core?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
-RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp | Add ImageSharp support | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.ImageSharp?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp/)
+RoboLynx.Umbraco.QRCodeGenerator | Default pack of functionalities/package references (Don't install bellow packages if you you installed this) | [![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
+RoboLynx.Umbraco.QRCodeGenerator.Core | Service generating QR codes | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Core?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
+RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp | Add newest ImageSharp support | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.ImageSharp?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp/)
 RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2 | Add ImageSharp 2 support | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.ImageSharp2?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2/)
-RoboLynx.Umbraco.QRCodeGenerator | Property editor for Umbraco backoffice [[more](#using-in-umbraco-backoffice)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
+RoboLynx.Umbraco.QRCodeGenerator.Backoffice | Property editor and content application for Umbraco backoffice [[more](#using-in-umbraco-backoffice)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Backoffice](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Backoffice?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Backoffice/)
 RoboLynx.Umbraco.QRCodeGenerator.Frontend | Controller for frontend page and property editor converter [[more](#using-on-frontend-page)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Frontend](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Frontend?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Frontend/)
 
 ## Configuration
@@ -245,6 +243,14 @@ public class MyClass
     }
 }
 ```
+
+## ImageSharp version
+
+Since Umbraco 11 the dependency to ImageSharp is decouple because ImageSharp in version 3+ has [license changes](https://sixlabors.com/posts/license-changes/) and is not totally free. Umbraco 12 by default use ImageSharp 3, so there is possibility to use ImageSharp version 2 ([see how to do this](https://our.umbraco.com/forum/using-umbraco-and-getting-started/112254-umbraco-12-and-switch-back-to-imagesharp-version-2#comment-347805)). 
+
+This extension also use an ImageSharp, that's why are there are available two additional packages (RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp and RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp2). Once of this packages is required by RoboLynx.Umbraco.QRCodeGenerator.Core package. 
+
+If you use ImageSharp 2 in your project don't install RoboLynx.Umbraco.QRCodeGenerator package. Add only packages what you need (excluding RoboLynx.Umbraco.QRCodeGenerator.ImageSharp).
 
 ## Source providers
 
