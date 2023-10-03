@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Backoffice\RoboLynx.Umbraco.QRCodeGenerator.Backoffice.csproj" />
+    <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp\RoboLynx.Umbraco.QRCodeGenerator.Core.ImageSharp.csproj" />
+    <ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Frontend\RoboLynx.Umbraco.QRCodeGenerator.Frontend.csproj" />
+  </ItemGroup>
+
+</Project>
