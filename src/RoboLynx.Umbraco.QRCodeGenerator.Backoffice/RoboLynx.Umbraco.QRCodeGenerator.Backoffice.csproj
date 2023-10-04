@@ -52,7 +52,7 @@
 
 	<ItemGroup>
 		<Content Include="App_Plugins\QRCodeGenerator\**\*.*" Exclude="App_Plugins\QRCodeGenerator\**\*.less" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />
-		<None Include="buildTransitivebuildTransitive\**" Pack="true"/>
+		<None Include="buildTransitive\**" Pack="true" PackagePath="buildTransitive"/>
 	</ItemGroup>
 
 	<ItemGroup>
