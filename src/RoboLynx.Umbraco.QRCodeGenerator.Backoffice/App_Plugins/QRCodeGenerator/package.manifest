@@ -1,6 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/package.manifest",
-  "other properties": "",
+  "id": "RoboLynx.Umbraco.QRCodeGenerator.Backoffice",
+  "name": "QR Code Generator",
+  "version": "",
+  "bundleOptions": "Default",
 
   "propertyEditors": [
     {
@@ -118,15 +121,6 @@
             "description": "The percent size of icon in the center of code.",
             "key": "defaultIconSizePercent",
             "view": "number"
-            //"validation": [
-            //  {
-            //    "type": "Range",
-            //    "config": {
-            //      "min": 0,
-            //      "max": 30
-            //    }
-            //  }
-            //]
           },
           {
             "label": "Default icon border width",
