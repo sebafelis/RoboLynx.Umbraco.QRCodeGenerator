@@ -25,6 +25,7 @@
 	<PropertyGroup>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace(".Backoffice", ""))</RootNamespace>
 	</PropertyGroup>
 
 	<Import Project="..\..\build\ProjectReferenceVersion.targets" />
@@ -38,11 +39,6 @@
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Remove="QRCodeGenerator.cs" />
-		<Compile Remove="QRCodeGeneratorComponent.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
