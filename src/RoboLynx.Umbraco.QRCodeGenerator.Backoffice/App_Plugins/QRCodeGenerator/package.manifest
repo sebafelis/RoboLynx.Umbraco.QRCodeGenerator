@@ -1,7 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/package.manifest",
-  "other properties": "",
-
+  "id": "RoboLynx.Umbraco.QRCodeGenerator.Backoffice",
+  "name": "QR Code Generator",
+  "version": "",
+  "bundleOptions": "Default",
+  "allowPackageTelemetry": true,
   "propertyEditors": [
     {
       "alias": "qrCodeGenerator",
