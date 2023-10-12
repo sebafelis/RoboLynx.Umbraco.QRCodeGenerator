@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Main project containing now only references to default packages 
+- Information about package to package.manifest
 
 ### Changed
 
