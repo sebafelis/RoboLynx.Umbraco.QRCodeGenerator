@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
     
 - Separate project to ImageSharp version 2 support
 - Main project containing now only references to default packages 
+- Information about package to package.manifest
 
 ### Changed
 
