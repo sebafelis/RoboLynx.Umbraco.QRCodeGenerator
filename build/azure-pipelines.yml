@@ -28,6 +28,8 @@ variables:
   publishOnNugetOrg: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u12'), eq(variables['publishPrereleseVersion'], true))]
   addTagToRepository: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u12'), eq(variables['publishPrereleseVersion'], true))]
   updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u12')]
+  packageManifestPath: '$(System.DefaultWorkingDirectory)/src/RoboLynx.Umbraco.QRCodeGenerator.Backoffice/App_Plugins/QRCodeGenerator/package.manifest'
+  updatePackageManifestVersion: true
   gitEmail: 'devops@robolynx.pl'
   gitUserName: 'DevOps Pipeline' 
 
@@ -56,30 +58,32 @@ steps:
     git config --global user.email $gitEmail
     git config --global user.name "$gitUserName"
   displayName: 'Set GIT Author identity'
-- powershell: | 
-    $regex_current_version = $current_version -replace '\.','\.'
-    $changelog = Get-Content -Path .\CHANGELOG.md -Raw
-    if ($changelog -match "##\s?\[Unreleased\]") 
-    {
+- task: PowerShell@2
+  displayName: 'Change [Unrelease] section header in CHANGELOG'
+  condition: and(succeeded(), eq(variables['updateChangelogVersion'], true))
+  inputs:
+    targetType: 'inline'
+    script: |
+      $regex_current_version = $($env:current_version) -replace '\.','\.'
+      $changelog = Get-Content -Path .\CHANGELOG.md -Raw
+      if ($changelog -match "##\s?\[Unreleased\]") 
+      {
         $current_date = Get-Date -UFormat "%Y-%m-%d"
-        $changelog -replace "##\s?\[Unreleased\].*","## [$current_version] - $current_date" | Set-Content -Path .\CHANGELOG.md
-
-        Write-Host "Unreleased section in CHANGELOG.md was updated into current version [$current_version] - $current_date."
+        $changelog -replace "##\s?\[Unreleased\].*","## [$env:current_version] - $current_date" | Set-Content -Path .\CHANGELOG.md
+        Write-Host "Unreleased section in CHANGELOG.md was updated into current version [$env:current_version] - $current_date."
         Write-Host "##vso[task.setvariable variable=changelogUpdated]true"
-    }
-    elseif ($changelog -match "##\s?\[$regex_current_version\]")
-    {
+      }
+      elseif ($changelog -match "##\s?\[$regex_current_version\]")
+      {
         Write-Host "##vso[task.LogIssue type=warning;]CHANGELOG.md already contains section with current version."
         Write-Host "##vso[task.setvariable variable=changelogUpdated]false"
-    }
-    else
-    {
+      }
+      else
+      {
         Write-Host "##vso[task.LogIssue type=error;]CHANGELOG.md do not contains Unreleased section with new changes."
         Write-Host "##vso[task.setvariable variable=changelogUpdated]false"
         exit 1
-    }
-  displayName: 'Change [Unrelease] section header in CHANGELOG to [$current_version]'
-  condition: and(succeeded(), eq(variables['updateChangelogVersion'], true))
+      }
   env:
     current_version: $(GitVersion.SemVer)
 - script: |
@@ -89,6 +93,19 @@ steps:
   condition: and(succeeded(), and(eq(variables['updateChangelogVersion'], true), eq(variables['changelogUpdated'], true)))
   workingDirectory: $(Build.SourcesDirectory)
   displayName: 'Commit changes in CHANGELOG.md'
+- task: PowerShell@2
+  displayName: 'Update version in package.manifest'
+  condition: and(succeeded(), eq(variables['updatePackageManifestVersion'], true))
+  inputs:
+    targetType: 'inline'
+    script: |
+      $regexPattern = '\"version\": .*,'
+      $replacementValue = '"version": "'+$env:currentVersion+'",'
+      $content = Get-Content -Path $env:packageManifestPath
+      $newContent = $content -replace $regexPattern, $replacementValue
+      $newContent | Set-Content -Path $env:packageManifestPath
+  env:
+    currentVersion: $(GitVersion.SemVer)
 - task: DotNetCoreCLI@2
   displayName: 'Build project ($(buildConfiguration) configuration)'
   inputs:
@@ -160,7 +177,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $regex_current_version = $current_version -replace '\.','\.'
+      $regex_current_version = $env:current_version -replace '\.','\.'
       $regex_pattern = "(?s)(?:\n##\s\[$regex_current_version\].*?\r\n(?:\s*\r\n)*)(?<content>.*?)(?:\r\n##\s\[\d+\.\d+\.\d+].*?\r\n|\s*\Z)"
       $changelog = Get-Content -Path .\CHANGELOG.md -Raw
       if ($changelog -match "##\s?\[$regex_current_version\]") 
