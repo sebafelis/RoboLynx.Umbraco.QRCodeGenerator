@@ -12,7 +12,8 @@ _Property editor_ and _Content app_ for **Umbraco 10** allowing to generate QR c
 > * Version for Umbraco 9 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u9)
 > * Version for Umbraco 8 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
 > * Version for Umbraco 7 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
- 
+> * Newest version is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)
+
 User can customize generated code by color, size, output format, error correction level, adding quiet zone and also by adding icon (not for all formats). Code is available to generated from specify document type, base on specify data source like current document property or URL. The source from where the code content is get, the code type and the document type from which code can be generated are specify by developer. At this moment data source it can be property of current document (or part of it selected by regular expression), document URL or custom ([see **Source providers**](#source-providers)).
 
 Since `version 8.1` QR code can be insert on to frontend page. Generated codes are also cached. Backoffice and frontend use separate cache for secure reasons.
@@ -46,17 +47,19 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 > * 8.* are intended for Umbraco 8.
 > * 9.* are intended for Umbraco 9.
 > * 10.* are intended for Umbraco 10.
+> * and so on if newest available
 
 Install RoboLynx.Umbraco.QRCodeGenerator by NuGet calling the following command in your main project:
 
 ```Install-Package RoboLynx.Umbraco.QRCodeGenerator -Version VERSION_NUMBER```
 
-and choose what other packages you need to from bellow table.
+List of all packages is bellow:
 
 Package name | Description | NuGet link
 -------------|------------|------------
-RoboLynx.Umbraco.QRCodeGenerator.Core | Project core  | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
-RoboLynx.Umbraco.QRCodeGenerator | Property editor for Umbraco backoffice [[more](#using-in-umbraco-backoffice)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
+RoboLynx.Umbraco.QRCodeGenerator | Default pack of functionalities/package references (Don't install bellow packages if you you installed this) | [![nuget:RoboLynx.Umbraco.QRCodeGenerator](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator/)
+RoboLynx.Umbraco.QRCodeGenerator.Core | Service generating QR codes | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Core](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Core?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Core/)
+RoboLynx.Umbraco.QRCodeGenerator.Backoffice | Property editor and content application for Umbraco backoffice [[more](#using-in-umbraco-backoffice)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Backoffice](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Backoffice?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Backoffice/)
 RoboLynx.Umbraco.QRCodeGenerator.Frontend | Controller for frontend page and property editor converter [[more](#using-on-frontend-page)] | [![nuget:RoboLynx.Umbraco.QRCodeGenerator.Frontend](https://img.shields.io/nuget/v/RoboLynx.Umbraco.QRCodeGenerator.Frontend?label=nuget)](https://www.nuget.org/packages/RoboLynx.Umbraco.QRCodeGenerator.Frontend/)
 
 ## Configuration
