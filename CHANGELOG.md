@@ -2,6 +2,18 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added 
+    
+- Main project containing now only references to default packages 
+- Information about package to package.manifest
+
+### Changed
+
+- Project/library *RoboLynx.Umbraco.QRCodeGenerator* change name to *RoboLynx.Umbraco.QRCodeGenerator.Backoffice*
+- Packages descriptions
+
 ## [10.0.0] - 2023-09-14
 
 ### Added
