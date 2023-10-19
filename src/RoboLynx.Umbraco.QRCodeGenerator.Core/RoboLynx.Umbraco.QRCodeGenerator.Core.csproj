@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Description>QR Code Generator for Umbraco. Core implements service to generates QR codes from code.</Description>
-		<Copyright>Sebastian Felis @ 2022</Copyright>
+		<Description>Part of QR Code Generator for Umbraco. Package implements necessary infrastructure and services to generate QR codes from code under Umbraco CMS.</Description>
+		<Copyright>Sebastian Felis @ 2023</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
@@ -38,7 +38,7 @@
 
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator</_Parameter1>
+			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Backoffice</_Parameter1>
 		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
 			<_Parameter1>RoboLynx.Umbraco.QRCodeGenerator.Frontend</_Parameter1>

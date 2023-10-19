@@ -6,13 +6,13 @@
 		<ContentTargetFolders>.</ContentTargetFolders>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
-		<Description>Part of QR Code Generator for Umbraco. Property editor and Content App to generate QR codes in Umbraco Backoffice for the specify data source (e.g. published document property value, URL, any custom source).</Description>
+		<Description>QR Code Generator for Umbraco - property editor for Umbraco to generating QR codes. Generate QR codes in Umbraco Backoffice for the specify data source (e.g. published document property value, URL, any custom source) and share them on frontend page.</Description>
 		<Copyright>Sebastian Felis @ 2023</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
 		<PackageTags>umbraco, propety editor, qr code, generator, umbraco-marketplace</PackageTags>
-		<PackageReleaseNotes>Release for Umbraco 12</PackageReleaseNotes>
+		<PackageReleaseNotes>Release for Umbraco 10</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
 		<Company>RoboLynx</Company>
 		<Authors>Sebastian Felis</Authors>
@@ -25,7 +25,6 @@
 	<PropertyGroup>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace(".Backoffice", ""))</RootNamespace>
 	</PropertyGroup>
 
 	<Import Project="..\..\build\ProjectReferenceVersion.targets" />
@@ -42,17 +41,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[10,11)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10,11)" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\QRCodeGenerator\**\*.*" Exclude="App_Plugins\QRCodeGenerator\**\*.less" ExcludeFromSingleFile="true" CopyToPublishDirectory="Always" />
-		<None Include="buildTransitive\**" Pack="true" PackagePath="buildTransitive" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Core\RoboLynx.Umbraco.QRCodeGenerator.Core.csproj" ExactVersion="true" />
+		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Backoffice\RoboLynx.Umbraco.QRCodeGenerator.Backoffice.csproj" ExactVersion="true" />
+		<ProjectReference Include="..\RoboLynx.Umbraco.QRCodeGenerator.Frontend\RoboLynx.Umbraco.QRCodeGenerator.Frontend.csproj" ExactVersion="true" />
 	</ItemGroup>
 
 </Project>
