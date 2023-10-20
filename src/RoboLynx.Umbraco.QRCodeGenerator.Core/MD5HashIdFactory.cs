@@ -27,8 +27,10 @@ namespace RoboLynx.Umbraco.QRCodeGenerator
 
             var binaryObject = ObjectToByteArray(configContainer);
 
-            var hashAlgoritm = System.Security.Cryptography.HashAlgorithm.Create(System.Security.Cryptography.HashAlgorithmName.MD5.Name ?? "MD5");
-            if (hashAlgoritm is null)
+#pragma warning disable SYSLIB0045 // Type or member is obsolete
+			var hashAlgoritm = System.Security.Cryptography.HashAlgorithm.Create(System.Security.Cryptography.HashAlgorithmName.MD5.Name ?? "MD5");
+#pragma warning restore SYSLIB0045 // Type or member is obsolete
+			if (hashAlgoritm is null)
             {
                 throw new NotSupportedException("Hash algorithm was not found.");
             }
