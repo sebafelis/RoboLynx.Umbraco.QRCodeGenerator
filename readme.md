@@ -14,7 +14,8 @@ _Property editor_ and _Content app_ for **Umbraco 12** allowing to generate QR c
 > * Version for Umbraco 9 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u9)
 > * Version for Umbraco 8 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
 > * Version for Umbraco 7 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
- 
+> * Newest version is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)
+
 User can customize generated code by color, size, output format, error correction level, adding quiet zone and also by adding icon (not for all formats). Code is available to generated from specify document type, base on specify data source like current document property or URL. The source from where the code content is get, the code type and the document type from which code can be generated are specify by developer. At this moment data source it can be property of current document (or part of it selected by regular expression), document URL or custom ([see **Source providers**](#source-providers)).
 
 Since `version 8.1` QR code can be insert on to frontend page. Generated codes are also cached. Backoffice and frontend use separate cache for secure reasons.
@@ -51,6 +52,7 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 > * 10.* are intended for Umbraco 10.
 > * 11.* are intended for Umbraco 11.
 > * 12.* are intended for Umbraco 12.
+> * and so on if newest available 
 
 Install RoboLynx.Umbraco.QRCodeGenerator by NuGet calling the following command in your main project:
 
