@@ -32,6 +32,7 @@ variables:
   updatePackageManifestVersion: true
   gitEmail: 'devops@robolynx.pl'
   gitUserName: 'DevOps Pipeline' 
+  commitHash: '$(Build.SourceVersion)'
 
 steps:
 - checkout: self
@@ -54,10 +55,13 @@ steps:
   inputs:
     useConfigFile: true
     configFilePath: '$(gitVersionPath)'
-- script: |
-    git config --global user.email $(gitEmail)
-    git config --global user.name "$(gitUserName)"
+- task: Bash@3
   displayName: 'Set GIT Author identity'
+  inputs:
+    targetType: 'inline'
+    script: |
+      git config --global user.email $(gitEmail)
+      git config --global user.name "$(gitUserName)"
 - task: PowerShell@2
   displayName: 'Change [Unrelease] section header in CHANGELOG'
   condition: and(succeeded(), eq(variables['updateChangelogVersion'], true))
@@ -86,13 +90,18 @@ steps:
       }
   env:
     current_version: $(GitVersion.SemVer)
-- script: |
-    git add CHANGELOG.md 
-    git commit -m "Update release version in CHNAGELOG.md"
-    git push origin $(Build.SourceBranchName)
-  condition: and(succeeded(), and(eq(variables['updateChangelogVersion'], true), eq(variables['changelogUpdated'], true)))
-  workingDirectory: $(Build.SourcesDirectory)
+- task: Bash@3
   displayName: 'Commit changes in CHANGELOG.md'
+  condition: and(succeeded(), and(eq(variables['updateChangelogVersion'], true), eq(variables['changelogUpdated'], true)))
+  inputs:
+    targetType: 'inline'
+    script: |
+      git add CHANGELOG.md 
+      git commit -m "Update release version in CHNAGELOG.md"
+      git push origin $(Build.SourceBranchName)
+      commit_hash=$(git rev-parse v$(GitVersion.SemVer))
+      echo "##vso[task.setvariable variable=commitHash]$commit_hash"
+    workingDirectory: $(Build.SourcesDirectory)
 - task: PowerShell@2
   displayName: 'Update version in package.manifest'
   condition: and(succeeded(), eq(variables['updatePackageManifestVersion'], true))
@@ -133,12 +142,17 @@ steps:
   displayName: 'Publish artifacts'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-- script: |
-     git tag v$(GitVersion.SemVer)
-     git push origin v$(GitVersion.SemVer) 
-  condition: and(succeeded(), eq(variables['addTagToRepository'], true))
-  workingDirectory: $(Build.SourcesDirectory)
+- task: Bash@3
   displayName: 'Add tag to commit'
+  condition: and(succeeded(), eq(variables['addTagToRepository'], true))
+  inputs:
+    targetType: 'inline'
+    script: |
+       git tag v$(GitVersion.SemVer)
+       git push origin v$(GitVersion.SemVer)
+       commit_hash=$(git rev-parse v$(GitVersion.SemVer))
+       echo "##vso[task.setvariable variable=commitHash]$commit_hash"
+    workingDirectory: $(Build.SourcesDirectory)
 - task: NuGetAuthenticate@0
   displayName: 'Authenticate DevOps Artifacts Nuget'
 - task: NuGetCommand@2
@@ -201,7 +215,7 @@ steps:
     gitHubConnection: 'github.com_sebafelis'
     repositoryName: '$(Build.Repository.Name)'
     action: create
-    target: '$(Build.SourceVersion)'
+    target: '$commitHash'
     tagSource: gitTag
     tagPattern: 'v.*'
     isDraft: false
