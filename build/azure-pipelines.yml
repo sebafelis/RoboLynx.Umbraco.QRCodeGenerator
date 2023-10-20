@@ -55,8 +55,8 @@ steps:
     useConfigFile: true
     configFilePath: '$(gitVersionPath)'
 - script: |
-    git config --global user.email $gitEmail
-    git config --global user.name "$gitUserName"
+    git config --global user.email $(gitEmail)
+    git config --global user.name "$(gitUserName)"
   displayName: 'Set GIT Author identity'
 - task: PowerShell@2
   displayName: 'Change [Unrelease] section header in CHANGELOG'
@@ -88,7 +88,7 @@ steps:
     current_version: $(GitVersion.SemVer)
 - script: |
     git add CHANGELOG.md 
-    git commit -m "CHNAGELOG.md update"
+    git commit -m "Update release version in CHNAGELOG.md"
     git push origin $(Build.SourceBranchName)
   condition: and(succeeded(), and(eq(variables['updateChangelogVersion'], true), eq(variables['changelogUpdated'], true)))
   workingDirectory: $(Build.SourcesDirectory)
