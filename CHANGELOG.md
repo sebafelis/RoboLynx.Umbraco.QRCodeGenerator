@@ -2,7 +2,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [12.0.1] - 2023-10-24
 
 ### Changed
 
@@ -115,6 +115,7 @@ If you extend property editor with custom QR code Format, Source or Type you nee
 - Support output formats: BMP, JPEG, PNG, SVG
 - Support code content types: SMS, Phone Number, Text, URL, Geolocation (GEO), Geolocation (Google Maps)
 - Support code content source: Absolute URL, Simple Property
+
 
 
 
