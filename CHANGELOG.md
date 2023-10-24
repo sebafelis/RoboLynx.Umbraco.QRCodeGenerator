@@ -2,6 +2,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+
+- Corrected information for Umbraco Marketplace
+
 ## [12.0.0] - 2023-10-20
 
 ### Added 
