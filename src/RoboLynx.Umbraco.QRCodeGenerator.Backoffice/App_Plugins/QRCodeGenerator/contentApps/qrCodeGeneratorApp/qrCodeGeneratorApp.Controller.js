@@ -4,9 +4,9 @@
     angular.module("umbraco")
         .controller("RoboLynx.Umbraco.QRCodeContentAppController", qrCodeContentApp);
 
-    qrCodeContentApp.$inject = ['$scope', 'editorState', 'eventsService', 'contentResource', 'mediaResource', 'memberResource', 'udiParser', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService', 'assetsService'];
+    qrCodeContentApp.$inject = ['$scope', 'eventsService', 'contentResource', 'mediaResource', 'memberResource', 'udiParser', 'RoboLynx.Umbraco.QRCodeGeneratorResources', '$q', 'notificationsService', 'assetsService'];
 
-    function qrCodeContentApp($scope, editorState, eventsService, contentResource, mediaResource, memberResource, udiParser, qrCodeGeneratorResources, $q, notificationsService, assetsService) {
+    function qrCodeContentApp($scope, eventsService, contentResource, mediaResource, memberResource, udiParser, qrCodeGeneratorResources, $q, notificationsService, assetsService) {
         var vm = this;
         const documentNodeType = "document",
             mediaNodeType = "media",
@@ -23,7 +23,7 @@
             onContentSaved;
 
         vm.appActive = false;
-        vm.currentNodeUdi = editorState.current.udi;
+        vm.content = $scope.content;
         vm.qrCodeProperties = null;
         vm.selectedQRCodePropertyAlias = null;
         vm.qrCodeLoaded = false;
@@ -239,8 +239,8 @@
         function watchSettings() {
             var callGetQRCode = function () {
                 if (vm.selectedQRCodePropertyAlias) {
-                    var culture = getNodeType(vm.currentNodeUdi) == documentNodeType ? getCurrentCulture($scope.content.variants) : null;
-                    getQRCode(vm.currentNodeUdi, vm.selectedQRCodePropertyAlias, culture, mapSettings(vm.settingsModel));
+                    var culture = getNodeType(vm.content.udi) == documentNodeType ? getCurrentCulture($scope.content.variants) : null;
+                    getQRCode(vm.content.udi, vm.selectedQRCodePropertyAlias, culture, mapSettings(vm.settingsModel));
                 }
             }
 
@@ -337,16 +337,16 @@
         }
 
         function findProperties() {
-            var udi = udiParser.parse(vm.currentNodeUdi);
+            var udi = udiParser.parse(vm.content.udi);
 
             if (udi.entityType == documentNodeType) {
                 var culture = getCurrentCulture($scope.content.variants);
-                return contentResource.getById(vm.currentNodeUdi, culture).then(function (node) {
+                return contentResource.getById(udi.value, culture).then(function (node) {
                     resolveNode(node.variants[0].tabs);
                 });
             }
             else if (udi.entityType == mediaNodeType) {
-                return mediaResource.getById(vm.currentNodeUdi).then(function (node) {
+                return mediaResource.getById(udi.value).then(function (node) {
                     resolveNode(node.tabs);
                 });
             }
@@ -383,7 +383,7 @@
 
                     $q.all([
                         getRequiredSettingsForFormats(),
-                        getQRCodeSettings(vm.currentNodeUdi, vm.selectedQRCodePropertyAlias),
+                        getQRCodeSettings(vm.content.udi, vm.selectedQRCodePropertyAlias),
                         loadDownloadJs()
                     ]).then(function () {
                         setDefaultSettings();
@@ -392,7 +392,7 @@
                 }
             });
 
-            if (getNodeType(vm.currentNodeUdi) == documentNodeType) {
+            if (getNodeType(vm.content.udi) == documentNodeType) {
                 $scope.model.disabled = true;
 
                 unwatchContentState = $scope.$watch("variantContent.state", function (newValue, oldValue) {
