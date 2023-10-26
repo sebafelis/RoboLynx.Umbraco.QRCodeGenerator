@@ -99,8 +99,6 @@ steps:
       git add CHANGELOG.md 
       git commit -m "Update release version in CHNAGELOG.md"
       git push origin $(Build.SourceBranchName)
-      commit_hash=$(git rev-parse v$(GitVersion.SemVer))
-      echo "##vso[task.setvariable variable=commitHash]$commit_hash"
     workingDirectory: $(Build.SourcesDirectory)
 - task: PowerShell@2
   displayName: 'Update version in package.manifest'
@@ -151,6 +149,7 @@ steps:
        git tag v$(GitVersion.SemVer)
        git push origin v$(GitVersion.SemVer)
        commit_hash=$(git rev-parse v$(GitVersion.SemVer))
+       echo "Commit hash with tag v$(GitVersion.SemVer) is $commit_hash"
        echo "##vso[task.setvariable variable=commitHash]$commit_hash"
     workingDirectory: $(Build.SourcesDirectory)
 - task: NuGetAuthenticate@0
@@ -215,7 +214,7 @@ steps:
     gitHubConnection: 'github.com_sebafelis'
     repositoryName: '$(Build.Repository.Name)'
     action: create
-    target: '$commitHash'
+    target: '$(commitHash)'
     tagSource: gitTag
     tagPattern: 'v.*'
     isDraft: false
