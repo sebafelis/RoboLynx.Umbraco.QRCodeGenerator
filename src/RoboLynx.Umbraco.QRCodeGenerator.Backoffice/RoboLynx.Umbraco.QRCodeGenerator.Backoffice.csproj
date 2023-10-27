@@ -11,7 +11,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator.git</RepositoryUrl>
 		<RepositoryType>GIT</RepositoryType>
-		<PackageTags>umbraco-marketplace, umbraco, propety editor, qr code, generator</PackageTags>
+		<PackageTags>umbraco, propety editor, qr code, generator</PackageTags>
 		<PackageReleaseNotes>Release for Umbraco 11</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator</PackageProjectUrl>
 		<Company>RoboLynx</Company>
