@@ -2,6 +2,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed 
+
+-  Error occurs when QR Code tab (ContentApp in Umbraco Backoffice) is activating after publishing new content.
+
 ## [12.0.1] - 2023-10-24
 
 ### Changed
