@@ -4,9 +4,9 @@
 trigger:
   branches:
     include:
-    - main-u12
-    - release-u12
-    - develop-u12
+    - 'main-u*'
+    - 'release-u*'
+    - 'develop-u*'
   tags:
     exclude:
     - v*
