@@ -45,7 +45,13 @@ angular.module("umbraco")
 
             var reader = new FileReader();
             reader.onloadend = function () {
-                deferred.resolve(JSON.parse(reader.result));
+                var resultValue;
+                try {
+                    resultValue = JSON.parse(reader.result);
+                } catch (e) {
+                    resultValue = reader.result;
+                }
+                deferred.resolve(resultValue);
             }
             reader.onerror = function () {
                 deferred.reject(reader.error);
@@ -121,7 +127,7 @@ angular.module("umbraco")
 
                             if (error.data) {
                                 _readAsJson(error.data).then(function (errorObj) {
-                                    deferred.reject(errorObj.message);
+                                    deferred.reject(errorObj.message | errorObj);
                                 }, function (readerError) {
                                     deferred.reject(readerError);
                                 });
