@@ -14,9 +14,5 @@ namespace RoboLynx.Umbraco.QRCodeGenerator.Exceptions
         public ValidationQRCodeGeneratorException(Type qrCodeType, string argument, string message, Exception inner) : base($"Source provider: {qrCodeType.Name}; {message}", inner)
         {
         }
-
-        protected ValidationQRCodeGeneratorException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

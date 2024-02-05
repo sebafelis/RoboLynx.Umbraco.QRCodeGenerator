@@ -24,10 +24,10 @@ variables:
   umbracoPackageDefinitionPath: '$(System.DefaultWorkingDirectory)/build/package.xml'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  publishOnGithubRelease: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u12'), eq(variables['publishPrereleseVersion'], true))]
-  publishOnNugetOrg: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u12'), eq(variables['publishPrereleseVersion'], true))]
-  addTagToRepository: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main-u12'), eq(variables['publishPrereleseVersion'], true))]
-  updateChangelogVersion: $[eq(variables['Build.SourceBranch'], 'refs/heads/main-u12')]
+  publishOnGithubRelease: $[or(startsWith(variables['Build.SourceBranch'], 'refs/heads/main-u'), eq(variables['publishPrereleseVersion'], true))]
+  publishOnNugetOrg: $[or(startsWith(variables['Build.SourceBranch'], 'refs/heads/main-u'), eq(variables['publishPrereleseVersion'], true))]
+  addTagToRepository: $[or(startsWith(variables['Build.SourceBranch'], 'refs/heads/main-u'), eq(variables['publishPrereleseVersion'], true))]
+  updateChangelogVersion: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/main-u')]
   packageManifestPath: '$(System.DefaultWorkingDirectory)/src/RoboLynx.Umbraco.QRCodeGenerator.Backoffice/App_Plugins/QRCodeGenerator/package.manifest'
   updatePackageManifestVersion: true
   gitEmail: 'devops@robolynx.pl'
@@ -218,7 +218,7 @@ steps:
     tagSource: gitTag
     tagPattern: 'v.*'
     isDraft: false
-    isPreRelease: $[ne(variables['Build.SourceBranch'], 'refs/heads/main-u12')]
+    isPreRelease: $[not(startsWith(variables['Build.SourceBranch'], 'refs/heads/main-u'))]
     assets: '$(Build.ArtifactStagingDirectory)/*'
     addChangeLog: false   
     releaseNotesSource: inline

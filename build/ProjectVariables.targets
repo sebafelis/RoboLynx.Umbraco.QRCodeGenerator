@@ -1,0 +1,5 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<CurrentYear>$([System.DateTime]::Now.ToString('yyyy'))</CurrentYear>
+	</PropertyGroup>
+</Project>

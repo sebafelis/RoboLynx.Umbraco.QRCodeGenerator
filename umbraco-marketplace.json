@@ -17,15 +17,15 @@
   "PackageType": "Package",
   "Screenshots": [
     {
-      "ImageUrl": "https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u10/assets/screenshots/screen1.png",
+      "ImageUrl": "https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u13/assets/screenshots/screen1.png",
       "Caption": "Active 'QR Code' tab in backoffice."
     },
     {
-      "ImageUrl": "https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u10/assets/screenshots/screen3.png",
+      "ImageUrl": "https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u13/assets/screenshots/screen3.png",
       "Caption": "Configuration of Data Type using QR Code property editor."
     },
     {
-      "ImageUrl": "https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u10/assets/screenshots/screen4.png",
+      "ImageUrl": "https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u13/assets/screenshots/screen4.png",
       "Caption": "Generated QR code with logo inside."
     }
   ],

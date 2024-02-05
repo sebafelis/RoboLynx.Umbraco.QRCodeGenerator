@@ -7,14 +7,15 @@
 
 ## Description
 
-_Property editor_ and _Content app_ for **Umbraco 12** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
+_Property editor_ and _Content app_ for **Umbraco 13** allowing to generate QR codes straight from code, Umbraco Backoffice and frontend page. 
 
+> * Newest version is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)
+> * Version for Umbraco 12 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u12)
 > * Version for Umbraco 11 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u11)
 > * Version for Umbraco 10 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u10)
 > * Version for Umbraco 9 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u9)
 > * Version for Umbraco 8 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u8)
 > * Version for Umbraco 7 is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/tree/main-u7)
-> * Newest version is [here](https://github.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator)
 
 User can customize generated code by color, size, output format, error correction level, adding quiet zone and also by adding icon (not for all formats). Code is available to generated from specify document type, base on specify data source like current document property or URL. The source from where the code content is get, the code type and the document type from which code can be generated are specify by developer. At this moment data source it can be property of current document (or part of it selected by regular expression), document URL or custom ([see **Source providers**](#source-providers)).
 
@@ -46,12 +47,13 @@ Since `version 8.1` QR code can be insert on to frontend page. Generated codes a
 > **Attention!**
 > 
 > Packages with version starts from:
-> * 7.* are intended for Umbraco 7.
-> * 8.* are intended for Umbraco 8.
-> * 9.* are intended for Umbraco 9.
-> * 10.* are intended for Umbraco 10.
-> * 11.* are intended for Umbraco 11.
-> * 12.* are intended for Umbraco 12.
+> * 7.* are intended for Umbraco 7
+> * 8.* are intended for Umbraco 8
+> * 9.* are intended for Umbraco 9
+> * 10.* are intended for Umbraco 10
+> * 11.* are intended for Umbraco 11
+> * 12.* are intended for Umbraco 12
+> * 13.* are intended for Umbraco 13
 > * and so on if newest available 
 
 Install RoboLynx.Umbraco.QRCodeGenerator by NuGet calling the following command in your main project:
@@ -81,7 +83,7 @@ RoboLynx.Umbraco.QRCodeGenerator.Frontend | Controller for frontend page and pro
 1. Add new property and select created before data type. Remember! Document type has to have all property names defined in **Source provider settings**. 
 1. Save document type. 
 
-   ![Configuration](assets/screenshots/screen3.png)
+   ![Configuration](https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u13/assets/screenshots/screen3.png)
 
 ## Configuration file 
 
@@ -123,7 +125,7 @@ Some global settings can be configure from *appsetting.json* file. Default confi
 1. If document is published you will see active QR Code icon between content icon and info icon. Click them.
 1. HearUmbraco backoffice users can create QR codes and download them.
    
-    ![QR Code tab](assets/screenshots/screen4.png)
+    ![QR Code tab](https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u13/assets/screenshots/screen4.png)
 
 ## Using on frontend page
 
@@ -316,7 +318,7 @@ Supported formats:
 * **jpg** (with icon support)
 * **png** (with icon support)
 * **bmp** (with icon support)
-* **Custom** - You can make your own output format writing a new class extending `QRCodeFormat` class. 
+* **Custom** - You can make your own output format writing a new class extending `QRCodeFormat` class. ([See more](https://raw.githubusercontent.com/sebafelis/RoboLynx.Umbraco.QRCodeGenerator/main-u13/doc/create-custom-output-format.md))
 
 > **Attention!**
 > 
@@ -330,8 +332,8 @@ Supported formats:
 When user scan the code then will see position on map in default map application. Position is easy to set on map in Umbraco Backoffice. 
     
 #### How to achieve this result:
-To achieve the aim you can use the property editor like [**Our.Umbraco.OsmMaps**](https://our.umbraco.com/packages/backoffice-extensions/openstreetmap-property-editor/) to change geographic position on the map in Umbraco Backoffice. 
-* Install **Our.Umbraco.OsmMaps**
+To achieve the aim you can use the property editor like [**Our.Umbraco.GMaps**](https://our.umbraco.com/packages/backoffice-extensions/openstreetmap-property-editor/) to change geographic position on the map in Umbraco Backoffice. 
+* Install **Our.Umbraco.GMaps**
 * In some Document Type (for this example I use Document Type named _ItemLocation_) add new property with alias _location_ and select **Open street maps** editor.
 * Create new Data Type in Umbraco backoffice, set name _Code with location_ and select **QR Code** as **Property editor** ([see Configuration](#configuration)). 
 * In **Source provider** field select **Content Property** to get the data for code from other properties in document.
