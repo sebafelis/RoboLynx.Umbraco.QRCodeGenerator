@@ -2,6 +2,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+
+- Support for Umbraco 12
+
+### Fixed 
+
+- Validation errors display in Umbraco Backoffice
+
 ## [12.0.2] - 2023-10-27
 
 ### Fixed 
