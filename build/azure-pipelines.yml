@@ -152,7 +152,7 @@ steps:
        echo "Commit hash with tag v$(GitVersion.SemVer) is $commit_hash"
        echo "##vso[task.setvariable variable=commitHash]$commit_hash"
     workingDirectory: $(Build.SourcesDirectory)
-- task: NuGetAuthenticate@0
+- task: NuGetAuthenticate@1
   displayName: 'Authenticate DevOps Artifacts Nuget'
 - task: NuGetCommand@2
   displayName: 'Publish NuGet package on DevOps Artifacts'
